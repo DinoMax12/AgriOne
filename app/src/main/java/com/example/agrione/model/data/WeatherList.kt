@@ -1,5 +1,8 @@
 package com.example.agrione.model.data
 
-class WeatherList {
-
-}
+data class WeatherList(
+    val main: WeatherMain,
+    val weather: List<Weather>,
+    val dt_txt: String,
+    val wind: WeatherWind
+)

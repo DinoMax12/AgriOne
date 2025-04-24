@@ -9,7 +9,6 @@ import com.bumptech.glide.Glide
 import com.example.agrione.R
 import com.example.agrione.utilities.CartItemBuy
 import com.example.agrione.utilities.CellClickListener
-import com.example.agrione.view.ecommerce.MyOrdersFragment
 import com.example.agrione.viewmodel.EcommViewModel
 import kotlinx.android.synthetic.main.single_myorder_item.view.*
 

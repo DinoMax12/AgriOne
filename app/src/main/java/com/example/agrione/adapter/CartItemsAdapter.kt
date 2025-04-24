@@ -12,7 +12,6 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
 import com.example.agrione.R
 import com.example.agrione.utilities.CartItemBuy
-import com.example.agrione.view.ecommerce.CartFragment
 import com.example.agrione.viewmodel.EcommViewModel
 import kotlinx.android.synthetic.main.single_cart_item.view.*
 

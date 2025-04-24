@@ -1,5 +1,6 @@
-package com.example.agrione.utilities
+package com.project.farmingapp.utilities
 
-class CellClickListener {
+interface CellClickListener {
+    fun onCellClickListener(name: String)
 
 }

@@ -1,5 +1,5 @@
-package com.example.agrione.utilities
+package com.project.agrione.utilities
 
-class CartItemBuy {
-
+interface CartItemBuy {
+    fun addToOrders(productId: String, quantity: Int, itemCost: Int, deliveryCost: Int)
 }
