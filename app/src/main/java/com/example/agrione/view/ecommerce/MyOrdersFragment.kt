@@ -1,4 +1,4 @@
-package com.project.agrione.view.ecommerce
+package com.example.agrione.view.ecommerce
 
 import android.content.Intent
 import android.os.Bundle
@@ -9,17 +9,17 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.firestore.FirebaseFirestore
-import com.project.agrione.R
-import com.project.agrione.adapter.MyOrdersAdapter
-import com.project.agrione.utilities.CartItemBuy
-import com.project.agrione.utilities.CellClickListener
-import kotlinx.android.synthetic.main.fragment_my_orders.*
+import com.example.agrione.R
+import com.example.agrione.adapter.MyOrdersAdapter
+import com.example.agrione.utilities.CartItemBuy
+import com.example.agrione.utilities.CellClickListener
 import kotlin.collections.HashMap
 
 // TODO: Rename parameter arguments, choose names that match
@@ -38,8 +38,9 @@ class MyOrdersFragment : Fragment(), CellClickListener, CartItemBuy {
     lateinit var firebaseDatabase: FirebaseDatabase
     lateinit var firebaseAuth: FirebaseAuth
     lateinit var firebaseFirestore: FirebaseFirestore
+    private lateinit var myOrderRecycler: RecyclerView
 
-    var orders = HashMap<String, Object>()
+    var orders = HashMap<String, Any>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,15 +51,15 @@ class MyOrdersFragment : Fragment(), CellClickListener, CartItemBuy {
         firebaseDatabase = FirebaseDatabase.getInstance()
         firebaseAuth = FirebaseAuth.getInstance()
         firebaseFirestore = FirebaseFirestore.getInstance()
-
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_my_orders, container, false)
+        val view = inflater.inflate(R.layout.fragment_my_orders, container, false)
+        myOrderRecycler = view.findViewById(R.id.myOrderRecycler)
+        return view
     }
 
     companion object {
@@ -94,7 +95,7 @@ class MyOrdersFragment : Fragment(), CellClickListener, CartItemBuy {
 
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()) {
-                    orders = snapshot.value as HashMap<String, Object>
+                    orders = snapshot.value as HashMap<String, Any>
                     var myOrdersAdapter = MyOrdersAdapter(this@MyOrdersFragment, orders, this@MyOrdersFragment, this@MyOrdersFragment)
                     myOrderRecycler.adapter = myOrdersAdapter
                     myOrderRecycler.layoutManager = LinearLayoutManager(activity!!.applicationContext)
@@ -107,7 +108,7 @@ class MyOrdersFragment : Fragment(), CellClickListener, CartItemBuy {
 
     override fun onCellClickListener(name: String) {
         val ecommerceItemFragment = EcommerceItemFragment()
-        val transaction = activity!!.supportFragmentManager
+        val transaction = requireActivity().supportFragmentManager
             .beginTransaction()
             .replace(R.id.frame_layout, ecommerceItemFragment, name)
             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
@@ -117,7 +118,7 @@ class MyOrdersFragment : Fragment(), CellClickListener, CartItemBuy {
     }
 
     override fun addToOrders(productId: String, quantity: Int, itemCost: Int, deliveryCost: Int) {
-        Intent(activity!!.applicationContext, RazorPayActivity::class.java).also {
+        Intent(requireActivity().applicationContext, RazorPayActivity::class.java).also {
             it.putExtra("productId", productId)
             it.putExtra("itemCost", itemCost.toString())
             it.putExtra("quantity", quantity.toString())

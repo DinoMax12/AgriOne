@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.agrione.R
 import com.example.agrione.utilities.CellClickListener
 import com.google.firebase.firestore.DocumentSnapshot
 

@@ -1,4 +1,4 @@
-package com.project.agrione.view.introscreen
+package com.example.agrione.view.introscreen
 
 import android.content.Context
 import android.content.Intent
@@ -8,19 +8,21 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.view.get
 import androidx.viewpager2.widget.ViewPager2
-import com.project.agrione.R
-import com.project.agrione.adapter.IntroAdapter
-import com.project.agrione.model.data.IntroData
-import com.project.agrione.view.auth.LoginActivity
-import kotlinx.android.synthetic.main.activity_intro.*
+import com.example.agrione.R
+import com.example.agrione.adapter.IntroAdapter
+import com.example.agrione.model.data.IntroData
+import com.example.agrione.view.auth.LoginActivity
+import com.example.agrione.databinding.ActivityIntroBinding
 
 class IntroActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityIntroBinding
 
     private val introSliderAdapter = IntroAdapter(
         listOf(
             IntroData(
-                "Welcome to the\n\bAgrione App\b",
+                "Welcome to the\nAgrione App",
                 "Best Guide and Helper for any Farmer. Provides various features at one place!",
                 R.drawable.intro_first
             ),
@@ -59,13 +61,25 @@ class IntroActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_intro)
 
-        sliderViewPager.adapter = introSliderAdapter
+        // Check SharedPreferences if user has already completed the intro
+        val sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+        val isFirstTime = sharedPreferences.getBoolean("firstTime", true)
+
+        if (!isFirstTime) {
+            // If the user has already seen the intro, go directly to the login screen
+            navigateToLogin()
+            return
+        }
+
+        binding = ActivityIntroBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        binding.sliderViewPager.adapter = introSliderAdapter
         setupIndicators()
         setCurrentIndicator(0)
 
-        sliderViewPager.registerOnPageChangeCallback(object :
+        binding.sliderViewPager.registerOnPageChangeCallback(object :
             ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
@@ -73,39 +87,42 @@ class IntroActivity : AppCompatActivity() {
             }
         })
 
-        if (sliderViewPager.currentItem + 1 == introSliderAdapter.itemCount) {
-            nextBtn.text = "Get Started"
+        if (binding.sliderViewPager.currentItem + 1 == introSliderAdapter.itemCount) {
+            binding.nextBtn.text = "Get Started"
         } else {
-            nextBtn.text = "Next"
+            binding.nextBtn.text = "Next"
         }
 
-        nextBtn.setOnClickListener {
-            if (sliderViewPager.currentItem + 1 < introSliderAdapter.itemCount) {
-                sliderViewPager.currentItem += 1
-                nextBtn.text = "Next"
-                if (sliderViewPager.currentItem + 1 == introSliderAdapter.itemCount) {
-                    nextBtn.text = "Get Started"
+        binding.nextBtn.setOnClickListener {
+            if (binding.sliderViewPager.currentItem + 1 < introSliderAdapter.itemCount) {
+                binding.sliderViewPager.currentItem += 1
+                binding.nextBtn.text = "Next"
+                if (binding.sliderViewPager.currentItem + 1 == introSliderAdapter.itemCount) {
+                    binding.nextBtn.text = "Get Started"
                 }
             } else {
-                Intent(this, LoginActivity::class.java).also {
-                    startActivity(it)
-                }
-                val sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+                // Mark firstTime as false and navigate to the login screen
                 val editor = sharedPreferences.edit()
                 editor.putBoolean("firstTime", false)
                 editor.apply()
-                finish()
+
+                navigateToLogin()
             }
         }
 
-        skipIntro.setOnClickListener {
-            Intent(this, LoginActivity::class.java).also {
-                startActivity(it)
-            }
-            val sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+        binding.skipIntro.setOnClickListener {
+            // Mark firstTime as false and navigate to the login screen
             val editor = sharedPreferences.edit()
             editor.putBoolean("firstTime", false)
             editor.apply()
+
+            navigateToLogin()
+        }
+    }
+
+    private fun navigateToLogin() {
+        Intent(this, LoginActivity::class.java).also {
+            startActivity(it)
             finish()
         }
     }
@@ -131,14 +148,14 @@ class IntroActivity : AppCompatActivity() {
                 this.layoutParams = layoutParams
             }
 
-            sliderballs_container.addView(indicators[i])
+            binding.sliderballsContainer.addView(indicators[i])
         }
     }
 
     private fun setCurrentIndicator(index: Int) {
-        val childCount = sliderballs_container.childCount
+        val childCount = binding.sliderballsContainer.childCount
         for (i in 0 until childCount) {
-            val imageView = sliderballs_container.get(i) as ImageView
+            val imageView = binding.sliderballsContainer.get(i) as ImageView
             if (i == index) {
                 imageView.setImageDrawable(
                     ContextCompat.getDrawable(
@@ -157,9 +174,9 @@ class IntroActivity : AppCompatActivity() {
         }
 
         if (index == introSliderAdapter.itemCount - 1) {
-            nextBtn.text = "Get Started"
+            binding.nextBtn.text = "Get Started"
         } else {
-            nextBtn.text = "Next"
+            binding.nextBtn.text = "Next"
         }
     }
 }

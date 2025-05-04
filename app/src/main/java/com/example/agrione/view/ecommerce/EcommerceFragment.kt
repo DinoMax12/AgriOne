@@ -1,4 +1,4 @@
-package com.project.agrione.view.ecommerce
+package com.example.agrione.view.ecommerce
 
 import android.os.Bundle
 import android.util.Log
@@ -13,19 +13,36 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.chip.ChipGroup
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
-import com.project.agrione.R
-import com.project.agrione.adapter.EcommerceAdapter
-import com.project.agrione.utilities.CellClickListener
-import com.project.agrione.viewmodel.EcommViewModel
-import kotlinx.android.synthetic.main.fragment_ecommerce.*
+import com.example.agrione.R
+import com.example.agrione.adapter.EcommerceAdapter
+import com.example.agrione.utilities.CellClickListener
+import com.example.agrione.viewmodel.EcommViewModel
+import com.example.agrione.databinding.FragmentEcommerceBinding
 
 class EcommerceFragment : Fragment(), CellClickListener {
+    private var _binding: FragmentEcommerceBinding? = null
+    private val binding get() = _binding!!
+
     private lateinit var viewmodel: EcommViewModel
     private var adapter: EcommerceAdapter? = null
     lateinit var ecommerceItemFragment: EcommerceItemFragment
 
     private var param1: String? = null
     private var param2: String? = null
+
+    companion object {
+        private const val ARG_PARAM1 = "param1"
+        private const val ARG_PARAM2 = "param2"
+
+        @JvmStatic
+        fun newInstance(param1: String, param2: String) =
+            EcommerceFragment().apply {
+                arguments = Bundle().apply {
+                    putString(ARG_PARAM1, param1)
+                    putString(ARG_PARAM2, param2)
+                }
+            }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,16 +61,22 @@ class EcommerceFragment : Fragment(), CellClickListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        _binding = FragmentEcommerceBinding.inflate(inflater, container, false)
         viewmodel = ViewModelProvider(requireActivity())
             .get(EcommViewModel::class.java)
 
         viewmodel.ecommLiveData.observe(viewLifecycleOwner, Observer {
             adapter = EcommerceAdapter(requireContext(), it, this)
-            ecommrcyclr.adapter = adapter
-            ecommrcyclr.layoutManager = LinearLayoutManager(requireContext())
+            binding.ecommrcyclr.adapter = adapter
+            binding.ecommrcyclr.layoutManager = LinearLayoutManager(requireContext())
         })
 
-        return inflater.inflate(R.layout.fragment_ecommerce, container, false)
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -62,51 +85,40 @@ class EcommerceFragment : Fragment(), CellClickListener {
         setHasOptionsMenu(true)
         (activity as AppCompatActivity).supportActionBar?.title = "E-Commerce"
 
-        chipgrp.check(R.id.chip1)
+        binding.chipgrp.check(R.id.chip1)
         viewmodel.loadAllEcommItems()
 
-        chipgrp.setOnCheckedChangeListener { group, checkedId ->
+        binding.chipgrp.setOnCheckedChangeListener { group, checkedId ->
             when (checkedId) {
                 R.id.chip1 -> {
                     viewmodel.loadAllEcommItems().observe(viewLifecycleOwner, Observer {
-                        ecommrcyclr.adapter =
+                        binding.ecommrcyclr.adapter =
                             EcommerceAdapter(requireContext(), it, this)
                     })
                 }
                 R.id.chip2 -> {
                     viewmodel.getSpecificCategoryItems("fertilizer")
                         .observe(viewLifecycleOwner, Observer {
-                            ecommrcyclr.adapter =
+                            binding.ecommrcyclr.adapter =
                                 EcommerceAdapter(requireContext(), it, this)
                         })
                 }
                 R.id.chip3 -> {
                     viewmodel.getSpecificCategoryItems("pesticide")
                         .observe(viewLifecycleOwner, Observer {
-                            ecommrcyclr.adapter =
+                            binding.ecommrcyclr.adapter =
                                 EcommerceAdapter(requireContext(), it, this)
                         })
                 }
                 R.id.chip4 -> {
                     viewmodel.getSpecificCategoryItems("machine")
                         .observe(viewLifecycleOwner, Observer {
-                            ecommrcyclr.adapter =
+                            binding.ecommrcyclr.adapter =
                                 EcommerceAdapter(requireContext(), it, this)
                         })
                 }
             }
         }
-    }
-
-    companion object {
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            EcommerceFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
     }
 
     override fun onCellClickListener(name: String) {
@@ -115,7 +127,7 @@ class EcommerceFragment : Fragment(), CellClickListener {
         bundle.putString("name", name)
         ecommerceItemFragment.arguments = bundle
 
-        val transaction = activity!!.supportFragmentManager
+        val transaction = requireActivity().supportFragmentManager
             .beginTransaction()
             .replace(R.id.frame_layout, ecommerceItemFragment, name)
             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
@@ -133,7 +145,7 @@ class EcommerceFragment : Fragment(), CellClickListener {
         when (item.itemId) {
             R.id.cart_item -> {
                 val cartFragment = CartFragment()
-                val transaction = activity!!.supportFragmentManager
+                val transaction = requireActivity().supportFragmentManager
                     .beginTransaction()
                     .replace(R.id.frame_layout, cartFragment)
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)

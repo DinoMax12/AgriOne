@@ -6,7 +6,6 @@
     android:layout_height="wrap_content"
 
     android:id="@+id/post_container"
-
     >
 
     <!--        <androidx.cardview.widget.CardView-->

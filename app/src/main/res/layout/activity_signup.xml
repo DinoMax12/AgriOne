@@ -7,7 +7,7 @@
         <!-- Adjusted the ViewModel name to match your project -->
         <variable
             name="authViewModel"
-            type="com.project.agrione.viewmodel.AuthViewModel" />
+            type="com.example.agrione.viewmodel.AuthViewModel" />
     </data>
 
     <ScrollView

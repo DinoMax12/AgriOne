@@ -1,4 +1,4 @@
-package com.project.agrione.utilities
+package com.exmaple.agrione.utilities
 
 import android.content.Context
 import android.view.View

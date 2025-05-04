@@ -1,4 +1,4 @@
-package com.project.agrione.view.ecommerce
+package com.example.agrione.view.ecommerce
 
 import android.app.Activity
 import androidx.appcompat.app.AppCompatActivity
@@ -7,16 +7,18 @@ import android.util.Log
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
-import com.project.agrione.R
-import com.project.agrione.model.data.orders
+import com.example.agrione.R
+import com.example.agrione.databinding.ActivityRazorPayBinding
+import com.example.agrione.model.data.Orders
 import com.razorpay.Checkout
 import com.razorpay.PaymentResultListener
-import kotlinx.android.synthetic.main.activity_razor_pay.*
 import java.text.SimpleDateFormat
 import java.util.*
 import org.json.JSONObject
 
 class RazorPayActivity : AppCompatActivity(), PaymentResultListener {
+    private lateinit var binding: ActivityRazorPayBinding
+    
     lateinit var firebaseAuth: FirebaseAuth
     val sdf = SimpleDateFormat("dd/M/yyyy hh:mm:ss")
 
@@ -27,6 +29,7 @@ class RazorPayActivity : AppCompatActivity(), PaymentResultListener {
     var state: String = ""
     var pincode: String = ""
     var mobile: String = ""
+    var addressType: String = "Home" // Default address type
     var currentDate = sdf.format(Date())
     lateinit var realtimeDatabase: FirebaseDatabase
     var productId: String? = null
@@ -37,7 +40,9 @@ class RazorPayActivity : AppCompatActivity(), PaymentResultListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_razor_pay)
+        binding = ActivityRazorPayBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        
         postId = UUID.randomUUID()
 
         firebaseAuth = FirebaseAuth.getInstance()
@@ -46,13 +51,23 @@ class RazorPayActivity : AppCompatActivity(), PaymentResultListener {
         quantity = intent.getStringExtra("quantity")!!.toString().toInt()
         deliveryCost = intent.getStringExtra("deliveryCost")!!.toString().toInt()
 
-        orderNowBtn.setOnClickListener {
-            name = fullNamePrePay.text.toString()
-            locality = localityPrePay.text.toString()
-            city = cityPrePay.text.toString()
-            state = statePrePay.text.toString()
-            pincode = pincodePrePay.text.toString()
-            mobile = mobileNumberPrePay.text.toString()
+        // Set up radio group listener
+        binding.addressTypeRadioGroup.setOnCheckedChangeListener { group, checkedId ->
+            addressType = when (checkedId) {
+                R.id.homerd -> "Home"
+                R.id.officerd -> "Office"
+                R.id.otherrd -> "Other"
+                else -> "Home"
+            }
+        }
+
+        binding.orderNowBtn.setOnClickListener {
+            name = binding.fullNamePrePay.text.toString()
+            locality = binding.localityPrePay.text.toString()
+            city = binding.cityPrePay.text.toString()
+            state = binding.statePrePay.text.toString()
+            pincode = binding.pincodePrePay.text.toString()
+            mobile = binding.mobileNumberPrePay.text.toString()
             if (name.isNullOrEmpty() ||
                 locality.isNullOrEmpty() ||
                 city.isNullOrEmpty() ||
@@ -67,7 +82,7 @@ class RazorPayActivity : AppCompatActivity(), PaymentResultListener {
             }
         }
 
-        netValue.text = "Net Value: ₹ ${(itemCost!! * quantity!! + deliveryCost!!)}"
+        binding.netValue.text = "Net Value: ₹ ${(itemCost!! * quantity!! + deliveryCost!!)}"
     }
 
     private fun startPayment() {
@@ -124,7 +139,7 @@ class RazorPayActivity : AppCompatActivity(), PaymentResultListener {
             date1 = calendar.time
 
             orderRef.setValue(
-                orders(
+                Orders(
                     name!!,
                     locality!!,
                     city!!,

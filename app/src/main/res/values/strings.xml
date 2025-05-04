@@ -1,9 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">AgriOne</string>
+    <string name="app_name">Agrione</string>
+    <string name="payment_title">Order Payment</string>
+    <string name="address_type_home">Home</string>
+    <string name="address_type_office">Office</string>
+    <string name="address_type_other">Other</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="open">Open</string>
     <string name="close">Close</string>
     <string name="loading">Loading...</string>
     <string name="key_id">rzp_test_4KlOjIggoWzTlr</string>
+    <string name="default_web_client_id">576234890939-k0snue5t8k5urhpvh6fg9tru144ukp3p.apps.googleusercontent.com</string>
 </resources>

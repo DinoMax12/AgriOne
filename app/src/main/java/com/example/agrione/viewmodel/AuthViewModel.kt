@@ -1,4 +1,4 @@
-package com.agrione.app.viewmodel
+package com.example.agrione.viewmodel
 
 import android.content.Intent
 import android.util.Log
@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.common.api.ApiException
-import com.agrione.app.model.AuthRepository
+import com.example.agrione.model.AuthRepository
 
 class AuthViewModel : ViewModel() {
 

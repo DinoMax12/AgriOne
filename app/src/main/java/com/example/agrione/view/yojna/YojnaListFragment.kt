@@ -1,4 +1,4 @@
-package com.agrione.app.view.yojna
+package com.example.agrione.view.yojna
 
 import android.os.Bundle
 import android.util.Log
@@ -11,11 +11,11 @@ import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.agrione.app.R
-import com.agrione.app.adapter.YojnaAdapter
-import com.agrione.app.utilities.CellClickListener
-import com.agrione.app.viewmodel.YojnaViewModel
-import kotlinx.android.synthetic.main.fragment_yojna_list.*
+import com.example.agrione.R
+import com.example.agrione.adapter.YojnaAdapter
+import com.example.agrione.utilities.CellClickListener
+import com.example.agrione.viewmodel.YojnaViewModel
+import com.example.agrione.databinding.FragmentYojnaListBinding
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
@@ -27,6 +27,8 @@ class YojnaListFragment : Fragment(), CellClickListener {
     private lateinit var viewModel: YojnaViewModel
     private lateinit var adapter: YojnaAdapter
     private lateinit var yojnaFragment: YojnaFragment
+    private var _binding: FragmentYojnaListBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,22 +45,27 @@ class YojnaListFragment : Fragment(), CellClickListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        _binding = FragmentYojnaListBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
-        viewModel.message3.observe(viewLifecycleOwner, Observer { response ->
-            Log.d("Yojna All Data", response[0].data.toString())
-
-            adapter = YojnaAdapter(requireContext(), response, this)
-            rcyclr_yojnaList.adapter = adapter
-            rcyclr_yojnaList.layoutManager = LinearLayoutManager(requireContext())
-        })
-
-        return inflater.inflate(R.layout.fragment_yojna_list, container, false)
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
         (activity as AppCompatActivity).supportActionBar?.title = "Krishi Yojna"
+
+        viewModel.message3.observe(viewLifecycleOwner, Observer { response ->
+            Log.d("Yojna All Data", response[0].data.toString())
+
+            adapter = YojnaAdapter(requireContext(), response, this)
+            binding.rcyclrYojnaList.adapter = adapter
+            binding.rcyclrYojnaList.layoutManager = LinearLayoutManager(requireContext())
+        })
     }
 
     companion object {

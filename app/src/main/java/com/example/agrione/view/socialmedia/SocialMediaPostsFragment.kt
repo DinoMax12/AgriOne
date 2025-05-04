@@ -1,4 +1,4 @@
-package com.project.agrione.view.socialmedia
+package com.example.agrione.view.socialmedia
 
 import android.os.Bundle
 import android.util.Log
@@ -12,15 +12,17 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
-import com.project.agrione.R
-import com.project.agrione.adapter.SMPostListAdapter
-import com.project.agrione.viewmodel.SocialMediaViewModel
-import kotlinx.android.synthetic.main.fragment_social_media_posts.*
+import com.example.agrione.R
+import com.example.agrione.adapter.SMPostListAdapter
+import com.example.agrione.viewmodel.SocialMediaViewModel
+import com.example.agrione.databinding.FragmentSocialMediaPostsBinding
 
 /**
  * A simple [Fragment] subclass for displaying social media posts in the Agrione app.
  */
 class SocialMediaPostsFragment : Fragment() {
+    private var _binding: FragmentSocialMediaPostsBinding? = null
+    private val binding get() = _binding!!
 
     private lateinit var smCreatePostFragment: SMCreatePostFragment
     private var adapter: SMPostListAdapter? = null
@@ -41,8 +43,13 @@ class SocialMediaPostsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_social_media_posts, container, false)
+        _binding = FragmentSocialMediaPostsBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     companion object {
@@ -68,8 +75,8 @@ class SocialMediaPostsFragment : Fragment() {
             .addOnSuccessListener {
                 Log.d("Posts data", it.documents.toString())
                 adapter = SMPostListAdapter(requireContext(), it.documents)
-                postsRecycler.adapter = adapter
-                postsRecycler.layoutManager = LinearLayoutManager(requireContext())
+                binding.postsRecycler.adapter = adapter
+                binding.postsRecycler.layoutManager = LinearLayoutManager(requireContext())
             }
             .addOnFailureListener {
                 Log.e("Firestore Error", "Failed to fetch posts", it)
@@ -89,8 +96,8 @@ class SocialMediaPostsFragment : Fragment() {
         smCreatePostFragment = SMCreatePostFragment()
 
         // Setup floating action button for creating posts
-        createPostFloating.setOnClickListener {
-            val transaction = activity!!.supportFragmentManager
+        binding.createPostFloating.setOnClickListener {
+            val transaction = requireActivity().supportFragmentManager
                 .beginTransaction()
                 .replace(R.id.frame_layout, smCreatePostFragment, "smCreate")
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)

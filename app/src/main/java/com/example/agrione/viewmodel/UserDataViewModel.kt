@@ -1,4 +1,4 @@
-package com.agrione.app.viewmodel
+package com.example.agrione.viewmodel
 
 import android.content.Context
 import android.util.Log
@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModel
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
-import com.agrione.app.R
+import com.example.agrione.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 

@@ -1,4 +1,4 @@
-package com.agrione.app.view.weather
+package com.example.agrione.view.weather
 
 import android.os.Build
 import android.os.Bundle
@@ -14,14 +14,20 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.agrione.app.R
-import com.agrione.app.adapter.CurrentWeatherAdapter
-import com.agrione.app.adapter.WeatherAdapter
-import com.agrione.app.databinding.FragmentWeatherBinding
-import com.agrione.app.model.data.WeatherList
-import com.agrione.app.viewmodel.WeatherListener
-import com.agrione.app.viewmodel.WeatherViewModel
-import kotlinx.android.synthetic.main.fragment_weather.*
+import com.example.agrione.R
+import com.example.agrione.adapter.CurrentWeatherAdapter
+import com.example.agrione.adapter.WeatherAdapter
+import com.example.agrione.databinding.FragmentWeatherBinding
+import com.example.agrione.model.data.WeatherList
+import com.example.agrione.viewmodel.WeatherListener
+import com.example.agrione.viewmodel.WeatherViewModel
+import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import java.util.*
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
@@ -34,7 +40,11 @@ class WeatherFragment : Fragment(), WeatherListener {
     private lateinit var adapter: WeatherAdapter
     private lateinit var adapter2: CurrentWeatherAdapter
     private lateinit var viewModel: WeatherViewModel
-    private var fragmentWeatherBinding: FragmentWeatherBinding? = null
+    private var _binding: FragmentWeatherBinding? = null
+    private val binding get() = _binding!!
+    private val coroutineScope = CoroutineScope(Dispatchers.Main)
+    private val firebaseAuth = FirebaseAuth.getInstance()
+    private val firebaseFirestore = FirebaseFirestore.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,7 +65,8 @@ class WeatherFragment : Fragment(), WeatherListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_weather, container, false)
+        _binding = FragmentWeatherBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     @RequiresApi(Build.VERSION_CODES.M)
@@ -66,7 +77,7 @@ class WeatherFragment : Fragment(), WeatherListener {
         (activity as AppCompatActivity).supportActionBar?.title = "Weather Forecast"
 
         val city = viewModel.getCoordinates().value
-        weatherCity.text = city?.get(2).toString()
+        binding.weatherCity.text = city?.get(2).toString()
         val newWeatherData = viewModel.newDataTrial.value
         Log.d("New Data Weather Trial", newWeatherData.toString())
 
@@ -92,11 +103,37 @@ class WeatherFragment : Fragment(), WeatherListener {
         adapter = WeatherAdapter(requireContext(), data3)
         adapter2 = CurrentWeatherAdapter(requireContext(), data2)
 
-        rcylr_weather.adapter = adapter
-        rcylr_weather.layoutManager = LinearLayoutManager(requireContext())
+        binding.rcylrWeather.adapter = adapter
+        binding.rcylrWeather.layoutManager = LinearLayoutManager(requireContext())
 
-        currentWeather_rcycl.adapter = adapter2
-        currentWeather_rcycl.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        binding.currentWeatherRcycl.adapter = adapter2
+        binding.currentWeatherRcycl.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+
+        coroutineScope.launch {
+            try {
+                viewModel.updateNewData()
+            } catch (e: Exception) {
+                Toast.makeText(requireContext(), "Error fetching weather data: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        viewModel.newDataTrial.observe(viewLifecycleOwner) { weatherData ->
+            if (weatherData != null) {
+                val updatedList = mutableListOf<WeatherList>()
+                for (a in 0..39) {
+                    if (weatherData.list[a].dt_txt.slice(11..12) == "12") {
+                        updatedList.add(weatherData.list[a])
+                    }
+                }
+                adapter = WeatherAdapter(requireContext(), updatedList)
+                binding.rcylrWeather.adapter = adapter
+            }
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     companion object {
@@ -109,6 +146,7 @@ class WeatherFragment : Fragment(), WeatherListener {
                 }
             }
     }
+    
 
     override fun onSuccess(authRepo: LiveData<String>) {
         authRepo.observe(this, Observer {

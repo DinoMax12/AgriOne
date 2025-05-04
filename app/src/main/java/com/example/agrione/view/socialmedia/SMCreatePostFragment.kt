@@ -1,4 +1,4 @@
-package com.project.agrione.view.socialmedia
+package com.example.agrione.view.socialmedia
 
 import android.app.Activity
 import android.content.Intent
@@ -23,15 +23,16 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
-import com.project.agrione.R
-import com.project.agrione.viewmodel.UserDataViewModel
-import com.project.agrione.viewmodel.UserProfilePostsViewModel
-import kotlinx.android.synthetic.main.fragment_s_m_create_post.*
-import kotlinx.android.synthetic.main.nav_header.view.*
+import com.example.agrione.R
+import com.example.agrione.viewmodel.UserDataViewModel
+import com.example.agrione.viewmodel.UserProfilePostsViewModel
+import com.example.agrione.databinding.FragmentSMCreatePostBinding
 import java.io.IOException
 import java.util.*
 
 class SMCreatePostFragment : Fragment() {
+    private var _binding: FragmentSMCreatePostBinding? = null
+    private val binding get() = _binding!!
 
     private var param1: String? = null
     private var param2: String? = null
@@ -46,6 +47,20 @@ class SMCreatePostFragment : Fragment() {
     lateinit var userDataViewModel: UserDataViewModel
     val db = FirebaseFirestore.getInstance()
     val data2 = HashMap<String, Any>()
+
+    companion object {
+        private const val ARG_PARAM1 = "param1"
+        private const val ARG_PARAM2 = "param2"
+
+        @JvmStatic
+        fun newInstance(param1: String, param2: String) =
+            SMCreatePostFragment().apply {
+                arguments = Bundle().apply {
+                    putString(ARG_PARAM1, param1)
+                    putString(ARG_PARAM2, param2)
+                }
+            }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,18 +80,13 @@ class SMCreatePostFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_s_m_create_post, container, false)
+        _binding = FragmentSMCreatePostBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-    companion object {
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            SMCreatePostFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -85,11 +95,11 @@ class SMCreatePostFragment : Fragment() {
         setHasOptionsMenu(true)
         (activity as AppCompatActivity).supportActionBar?.title = "Social Media"
 
-        progress_create_post.visibility = View.GONE
-        progressTitle.visibility = View.GONE
+        binding.progressCreatePost.visibility = View.GONE
+        binding.progressTitle.visibility = View.GONE
 
         data2["uploadType"] = ""
-        uploadImagePreview.setOnClickListener {
+        binding.uploadImagePreview.setOnClickListener {
             val intent = Intent()
             intent.type = "image/* video/*"
             intent.action = Intent.ACTION_PICK
@@ -106,18 +116,17 @@ class SMCreatePostFragment : Fragment() {
                 .addOnCompleteListener {
                     val data = it.result
                     data2["name"] = data!!.getString("name").toString()
-                    Log.d("Google User", data!!.getString("name"))
+                    data!!.getString("name")?.let { it1 -> Log.d("Google User", it1) }
                 }
         } else {
             data2["name"] = googleLoggedUser.toString()
             Log.d("Normal User", googleLoggedUser)
         }
 
-        createPostBtnSM.setOnClickListener {
-
-            if (postTitleSM.text.toString().isNullOrEmpty()) {
+        binding.createPostBtnSM.setOnClickListener {
+            if (binding.postTitleSM.text.toString().isNullOrEmpty()) {
                 Toast.makeText(
-                    activity!!.applicationContext,
+                    requireActivity().applicationContext,
                     "Please enter title",
                     Toast.LENGTH_SHORT
                 ).show()
@@ -136,7 +145,7 @@ class SMCreatePostFragment : Fragment() {
             }
 
             filePath = data.data
-            uploadImagePreview.setImageURI(filePath)
+            binding.uploadImagePreview.setImageURI(filePath)
             try {
                 val lastIndex = filePath.toString().length - 1
                 val type =
@@ -151,7 +160,7 @@ class SMCreatePostFragment : Fragment() {
                 }
 
                 Log.d("File Type 3", data2["uploadType"].toString())
-                bitmap = MediaStore.Images.Media.getBitmap(activity!!.contentResolver, filePath)
+                bitmap = MediaStore.Images.Media.getBitmap(requireActivity().contentResolver, filePath)
 
             } catch (e: IOException) {
                 e.printStackTrace()
@@ -160,8 +169,8 @@ class SMCreatePostFragment : Fragment() {
     }
 
     private fun uploadImage() {
-        progress_create_post.visibility = View.VISIBLE
-        progressTitle.visibility = View.VISIBLE
+        binding.progressCreatePost.visibility = View.VISIBLE
+        binding.progressTitle.visibility = View.VISIBLE
         if (filePath != null) {
             postID = UUID.randomUUID()
             val ref = storageReference?.child("posts/" + postID.toString())
@@ -172,8 +181,8 @@ class SMCreatePostFragment : Fragment() {
                     if (!task.isSuccessful) {
                         task.exception?.let {
                             throw it
-                            progress_create_post.visibility = View.GONE
-                            progressTitle.visibility = View.GONE
+                            binding.progressCreatePost.visibility = View.GONE
+                            binding.progressTitle.visibility = View.GONE
                         }
                     }
                     return@Continuation ref.downloadUrl
@@ -182,13 +191,13 @@ class SMCreatePostFragment : Fragment() {
                         val downloadUri = task.result
                         addUploadRecordWithImageToDb(downloadUri.toString(), postID!!)
                     } else {
-                        progress_create_post.visibility = View.GONE
-                        progressTitle.visibility = View.GONE
+                        binding.progressCreatePost.visibility = View.GONE
+                        binding.progressTitle.visibility = View.GONE
                     }
                 }?.addOnFailureListener {
-                    progress_create_post.visibility = View.GONE
-                    progressTitle.visibility = View.GONE
-                    Toast.makeText(activity!!.applicationContext, it.message, Toast.LENGTH_LONG).show()
+                    binding.progressCreatePost.visibility = View.GONE
+                    binding.progressTitle.visibility = View.GONE
+                    Toast.makeText(requireActivity().applicationContext, it.message, Toast.LENGTH_LONG).show()
                 }
         } else {
             data2["uploadType"] = ""
@@ -208,8 +217,8 @@ class SMCreatePostFragment : Fragment() {
 
         data2["userID"] = authUser!!.currentUser?.email.toString()
         data2["timeStamp"] = postTimeStamp
-        data2["title"] = postTitleSM.text.toString()
-        data2["description"] = descPostSM.text.toString()
+        data2["title"] = binding.postTitleSM.text.toString()
+        data2["description"] = binding.descPostSM.text.toString()
 
         db.collection("posts")
             .add(data2)
@@ -228,16 +237,16 @@ class SMCreatePostFragment : Fragment() {
                     .addOnSuccessListener { documentReference ->
 
                         Toast.makeText(
-                            activity!!.applicationContext,
+                            requireActivity().applicationContext,
                             "Post Created",
                             Toast.LENGTH_LONG
                         ).show()
 
-                        progress_create_post.visibility = View.GONE
-                        progressTitle.visibility = View.GONE
+                        binding.progressCreatePost.visibility = View.GONE
+                        binding.progressTitle.visibility = View.GONE
                         userDataViewModel.getUserData(authUser!!.currentUser?.email.toString())
                         socialMediaPostsFragment = SocialMediaPostsFragment()
-                        val transaction = activity!!.supportFragmentManager
+                        val transaction = requireActivity().supportFragmentManager
                             .beginTransaction()
                             .replace(R.id.frame_layout, socialMediaPostsFragment, "smPostList")
                             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
@@ -247,22 +256,22 @@ class SMCreatePostFragment : Fragment() {
                     }
                     .addOnFailureListener { e ->
                         Toast.makeText(
-                            activity!!.applicationContext,
+                            requireActivity().applicationContext,
                             "Error saving to DB",
                             Toast.LENGTH_LONG
                         ).show()
-                        progress_create_post.visibility = View.GONE
-                        progressTitle.visibility = View.GONE
+                        binding.progressCreatePost.visibility = View.GONE
+                        binding.progressTitle.visibility = View.GONE
                     }
             }
             .addOnFailureListener { e ->
                 Toast.makeText(
-                    activity!!.applicationContext,
+                    requireActivity().applicationContext,
                     "Error saving to DB",
                     Toast.LENGTH_LONG
                 ).show()
-                progress_create_post.visibility = View.GONE
-                progressTitle.visibility = View.GONE
+                binding.progressCreatePost.visibility = View.GONE
+                binding.progressTitle.visibility = View.GONE
             }
     }
 }

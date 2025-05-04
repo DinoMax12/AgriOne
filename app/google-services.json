@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "576234890939",
+    "project_id": "agrione-67d77",
+    "storage_bucket": "agrione-67d77.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:576234890939:android:4c84e5b3f1f411ca0eeb9e",
+        "android_client_info": {
+          "package_name": "com.example.agrione"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "576234890939-k0snue5t8k5urhpvh6fg9tru144ukp3p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAuryLnwG6nkja59mN-VEvBrv4Xtc2cw0w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "576234890939-k0snue5t8k5urhpvh6fg9tru144ukp3p.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

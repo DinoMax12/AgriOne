@@ -1,6 +1,6 @@
-package com.project.agrione.model
+package com.example.agrione.model
 
-import com.project.agrione.model.data.WeatherRootList
+import com.example.agrione.model.data.WeatherRootList
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

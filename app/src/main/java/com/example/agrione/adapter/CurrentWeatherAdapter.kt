@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.agrione.R
 import com.example.agrione.model.data.WeatherList
-import kotlinx.android.synthetic.main.single_currentweather.view.*
 
 class CurrentWeatherAdapter(val context: Context, private val weatherData: List<WeatherList>) :
     RecyclerView.Adapter<CurrentWeatherAdapter.CurrentWeatherViewHolder>() {

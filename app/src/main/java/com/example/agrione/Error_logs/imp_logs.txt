@@ -1,0 +1,74 @@
+2025-05-04 17:42:31.215  6851-8471  FirebaseAuth            com.example.agrione                  D  Notifying id token listeners about user ( 2VarZhzg9PN2AO55qphyvEWdtAe2 ).
+2025-05-04 17:42:31.216  6851-8471  FirebaseAuth            com.example.agrione                  D  Notifying auth state listeners about user ( 2VarZhzg9PN2AO55qphyvEWdtAe2 ).
+2025-05-04 17:42:31.219  6851-6958  gralloc4                com.example.agrione                  E  Empty SMPTE 2094-40 data
+2025-05-04 17:42:31.221  6851-6851  Compatibil...geReporter com.example.agrione                  D  Compat change id reported: 147798919; UID 10463; state: ENABLED
+2025-05-04 17:42:31.232  6851-6851  LoginActivity           com.example.agrione                  D  Navigating to Dashboard.
+2025-05-04 17:42:31.235  6851-6958  gralloc4                com.example.agrione                  E  Empty SMPTE 2094-40 data
+2025-05-04 17:42:31.249  6851-6958  gralloc4                com.example.agrione                  E  Empty SMPTE 2094-40 data
+2025-05-04 17:42:31.268  6851-6958  gralloc4                com.example.agrione                  E  Empty SMPTE 2094-40 data
+2025-05-04 17:42:31.272  6851-8485  libMEOW                 com.example.agrione                  D  meow new tls: 0xb40000720d3f5480
+2025-05-04 17:42:31.272  6851-8485  libMEOW                 com.example.agrione                  D  applied 1 plugins for [com.example.agrione]:
+2025-05-04 17:42:31.272  6851-8485  libMEOW                 com.example.agrione                  D    plugin 1: [libMEOW_gift.so]:
+2025-05-04 17:42:31.273  6851-8485  libMEOW                 com.example.agrione                  D  meow delete tls: 0xb40000720d3f5480
+2025-05-04 17:42:31.304  6851-6851  ScrollerOp...ionManager com.example.agrione                  D  registerConfigChangedListener
+2025-05-04 17:42:31.304  6851-6851  ScrollerOp...ionManager com.example.agrione                  D  registerConfigChangedListener
+2025-05-04 17:42:31.343  6851-6851  ScrollerOp...ionManager com.example.agrione                  D  registerConfigChangedListener
+2025-05-04 17:42:31.364  6851-6851  IS_CTS_MODE             com.example.agrione                  D  false
+2025-05-04 17:42:31.364  6851-6851  MULTI_WINDOW_ENABLED    com.example.agrione                  D  false
+2025-05-04 17:42:31.366  6851-6851  DecorView[]             com.example.agrione                  D  getWindowModeFromSystem  windowmode is 1
+2025-05-04 17:42:31.368  6851-6851  ScrollerOp...ionManager com.example.agrione                  D  registerConfigChangedListener
+2025-05-04 17:42:31.375  7938-14100 ActivityManagerWrapper  com.mi.android.globallauncher        E  getRecentTasks: mainTaskId=2857   userId=0   baseIntent=Intent { act=android.intent.action.MAIN flag=268435456 cmp=ComponentInfo{com.example.agrione/com.example.agrione.view.dashboard.DashboardActivity} }
+2025-05-04 17:42:31.376  6851-6851  ActionBarDrawerToggle   com.example.agrione                  W  DrawerToggle may not show up because NavigationIcon is not visible. You may need to call actionbar.setDisplayHomeAsUpEnabled(true);
+2025-05-04 17:42:31.393  7938-14100 ActivityManagerWrapper  com.mi.android.globallauncher        E  getRecentTasks: mainTaskId=2857   userId=0   baseIntent=Intent { act=android.intent.action.MAIN flag=268435456 cmp=ComponentInfo{com.example.agrione/com.example.agrione.view.dashboard.DashboardActivity} }
+2025-05-04 17:42:31.394  6851-6851  DecorView[]             com.example.agrione                  D  onWindowFocusChanged hasWindowFocus false
+2025-05-04 17:42:31.414  6851-6958  gralloc4                com.example.agrione                  E  Empty SMPTE 2094-40 data
+2025-05-04 17:42:31.426  6851-8490  libMEOW                 com.example.agrione                  D  meow new tls: 0xb400007208e50480
+2025-05-04 17:42:31.426  6851-8490  libMEOW                 com.example.agrione                  D  applied 1 plugins for [com.example.agrione]:
+2025-05-04 17:42:31.426  6851-8490  libMEOW                 com.example.agrione                  D    plugin 1: [libMEOW_gift.so]:
+2025-05-04 17:42:31.426  6851-8490  libMEOW                 com.example.agrione                  D  meow delete tls: 0xb400007208e50480
+2025-05-04 17:42:31.446  6851-6851  IS_CTS_MODE             com.example.agrione                  D  false
+2025-05-04 17:42:31.446  6851-6851  MULTI_WINDOW_ENABLED    com.example.agrione                  D  false
+2025-05-04 17:42:31.448  6851-6851  DecorView[]             com.example.agrione                  D  getWindowModeFromSystem  windowmode is 1
+2025-05-04 17:42:31.460  6851-8492  libMEOW                 com.example.agrione                  D  meow new tls: 0xb400007208e6c480
+2025-05-04 17:42:31.460  6851-8492  libMEOW                 com.example.agrione                  D  applied 1 plugins for [com.example.agrione]:
+2025-05-04 17:42:31.460  6851-8492  libMEOW                 com.example.agrione                  D    plugin 1: [libMEOW_gift.so]:
+2025-05-04 17:42:31.461  6851-8492  libMEOW                 com.example.agrione                  D  meow delete tls: 0xb400007208e6c480
+2025-05-04 17:42:31.471  6851-6851  IS_CTS_MODE             com.example.agrione                  D  false
+2025-05-04 17:42:31.471  6851-6851  MULTI_WINDOW_ENABLED    com.example.agrione                  D  false
+2025-05-04 17:42:31.472  6851-6851  DecorView[]             com.example.agrione                  D  getWindowModeFromSystem  windowmode is 1
+2025-05-04 17:42:31.474  6851-6851  ScrollerOp...ionManager com.example.agrione                  D  registerConfigChangedListener
+2025-05-04 17:42:31.480  6851-6851  ScrollerOp...ionManager com.example.agrione                  D  registerConfigChangedListener
+2025-05-04 17:42:31.530  6851-6851  LoginActivity           com.example.agrione                  D  User already logged in, navigating to Dashboard.
+2025-05-04 17:42:31.530  6851-6851  LoginActivity           com.example.agrione                  D  Navigating to Dashboard.
+2025-05-04 17:42:31.556  6851-8494  libMEOW                 com.example.agrione                  D  meow new tls: 0xb400007208ef2b00
+2025-05-04 17:42:31.556  6851-8494  libMEOW                 com.example.agrione                  D  applied 1 plugins for [com.example.agrione]:
+2025-05-04 17:42:31.556  6851-8494  libMEOW                 com.example.agrione                  D    plugin 1: [libMEOW_gift.so]:
+2025-05-04 17:42:31.556  6851-8494  libMEOW                 com.example.agrione                  D  meow delete tls: 0xb400007208ef2b00
+2025-05-04 17:42:31.568  6851-6851  ScrollerOp...ionManager com.example.agrione                  D  registerConfigChangedListener
+2025-05-04 17:42:31.568  6851-6851  ScrollerOp...ionManager com.example.agrione                  D  registerConfigChangedListener
+2025-05-04 17:42:31.604  6851-6851  ScrollerOp...ionManager com.example.agrione                  D  registerConfigChangedListener
+2025-05-04 17:42:31.621  6851-6851  IS_CTS_MODE             com.example.agrione                  D  false
+2025-05-04 17:42:31.621  6851-6851  MULTI_WINDOW_ENABLED    com.example.agrione                  D  false
+2025-05-04 17:42:31.622  6851-6851  DecorView[]             com.example.agrione                  D  getWindowModeFromSystem  windowmode is 1
+2025-05-04 17:42:31.624  6851-6851  ScrollerOp...ionManager com.example.agrione                  D  registerConfigChangedListener
+2025-05-04 17:42:31.631  6851-6851  ActionBarDrawerToggle   com.example.agrione                  W  DrawerToggle may not show up because NavigationIcon is not visible. You may need to call actionbar.setDisplayHomeAsUpEnabled(true);
+2025-05-04 17:42:31.667  6851-8496  libMEOW                 com.example.agrione                  D  meow new tls: 0xb400007208f5cb00
+2025-05-04 17:42:31.667  6851-8496  libMEOW                 com.example.agrione                  D  applied 1 plugins for [com.example.agrione]:
+2025-05-04 17:42:31.667  6851-8496  libMEOW                 com.example.agrione                  D    plugin 1: [libMEOW_gift.so]:
+2025-05-04 17:42:31.667  6851-8496  libMEOW                 com.example.agrione                  D  meow delete tls: 0xb400007208f5cb00
+2025-05-04 17:42:31.669  7938-14100 ActivityManagerWrapper  com.mi.android.globallauncher        E  getRecentTasks: mainTaskId=2857   userId=0   baseIntent=Intent { act=android.intent.action.MAIN flag=268435456 cmp=ComponentInfo{com.example.agrione/com.example.agrione.view.dashboard.DashboardActivity} }
+2025-05-04 17:42:31.687  7938-14100 ActivityManagerWrapper  com.mi.android.globallauncher        E  getRecentTasks: mainTaskId=2857   userId=0   baseIntent=Intent { act=android.intent.action.MAIN flag=268435456 cmp=ComponentInfo{com.example.agrione/com.example.agrione.view.dashboard.DashboardActivity} }
+2025-05-04 17:42:31.687  6851-6851  IS_CTS_MODE             com.example.agrione                  D  false
+2025-05-04 17:42:31.687  6851-6851  MULTI_WINDOW_ENABLED    com.example.agrione                  D  false
+2025-05-04 17:42:31.688  6851-6851  DecorView[]             com.example.agrione                  D  getWindowModeFromSystem  windowmode is 1
+2025-05-04 17:42:31.711  6851-8498  libMEOW                 com.example.agrione                  D  meow new tls: 0xb400007208f67b00
+2025-05-04 17:42:31.711  6851-8498  libMEOW                 com.example.agrione                  D  applied 1 plugins for [com.example.agrione]:
+2025-05-04 17:42:31.711  6851-8498  libMEOW                 com.example.agrione                  D    plugin 1: [libMEOW_gift.so]:
+2025-05-04 17:42:31.712  6851-8498  libMEOW                 com.example.agrione                  D  meow delete tls: 0xb400007208f67b00
+2025-05-04 17:42:31.719  6851-6851  IS_CTS_MODE             com.example.agrione                  D  false
+2025-05-04 17:42:31.719  6851-6851  MULTI_WINDOW_ENABLED    com.example.agrione                  D  false
+2025-05-04 17:42:31.720  6851-6851  DecorView[]             com.example.agrione                  D  getWindowModeFromSystem  windowmode is 1
+2025-05-04 17:42:31.722  6851-6851  ScrollerOp...ionManager com.example.agrione                  D  registerConfigChangedListener
+2025-05-04 17:42:31.728  6851-6851  ScrollerOp...ionManager com.example.agrione                  D  registerConfigChangedListener
+2025-05-04 17:42:31.769  6851-6851  LoginActivity           com.example.agrione                  D  User already logged in, navigating to Dashboard.
+2025-05-04 17:42:31.769  6851-6851  LoginActivity           com.example.agrione                  D  Navigating to Dashboard.

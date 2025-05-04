@@ -1,10 +1,10 @@
-package com.project.agrione.model
+package com.example.agrione.model
 
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.firestore.FirebaseFirestore
-import com.project.agrione.viewmodel.ArticleViewModel
+import com.example.agrione.viewmodel.ArticleViewModel
 
 class ArticleRepository(private val viewModel: ArticleViewModel) {
 

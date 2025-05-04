@@ -1,4 +1,4 @@
-package com.project.agrione.view.ecommerce
+package com.example.agrione.view.ecommerce
 
 import android.content.Intent
 import android.net.Uri
@@ -11,24 +11,22 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentTransaction
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.asura.library.posters.Poster
-import com.asura.library.posters.RawVideo
-import com.asura.library.posters.RemoteImage
-import com.asura.library.posters.RemoteVideo
-import com.asura.library.views.PosterSlider
+import androidx.viewpager2.widget.ViewPager2
 import com.google.common.base.MoreObjects
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
-import com.project.agrione.R
-import com.project.agrione.adapter.AttributesNormalAdapter
-import com.project.agrione.adapter.AttributesSelectionAdapter
-import com.project.agrione.model.data.CartItem
-import com.project.agrione.utilities.CellClickListener
-import com.project.agrione.viewmodel.EcommViewModel
-import kotlinx.android.synthetic.main.fragment_ecommerce_item.*
+import com.example.agrione.R
+import com.example.agrione.adapter.AttributesNormalAdapter
+import com.example.agrione.adapter.AttributesSelectionAdapter
+import com.example.agrione.adapter.ImageSliderAdapter
+import com.example.agrione.model.data.CartItem
+import com.example.agrione.utilities.CellClickListener
+import com.example.agrione.viewmodel.EcommViewModel
+import com.example.agrione.databinding.FragmentEcommerceItemBinding
+import com.bumptech.glide.Glide
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -44,6 +42,9 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class EcommerceItemFragment : Fragment(), CellClickListener {
+    private var _binding: FragmentEcommerceItemBinding? = null
+    private val binding get() = _binding!!
+
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private lateinit var viewmodel: EcommViewModel
@@ -53,15 +54,16 @@ class EcommerceItemFragment : Fragment(), CellClickListener {
     lateinit var realtimeDatabase: FirebaseDatabase
     lateinit var firebaseAuth: FirebaseAuth
     val sdf = SimpleDateFormat("dd/M/yyyy hh:mm:ss")
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
-        viewmodel = ViewModelProviders.of(requireActivity())
-            .get<EcommViewModel>(EcommViewModel::class.java)
-        Toast.makeText(activity!!.applicationContext, "Something" + tag, Toast.LENGTH_SHORT).show()
+        viewmodel = ViewModelProvider(requireActivity())
+            .get(EcommViewModel::class.java)
+        Toast.makeText(requireActivity().applicationContext, "Something" + tag, Toast.LENGTH_SHORT).show()
 
         realtimeDatabase = FirebaseDatabase.getInstance()
         firebaseAuth = FirebaseAuth.getInstance()
@@ -71,8 +73,13 @@ class EcommerceItemFragment : Fragment(), CellClickListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_ecommerce_item, container, false)
+        _binding = FragmentEcommerceItemBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     companion object {
@@ -100,159 +107,148 @@ class EcommerceItemFragment : Fragment(), CellClickListener {
         setHasOptionsMenu(true)
 
         (activity as AppCompatActivity).supportActionBar?.title = "E-Commerce"
-        loadingText.text = "Loading..."
+        binding.loadingText.text = "Loading..."
 
-        val color1Params = color1.layoutParams
-        val color2Params = color2.layoutParams
-        val color3Params = color3.layoutParams
-        val color4Params = color4.layoutParams
+        val color1Params = binding.color1.layoutParams
+        val color2Params = binding.color2.layoutParams
+        val color3Params = binding.color3.layoutParams
+        val color4Params = binding.color4.layoutParams
 
         val density = resources.displayMetrics.density
         color1Params.width = (density * 40).toInt()
         color1Params.height = (density * 35).toInt()
-        color1.layoutParams = color1Params
+        binding.color1.layoutParams = color1Params
 
-        color1.setOnClickListener {
+        binding.color1.setOnClickListener {
             color1Params.width = (density * 40).toInt()
             color1Params.height = (density * 35).toInt()
-            color1.layoutParams = color1Params
+            binding.color1.layoutParams = color1Params
 
             color3Params.width = (density * 30).toInt()
             color3Params.height = (density * 25).toInt()
-            color3.layoutParams = color3Params
+            binding.color3.layoutParams = color3Params
 
             color4Params.width = (density * 30).toInt()
             color4Params.height = (density * 25).toInt()
-            color4.layoutParams = color4Params
+            binding.color4.layoutParams = color4Params
 
             color2Params.width = (density * 30).toInt()
             color2Params.height = (density * 25).toInt()
-            color2.layoutParams = color2Params
+            binding.color2.layoutParams = color2Params
         }
 
-        color2.setOnClickListener {
+        binding.color2.setOnClickListener {
             color1Params.width = (density * 30).toInt()
             color1Params.height = (density * 25).toInt()
-            color1.layoutParams = color1Params
+            binding.color1.layoutParams = color1Params
 
             color3Params.width = (density * 30).toInt()
             color3Params.height = (density * 25).toInt()
-            color3.layoutParams = color3Params
+            binding.color3.layoutParams = color3Params
 
             color4Params.width = (density * 30).toInt()
             color4Params.height = (density * 25).toInt()
-            color4.layoutParams = color4Params
+            binding.color4.layoutParams = color4Params
 
             color2Params.width = (density * 40).toInt()
             color2Params.height = (density * 35).toInt()
-            color2.layoutParams = color2Params
+            binding.color2.layoutParams = color2Params
         }
 
-        increaseQtyBtn.setOnClickListener {
-            quantityCountEcomm.text = (quantityCountEcomm.text.toString().toInt() + 1).toString()
+        binding.increaseQtyBtn.setOnClickListener {
+            binding.quantityCountEcomm.text = (binding.quantityCountEcomm.text.toString().toInt() + 1).toString()
         }
 
-        decreaseQtyBtn.setOnClickListener {
-            if (quantityCountEcomm.text.toString().toInt() != 1) {
-                quantityCountEcomm.text = (quantityCountEcomm.text.toString().toInt() - 1).toString()
+        binding.decreaseQtyBtn.setOnClickListener {
+            if (binding.quantityCountEcomm.text.toString().toInt() != 1) {
+                binding.quantityCountEcomm.text = (binding.quantityCountEcomm.text.toString().toInt() - 1).toString()
             }
         }
-
-        var posters: ArrayList<Poster> = ArrayList()
 
         val allData = viewmodel.ecommLiveData.value
         val allDataLength = allData!!.size
 
         for (a in 0 until allDataLength) {
             if (allData[a].id == this.tag) {
-
                 val specificData = allData[a]
-
                 currentItemId = specificData.id!!
 
-                productTitle.text = specificData.getString("title")
-                productShortDescription.text = specificData.getString("shortDesc")
-                productPrice.text = "₹" + specificData.getString("price")
-                productLongDesc.text = specificData.getString("longDesc")
-                howToUseText.text = specificData.getString("howtouse")
-                deliverycost.text = specificData.getString("delCharge")
-                Rating.rating = specificData.get("rating").toString().toFloat()
+                binding.productTitle.text = specificData.getString("title")
+                binding.productShortDescription.text = specificData.getString("shortDesc")
+                binding.productPrice.text = "₹" + specificData.getString("price")
+                binding.productLongDesc.text = specificData.getString("longDesc")
+                binding.howToUseText.text = specificData.getString("howtouse")
+                binding.deliverycost.text = specificData.getString("delCharge")
+                binding.Rating.rating = specificData.get("rating").toString().toFloat()
                 var attributes = specificData.get("attributes") as Map<String, Any>
 
                 if (attributes.contains("Color")) {
-                    colorLinear.visibility = View.VISIBLE
-                    colorTitle.visibility = View.VISIBLE
+                    binding.colorLinear.visibility = View.VISIBLE
+                    binding.colorTitle.visibility = View.VISIBLE
                 } else {
-                    colorLinear.visibility = View.GONE
-                    colorTitle.visibility = View.GONE
+                    binding.colorLinear.visibility = View.GONE
+                    binding.colorTitle.visibility = View.GONE
                 }
 
-                var allSelectionAttributes = mutableListOf<MutableMap<String, Any>>()
-                var allNormalAttributes = mutableListOf<MutableMap<String, Any>>()
+                var allSelectionAttributes = mutableListOf<Map<String, Any>>()
+                var allNormalAttributes = mutableListOf<Map<String, Any>>()
                 for ((key, value) in attributes) {
-                    var selectionMap = mutableMapOf<String, Any>()
-                    var normalMap = mutableMapOf<String, Any>()
-
                     if (value is ArrayList<*> && key.toString() != "Color") {
-                        selectionMap.put(key, value)
-                        allSelectionAttributes.add(selectionMap)
+                        allSelectionAttributes.add(mapOf(key to value))
                     }
-
                     if (value is String) {
-                        normalMap.put(key, value)
-                        allNormalAttributes.add(normalMap)
+                        allNormalAttributes.add(mapOf(key to value))
                     }
                 }
 
-                val adapter = AttributesSelectionAdapter(activity!!.applicationContext, allSelectionAttributes, this)
-                recyclerSelectionAttributes.adapter = adapter
-                recyclerSelectionAttributes.layoutManager = LinearLayoutManager(activity!!.applicationContext)
+                val selectionAdapter = AttributesSelectionAdapter(requireActivity().applicationContext, allSelectionAttributes, this)
+                binding.recyclerSelectionAttributes.adapter = selectionAdapter
+                binding.recyclerSelectionAttributes.layoutManager = LinearLayoutManager(requireActivity().applicationContext)
 
-                val adapter2 = AttributesNormalAdapter(activity!!.applicationContext, allNormalAttributes)
-                recyclerNormalAttributes.adapter = adapter2
-                recyclerNormalAttributes.layoutManager = LinearLayoutManager(activity!!.applicationContext)
+                val normalAdapter = AttributesNormalAdapter(allNormalAttributes)
+                binding.recyclerNormalAttributes.adapter = normalAdapter
+                binding.recyclerNormalAttributes.layoutManager = LinearLayoutManager(requireActivity().applicationContext)
 
-                progress_ecommItem.visibility = View.GONE
-                loadingText.visibility = View.GONE
+                binding.progressEcommItem.visibility = View.GONE
+                binding.loadingText.visibility = View.GONE
 
                 val allImages = specificData.get("imageUrl") as List<String>
-                for (a in allImages) {
-                    posters.add(RemoteImage("${a}"))
-                }
-                poster_slider.setPosters(posters)
+                val imageSliderAdapter = ImageSliderAdapter(allImages)
+                binding.posterSlider.adapter = imageSliderAdapter
+                binding.posterSlider.orientation = ViewPager2.ORIENTATION_HORIZONTAL
             }
         }
 
-        addToCart.setOnClickListener {
-            addToCart.isClickable = false
-            progress_ecommItem.visibility = View.VISIBLE
-            loadingText.text = "Adding to Cart..."
-            loadingText.visibility = View.GONE
+        binding.addToCart.setOnClickListener {
+            binding.addToCart.isClickable = false
+            binding.progressEcommItem.visibility = View.VISIBLE
+            binding.loadingText.text = "Adding to Cart..."
+            binding.loadingText.visibility = View.GONE
             val realtimeRef = realtimeDatabase.getReference("${firebaseAuth.currentUser!!.uid}").child("cart").child("${currentItemId}")
 
             val currentDateTime = sdf.format(Date())
-            realtimeRef.setValue(CartItem(quantityCountEcomm.text.toString().toInt(), currentDateTime.toString()))
+            realtimeRef.setValue(CartItem(binding.quantityCountEcomm.text.toString().toInt(), currentDateTime.toString()))
                 .addOnCompleteListener {
-                    Toast.makeText(activity!!.applicationContext, "Item Added", Toast.LENGTH_SHORT).show()
-                    progress_ecommItem.visibility = View.GONE
-                    loadingText.visibility = View.GONE
-                    addToCart.isClickable = true
+                    Toast.makeText(requireActivity().applicationContext, "Item Added", Toast.LENGTH_SHORT).show()
+                    binding.progressEcommItem.visibility = View.GONE
+                    binding.loadingText.visibility = View.GONE
+                    binding.addToCart.isClickable = true
                 }.addOnFailureListener {
-                    Toast.makeText(activity!!.applicationContext, "Please Try Again!", Toast.LENGTH_SHORT).show()
-                    progress_ecommItem.visibility = View.GONE
-                    loadingText.visibility = View.GONE
-                    addToCart.isClickable = true
+                    Toast.makeText(requireActivity().applicationContext, "Please Try Again!", Toast.LENGTH_SHORT).show()
+                    binding.progressEcommItem.visibility = View.GONE
+                    binding.loadingText.visibility = View.GONE
+                    binding.addToCart.isClickable = true
                 }
         }
 
-        buynow.setOnClickListener {
-            val productPrice = productPrice.text.toString().split("₹") as ArrayList<String>
+        binding.buynow.setOnClickListener {
+            val productPrice = binding.productPrice.text.toString().split("₹") as ArrayList<String>
 
-            Intent(activity!!.applicationContext, RazorPayActivity::class.java).also {
+            Intent(requireActivity().applicationContext, RazorPayActivity::class.java).also {
                 it.putExtra("productId", currentItemId.toString())
                 it.putExtra("itemCost", productPrice[1].toString())
-                it.putExtra("quantity", quantityCountEcomm.text.toString())
-                it.putExtra("deliveryCost", deliverycost.text.toString())
+                it.putExtra("quantity", binding.quantityCountEcomm.text.toString())
+                it.putExtra("deliveryCost", binding.deliverycost.text.toString())
                 startActivity(it)
             }
         }
@@ -274,7 +270,7 @@ class EcommerceItemFragment : Fragment(), CellClickListener {
         when (item.itemId) {
             R.id.cart_item -> {
                 val cartFragment = CartFragment()
-                val transaction = activity!!.supportFragmentManager
+                val transaction = requireActivity().supportFragmentManager
                     .beginTransaction()
                     .replace(R.id.frame_layout, cartFragment)
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)

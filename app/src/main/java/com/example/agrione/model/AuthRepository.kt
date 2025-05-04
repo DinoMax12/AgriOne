@@ -1,4 +1,4 @@
-package com.project.agrione.model
+package com.example.agrione.model
 
 import android.util.Log
 import androidx.lifecycle.LiveData

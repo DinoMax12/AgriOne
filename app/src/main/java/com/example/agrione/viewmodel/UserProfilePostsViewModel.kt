@@ -1,16 +1,16 @@
-package com.agrione.app.viewmodel
+package com.example.agrione.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
-import com.agrione.app.model.data.Post
+import com.example.agrione.model.data.Post
 
 class UserProfilePostsViewModel : ViewModel() {
 
     val userProfilePostsLiveData = MutableLiveData<ArrayList<HashMap<String, Any>>>()
-    val userProfilePostsLiveData2 = MutableLiveData<List<String>>()
+    val userProfilePostsLiveData2 = MutableLiveData<List<String>?>()
 
     val liveData1 = MutableLiveData<List<String>>()
     val liveData2 = MutableLiveData<ArrayList<DocumentSnapshot>>()

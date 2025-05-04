@@ -1,4 +1,4 @@
-package com.project.agrione.view.dashboard
+package com.example.agrione.view.dashboard
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -15,59 +15,60 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.os.PersistableBundle
 import android.provider.Settings
 import android.util.Log
 import android.view.Gravity
 import android.view.MenuItem
 import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
-import com.project.agrione.R
-import com.project.agrione.adapter.CurrentWeatherAdapter
-import com.project.agrione.adapter.WeatherAdapter
-import com.project.agrione.databinding.ActivityDashboardBinding
-import com.project.agrione.model.WeatherApi
-import com.project.agrione.model.data.Weather
-import com.project.agrione.model.data.WeatherList
-import com.project.agrione.model.data.WeatherRootList
-import com.project.agrione.view.articles.ArticleListFragment
-import com.project.agrione.view.auth.LoginActivity
-import com.project.agrione.view.ecommerce.*
-import com.project.agrione.view.introscreen.IntroActivity
-import com.project.agrione.view.socialmedia.SMCreatePostFragment
-import com.project.agrione.view.socialmedia.SocialMediaPostsFragment
-import com.project.agrione.view.user.UserFragment
-import com.project.agrione.view.weather.WeatherFragment
-import com.project.agrione.viewmodel.UserDataViewModel
-import com.project.agrione.viewmodel.UserProfilePostsViewModel
-import com.project.agrione.viewmodel.WeatherViewModel
-import kotlinx.android.synthetic.main.activity_dashboard.*
-import kotlinx.android.synthetic.main.app_bar_main.*
-import kotlinx.android.synthetic.main.nav_header.view.*
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import com.example.agrione.R
+import com.example.agrione.databinding.ActivityDashboardBinding
+import com.example.agrione.view.apmc.ApmcFragment
+import com.example.agrione.view.articles.ArticleListFragment
+import com.example.agrione.view.auth.LoginActivity
+import com.example.agrione.view.ecommerce.*
+import com.example.agrione.view.introscreen.IntroActivity
+import com.example.agrione.view.socialmedia.SMCreatePostFragment
+import com.example.agrione.view.socialmedia.SocialMediaPostsFragment
+import com.example.agrione.view.weather.WeatherFragment
+import com.example.agrione.viewmodel.UserDataViewModel
+import com.example.agrione.viewmodel.UserProfilePostsViewModel
+import com.example.agrione.viewmodel.WeatherViewModel
+import com.example.agrione.view.user.UserFragment
+import com.example.agrione.view.ecommerce.CartFragment
+import com.example.agrione.view.ecommerce.EcommerceFragment
+import com.example.agrione.view.ecommerce.PaymentFragment
 import java.util.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import kotlinx.coroutines.delay
 
 class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, View.OnClickListener, com.google.android.gms.location.LocationListener {
+    private val TEMP_BYPASS_INTRO = false
+
+    private lateinit var binding: ActivityDashboardBinding
     lateinit var cartFragment: CartFragment
     lateinit var ecommerceItemFragment: EcommerceItemFragment
     lateinit var paymentFragment: PaymentFragment
@@ -89,7 +90,6 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
     val firebaseFireStore = FirebaseFirestore.getInstance()
     val firebaseAuth = FirebaseAuth.getInstance()
     var userName = ""
-    var data: WeatherRootList? = null
     var firstTime: Boolean? = null
 
     private var REQUEST_LOCATION_CODE = 101
@@ -99,23 +99,65 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
     private val UPDATE_INTERVAL = (2 * 1000).toLong()  /* 2 secs */
     private val FASTEST_INTERVAL: Long = 2000 /* 2 sec */
 
+    private var isLocationUpdateInProgress = false
+    private var lastLocationUpdateTime = 0L
+    private val LOCATION_UPDATE_INTERVAL = 30000L // 30 seconds
+    private val coroutineScope = CoroutineScope(Dispatchers.Main)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_dashboard)
+        binding = ActivityDashboardBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        val binding: ActivityDashboardBinding = DataBindingUtil.setContentView(this, R.layout.activity_dashboard)
-        viewModel = ViewModelProviders.of(this).get(UserDataViewModel::class.java)
+        // Initialize UI components first
+        initializeUI()
+
+        // Only perform navigation checks if this is a fresh start
+        if (savedInstanceState == null) {
+            val currentUser = firebaseAuth.currentUser
+            sharedPreferences = getSharedPreferences("AgrionePrefs", Context.MODE_PRIVATE)
+            firstTime = sharedPreferences.getBoolean("firstTime", true)
+
+            if (firstTime == true) {
+                // First time user, show intro
+                Intent(this, IntroActivity::class.java).also {
+                    startActivity(it)
+                }
+                finish()
+                return
+            }
+
+            if (currentUser == null) {
+                // No user logged in, show login
+                Intent(this, LoginActivity::class.java).also {
+                    it.putExtra("from_dashboard", true)
+                    it.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    startActivity(it)
+                }
+                finish()
+                return
+            }
+
+            // User is logged in, load user data
+            viewModel.getUserData(currentUser.email as String)
+        }
+        
+        coroutineScope.launch {
+            delay(1000)
+            initializeLocationServices()
+        }
+    }
+
+    private fun initializeUI() {
+        viewModel = ViewModelProvider(this).get(UserDataViewModel::class.java)
         binding.userDataViewModel = viewModel
 
-        toggle = ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close)
-        drawerLayout.addDrawerListener(toggle)
+        toggle = ActionBarDrawerToggle(this, binding.drawerLayout, R.string.open, R.string.close)
+        binding.drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
 
-        weatherViewModel = ViewModelProviders.of(this)
-            .get<WeatherViewModel>(WeatherViewModel::class.java)
-
-        viewModel2 = ViewModelProviders.of(this)
-            .get<UserProfilePostsViewModel>(UserProfilePostsViewModel::class.java)
+        weatherViewModel = ViewModelProvider(this).get(WeatherViewModel::class.java)
+        viewModel2 = ViewModelProvider(this).get(UserProfilePostsViewModel::class.java)
 
         mGoogleApiClient = GoogleApiClient.Builder(this)
             .addApi(LocationServices.API)
@@ -125,30 +167,7 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
 
         buildGoogleApiClient()
 
-        val currentUser = firebaseAuth.currentUser
-
-        sharedPreferences = getSharedPreferences("AgrionePrefs", Context.MODE_PRIVATE)
-        firstTime = sharedPreferences.getBoolean("firstTime", true)
-
-        if(firstTime!!) {
-            Intent(this, IntroActivity::class.java).also {
-                startActivity(it)
-            }
-            finish()
-            return
-        } else {
-            if(currentUser == null) {
-                Intent(this, LoginActivity::class.java).also {
-                    startActivity(it)
-                }
-                finish()
-                return
-            }
-        }
-
-        viewModel.getUserData(firebaseAuth.currentUser!!.email as String)
-
-        navView.setNavigationItemSelectedListener(this)
+        binding.navView.setNavigationItemSelectedListener(this)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         supportActionBar?.title = "Agrione"
@@ -164,9 +183,10 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
             .setReorderingAllowed(true)
             .commit()
 
+        val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNav)
         bottomNav.selectedItemId = R.id.bottomNavHome
 
-        val headerView = navView.getHeaderView(0)
+        val headerView = binding.navView.getHeaderView(0)
 
         if (dashboardFragment.isVisible) {
             bottomNav.selectedItemId = R.id.bottomNavHome
@@ -175,8 +195,8 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
         headerView.setOnClickListener {
             Toast.makeText(this, "Profile Selected", Toast.LENGTH_SHORT).show()
 
-            if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-                drawerLayout.closeDrawer(GravityCompat.START)
+            if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
+                binding.drawerLayout.closeDrawer(GravityCompat.START)
             }
 
             userFragment = UserFragment()
@@ -196,8 +216,8 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
         cartFragment = CartFragment()
         myOrdersFragment = MyOrdersFragment()
 
-        bottomNav.setOnNavigationItemSelectedListener {
-            when (it.itemId) {
+        bottomNav.setOnNavigationItemSelectedListener { menuItem ->
+            when (menuItem.itemId) {
                 R.id.bottomNavAPMC -> {
                     supportFragmentManager.beginTransaction().apply {
                         replace(R.id.frame_layout, apmcFragment, "apmcFrag")
@@ -240,26 +260,114 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
             true
         }
 
-        viewModel.userliveData.observe(this, Observer {
-            val headerView = navView.getHeaderView(0)
-            val posts = it.get("posts") as List<String>
-            val city = it.get("city")
-            userName = it.get("name").toString()
+        if (!TEMP_BYPASS_INTRO) {
+            viewModel.userliveData.observe(this, Observer {
+                val headerView = binding.navView.getHeaderView(0)
+                val posts = it.get("posts") as List<String>
+                val city = it.get("city")
+                userName = it.get("name").toString()
 
-            if(city == null) {
-                headerView.cityTextNavHeader.text = "City: "
-            } else {
-                headerView.cityTextNavHeader.text = "City: " + it.get("city").toString()
+                if(city == null) {
+                    headerView.findViewById<TextView>(R.id.cityTextNavHeader).text = "City: "
+                } else {
+                    headerView.findViewById<TextView>(R.id.cityTextNavHeader).text = "City: " + it.get("city").toString()
+                }
+
+                headerView.findViewById<TextView>(R.id.navbarUserName).text = userName
+                headerView.findViewById<TextView>(R.id.navbarUserEmail).text = firebaseAuth.currentUser!!.email
+                Glide.with(this).load(it.get("profileImage")).into(headerView.findViewById(R.id.navbarUserImage))
+
+                it.getString("name")?.let { it1 -> Log.d("User Data from VM", it1) }
+
+                headerView.findViewById<TextView>(R.id.navBarUserPostCount).text = "Posts Count: " + posts.size.toString()
+            })
+        }
+    }
+
+    private fun initializeLocationServices() {
+        mGoogleApiClient = GoogleApiClient.Builder(this)
+            .addApi(LocationServices.API)
+            .build()
+
+        mGoogleApiClient!!.connect()
+        buildGoogleApiClient()
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun getLocation() {
+        if (isLocationUpdateInProgress) return
+        
+        val currentTime = System.currentTimeMillis()
+        if (currentTime - lastLocationUpdateTime < LOCATION_UPDATE_INTERVAL) {
+            return
+        }
+
+        isLocationUpdateInProgress = true
+        lastLocationUpdateTime = currentTime
+
+        coroutineScope.launch {
+            try {
+                withContext(Dispatchers.IO) {
+                    mLocation = mGoogleApiClient?.let { LocationServices.FusedLocationApi.getLastLocation(it) }
+
+                    if (mLocation == null) {
+                        startLocationUpdates()
+                    } else {
+                        updateLocationData()
+                    }
+                }
+            } catch (e: Exception) {
+                Log.e("DashboardActivity", "Error getting location: ${e.message}")
+            } finally {
+                isLocationUpdateInProgress = false
             }
+        }
+    }
 
-            headerView.navbarUserName.text = userName
-            headerView.navbarUserEmail.text = firebaseAuth.currentUser!!.email
-            Glide.with(this).load(it.get("profileImage")).into(headerView.navbarUserImage)
+    private fun updateLocationData() {
+        coroutineScope.launch {
+            try {
+                withContext(Dispatchers.IO) {
+                    val coords = mutableListOf<String>()
+                    val geocoder = Geocoder(this@DashboardActivity, Locale.getDefault())
+                    val addresses: MutableList<Address>? = geocoder.getFromLocation(mLocation!!.latitude, mLocation!!.longitude, 1)
 
-            Log.d("User Data from VM", it.getString("name"))
+                    coords.add(mLocation!!.latitude.toString())
+                    coords.add(mLocation!!.longitude.toString())
+                    coords.add(addresses?.get(0)?.locality.toString())
+                    
+                    withContext(Dispatchers.Main) {
+                        weatherViewModel.updateCoordinates(coords)
+                        if (!isLocationUpdateInProgress) {
+                            Toast.makeText(this@DashboardActivity, "Location detected", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+            } catch (e: Exception) {
+                Log.e("DashboardActivity", "Error updating location data: ${e.message}")
+            }
+        }
+    }
 
-            headerView.navBarUserPostCount.text = "Posts Count: " + posts.size.toString()
-        })
+    override fun onLocationChanged(location: Location) {
+        mLocation = location
+        updateLocationData()
+    }
+
+    private fun startLocationUpdates() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+            ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return
+        }
+
+        mLocationRequest = LocationRequest.create()
+            .setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY)
+            .setInterval(LOCATION_UPDATE_INTERVAL)
+            .setFastestInterval(LOCATION_UPDATE_INTERVAL / 2)
+
+        mGoogleApiClient?.let { 
+            LocationServices.FusedLocationApi.requestLocationUpdates(it, mLocationRequest!!, this)
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -285,6 +393,7 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNav)
         bottomNav.selectedItemId = R.id.bottomNavHome
         when (item.itemId) {
             R.id.miItem1 -> {
@@ -372,13 +481,13 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
                     .show()
             }
         }
-        drawerLayout.closeDrawer(GravityCompat.START)
+        binding.drawerLayout.closeDrawer(GravityCompat.START)
         return true
     }
 
     override fun onBackPressed() {
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            drawerLayout.closeDrawer(GravityCompat.START)
+        if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            binding.drawerLayout.closeDrawer(GravityCompat.START)
         } else {
             super.onBackPressed()
         }
@@ -414,47 +523,6 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
         } else {
             getLocation()
         }
-    }
-
-    @SuppressLint("MissingPermission")
-    private fun getLocation() {
-        mLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient)
-
-        if (mLocation == null) {
-            startLocationUpdates()
-        }
-        if (mLocation != null) {
-            Toast.makeText(this, "Location detected", Toast.LENGTH_SHORT).show()
-
-            val coords = mutableListOf<String>()
-            val geocoder = Geocoder(this, Locale.getDefault())
-            val addresses: List<Address> = geocoder.getFromLocation(mLocation!!.latitude, mLocation!!.longitude, 1)
-
-            coords.add(mLocation!!.latitude.toString())
-            coords.add(mLocation!!.longitude.toString())
-            coords.add(addresses[0].locality.toString())
-            weatherViewModel.updateCoordinates(coords)
-
-        } else {
-            Toast.makeText(this, "Location not Detected", Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    private fun startLocationUpdates() {
-        mLocationRequest = LocationRequest.create()
-            .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-            .setInterval(UPDATE_INTERVAL)
-            .setFastestInterval(FASTEST_INTERVAL)
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-            ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return
-        }
-        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this)
-    }
-
-    override fun onLocationChanged(p0: Location?) {
-        // Location changed callback
     }
 
     @Synchronized
@@ -507,6 +575,7 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
             REQUEST_LOCATION_CODE -> {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -525,14 +594,16 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
     override fun onStart() {
         super.onStart()
         mGoogleApiClient?.connect()
-        Handler().postDelayed({
+        coroutineScope.launch {
+            delay(2000)
             automatedClick()
-        }, 1000)
+        }
     }
 
     override fun onStop() {
         super.onStop()
-        if (mGoogleApiClient!!.isConnected()) {
+        if (mGoogleApiClient?.isConnected == true) {
+            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient!!, this)
             mGoogleApiClient!!.disconnect()
         }
     }

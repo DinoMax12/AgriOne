@@ -1,61 +1,80 @@
-package com.project.agrione.view.auth
+package com.example.agrione.view.auth
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
-import com.project.agrione.R
-import com.project.agrione.databinding.ActivityLoginBinding
-import com.project.agrione.utilities.hide
-import com.project.agrione.utilities.show
-import com.project.agrione.utilities.toast
-import com.project.agrione.view.dashboard.DashboardActivity
-import com.project.agrione.viewmodel.AuthListener
-import com.project.agrione.viewmodel.AuthViewModel
-import kotlinx.android.synthetic.main.activity_login.*
+import com.example.agrione.R
+import com.example.agrione.databinding.ActivityLoginBinding
+import com.example.agrione.view.dashboard.DashboardActivity
+import com.example.agrione.viewmodel.AuthListener
+import com.example.agrione.viewmodel.AuthViewModel
 
 class LoginActivity : AppCompatActivity(), AuthListener {
 
-    lateinit var googleSignInClient: GoogleSignInClient
-    val firebaseAuth = FirebaseAuth.getInstance()
-    lateinit var viewModel: AuthViewModel
+    // TEMPORARY TESTING MODE - Set to true to bypass authentication
+    // TODO: Set this back to false when done testing
+    private val TEMP_BYPASS_AUTH = false
+
+    private lateinit var googleSignInClient: GoogleSignInClient
+    private val firebaseAuth = FirebaseAuth.getInstance()
+    private lateinit var viewModel: AuthViewModel
+    private lateinit var binding: ActivityLoginBinding
+    private var isNavigating = false
+    private var isFromDashboard = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val binding: ActivityLoginBinding =
-            DataBindingUtil.setContentView(this, R.layout.activity_login)
+        // TEMPORARY TESTING MODE - Bypass authentication
+        if (TEMP_BYPASS_AUTH) {
+            Log.d("LoginActivity", "TEMP_BYPASS_AUTH: Bypassing authentication")
+            navigateToDashboard()
+            return
+        }
 
-        viewModel = ViewModelProviders.of(this).get(AuthViewModel::class.java)
+        // Check if we're coming from DashboardActivity
+        isFromDashboard = intent.getBooleanExtra("from_dashboard", false)
+
+        // Initialize View Binding
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_login)
+
+        // Initialize ViewModel
+        viewModel = ViewModelProvider(this).get(AuthViewModel::class.java)
         binding.authViewModel = viewModel
         viewModel.authListener = this
 
-        if (firebaseAuth.currentUser != null) {
-            Intent(this, DashboardActivity::class.java).also {
-                startActivity(it)
-            }
+        // Only check for logged in user if we're not coming from DashboardActivity
+        if (!isFromDashboard && firebaseAuth.currentUser != null && !isNavigating) {
+            Log.d("LoginActivity", "User already logged in, navigating to Dashboard.")
+            navigateToDashboard()
+            return
         }
 
-        createaccountText.setOnClickListener {
-            Intent(this, SignupActivity::class.java).also {
-                startActivity(it)
-            }
+        setupClickListeners()
+    }
+
+    private fun setupClickListeners() {
+        binding.createaccountText.setOnClickListener {
+            startActivity(Intent(this, SignupActivity::class.java))
         }
 
-        signGoogleBtnLogin.setOnClickListener {
+        binding.signGoogleBtnLogin.setOnClickListener {
             signIn()
         }
 
-        forgotPasswdTextLogin.setOnClickListener {
-            val userEmail = emailEditLogin.text.toString()
+        binding.forgotPasswdTextLogin.setOnClickListener {
+            val userEmail = binding.emailEditLogin.text.toString()
             if (userEmail.isNullOrEmpty()) {
                 Toast.makeText(this, "Please enter your Email", Toast.LENGTH_SHORT).show()
             } else {
@@ -72,12 +91,24 @@ class LoginActivity : AppCompatActivity(), AuthListener {
         }
     }
 
+    private fun navigateToDashboard() {
+        if (!isNavigating) {
+            isNavigating = true
+            Log.d("LoginActivity", "Navigating to Dashboard.")
+            val intent = Intent(this, DashboardActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            }
+            startActivity(intent)
+            finish()
+        }
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         viewModel.returnActivityResult(requestCode, resultCode, data)
     }
 
-    fun signIn() {
+    private fun signIn() {
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
             .requestEmail()
@@ -101,24 +132,21 @@ class LoginActivity : AppCompatActivity(), AuthListener {
     }
 
     override fun onStarted() {
-        progressLogin.show()
+        binding.progressLogin.visibility = android.view.View.VISIBLE
     }
 
     override fun onSuccess(authRepo: LiveData<String>) {
         authRepo.observe(this, Observer {
-            progressLogin.hide()
+            binding.progressLogin.visibility = android.view.View.GONE
             if (it.toString() == "Success") {
-                toast("Logged In")
-                Toast.makeText(this, it.toString(), Toast.LENGTH_LONG).show()
-                Intent(this, DashboardActivity::class.java).also {
-                    startActivity(it)
-                }
+                Toast.makeText(this, "Logged In", Toast.LENGTH_LONG).show()
+                navigateToDashboard()
             }
         })
     }
 
     override fun onFailure(message: String) {
-        progressLogin.hide()
-        toast("Failure")
+        binding.progressLogin.visibility = android.view.View.GONE
+        Toast.makeText(this, "Failure", Toast.LENGTH_SHORT).show()
     }
 }

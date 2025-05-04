@@ -1,4 +1,4 @@
-package com.project.farmingapp.view.articles
+package com.example.agrione.view.articles
 
 import android.os.Bundle
 import android.util.Log
@@ -11,17 +11,18 @@ import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.agrione.adapter.ArticleListAdapter
-import com.project.farmingapp.R
-import com.project.farmingapp.adapter.ArticleListAdapter
-import com.project.farmingapp.utilities.CellClickListener
-import com.project.farmingapp.viewmodel.ArticleViewModel
-import kotlinx.android.synthetic.main.fragment_article_list.*
+import com.example.agrione.R
+import com.example.agrione.utilities.CellClickListener
+import com.example.agrione.viewmodel.ArticleViewModel
+import com.example.agrione.databinding.FragmentArticleListBinding // Import the view binding class
 
 class ArticleListFragment : Fragment(), CellClickListener {
 
     private lateinit var viewModel: ArticleViewModel
     private lateinit var adapter: ArticleListAdapter
     private lateinit var fruitFragment: FruitsFragment
+    private var _binding: FragmentArticleListBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,7 +34,8 @@ class ArticleListFragment : Fragment(), CellClickListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_article_list, container, false)
+        _binding = FragmentArticleListBinding.inflate(inflater, container, false)
+        return binding.root // Use the root view from the view binding
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -45,10 +47,12 @@ class ArticleListFragment : Fragment(), CellClickListener {
         viewModel.message3.observe(viewLifecycleOwner) { articleList ->
             Log.d("Art All Data", articleList[0].data.toString())
 
-            adapter = ArticleListAdapter(requireContext(), articleList, this)
-            recyclerArticleListFrag.adapter = adapter
-            recyclerArticleListFrag.layoutManager = GridLayoutManager(requireContext(), 2)
+            // Pass the article list as the first parameter, and cell click listener (this) as the second
+            adapter = ArticleListAdapter(articleList, this)
+            binding.recyclerArticleListFrag.adapter = adapter
+            binding.recyclerArticleListFrag.layoutManager = GridLayoutManager(requireContext(), 2)
         }
+
     }
 
     override fun onCellClickListener(name: String) {
@@ -65,5 +69,10 @@ class ArticleListFragment : Fragment(), CellClickListener {
             ?.setReorderingAllowed(true)
             ?.addToBackStack("name")
             ?.commit()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null // Clean up binding when the view is destroyed
     }
 }

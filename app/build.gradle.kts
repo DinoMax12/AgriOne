@@ -6,15 +6,14 @@ plugins {
     id("com.google.gms.google-services")
 }
 
-
 android {
     namespace = "com.example.agrione"
-    compileSdk = 35
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.example.agrione"
         minSdk = 24
-        targetSdk = 35
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
@@ -42,6 +41,7 @@ android {
 
     buildFeatures {
         dataBinding = true
+        viewBinding = true
     }
 }
 
@@ -55,7 +55,7 @@ dependencies {
     implementation(libs.androidx.activity)
 
     // Firebase + Google Auth
-    implementation(platform("com.google.firebase:firebase-bom:32.7.2"))
+    implementation(platform(libs.firebase.bom))
     implementation("com.google.firebase:firebase-auth")
     implementation("com.google.firebase:firebase-firestore")
     implementation("com.google.firebase:firebase-storage")
@@ -64,49 +64,47 @@ dependencies {
     implementation("com.google.android.gms:play-services-location:21.0.1")
 
     // Retrofit & Gson
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.converter.gson)
 
     // Kotlin Coroutines
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.kotlinx.coroutines.android)
 
     // Lifecycle
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.6.2")
+    implementation(libs.lifecycle.viewmodel.ktx)
+    implementation(libs.lifecycle.livedata.ktx)
 
     // Navigation
-    implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
-    implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
+    implementation(libs.navigation.fragment.ktx)
+    implementation(libs.navigation.ui.ktx)
 
     // Room
-    implementation("androidx.room:room-runtime:2.6.1")
-    implementation("androidx.room:room-ktx:2.6.1")
-    kapt("androidx.room:room-compiler:2.6.1")
+    implementation(libs.room.runtime)
+    implementation(libs.room.ktx)
+    kapt(libs.room.compiler)
 
     // Kodein DI
-    implementation("org.kodein.di:kodein-di:7.19.0")
-    implementation("org.kodein.di:kodein-di-framework-android-x:7.19.0")
+    implementation(libs.kodein.di)
+    implementation(libs.kodein.di.framework.android.x)
 
     // Image Loaders
     implementation("com.squareup.picasso:picasso:2.8")
-    implementation("com.github.bumptech.glide:glide:4.16.0")
-    kapt("com.github.bumptech.glide:compiler:4.16.0")
+    implementation(libs.glide)
+    kapt(libs.glide.compiler)
 
-    // Butterknife (optional in Kotlin, but if needed)
-    implementation("com.jakewharton:butterknife:10.2.3")
-    kapt("com.jakewharton:butterknife-compiler:10.2.3")
+    // Butterknife
+    implementation(libs.butterknife)
+    kapt(libs.butterknife.compiler)
 
-    // Carousel Libraries
-    implementation("com.littlemango:stacklayoutmanager:1.0.5")
-    implementation("com.azoft.carousellayoutmanager:carousel:1.4.4")
-    implementation("com.github.mohan-dev1248:PosterSlider:1.0.2")
+    // Carousel Libraries (Updated)
+//    implementation("com.github.smarteist:autoimageslider:1.3.9")
 
     // RazorPay
-    implementation("com.razorpay:checkout:1.6.33")
+    implementation(libs.razorpay)
 
     // Testing
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
 }

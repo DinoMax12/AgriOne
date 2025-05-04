@@ -1,5 +1,6 @@
-package com.agrione.app.viewmodel
+package com.example.agrione.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
@@ -23,8 +24,8 @@ class SocialMediaViewModel : ViewModel() {
 
         firebaseFireStore!!.collection("posts").get()
             .addOnSuccessListener { documents ->
-                if (documents.isNotEmpty()) {
-                    postLiveData.value = documents
+                if (documents != null && documents.documents.isNotEmpty()) {
+                    postLiveData.value = documents.documents
                     // You can access document data like this: documents[0].data["field_name"]
                 }
             }

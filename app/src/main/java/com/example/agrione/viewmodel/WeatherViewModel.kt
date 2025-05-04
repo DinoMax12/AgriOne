@@ -1,13 +1,13 @@
-package com.agrione.app.viewmodel
+package com.example.agrione.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.agrione.app.adapter.WeatherAdapter
-import com.agrione.app.model.WeatherApi
-import com.agrione.app.model.WeatherRepository
-import com.agrione.app.model.data.WeatherRootList
+import com.example.agrione.adapter.WeatherAdapter
+import com.example.agrione.model.WeatherApi
+import com.example.agrione.model.WeatherRepository
+import com.example.agrione.model.data.WeatherRootList
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

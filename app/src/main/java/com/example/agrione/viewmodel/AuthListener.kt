@@ -1,4 +1,4 @@
-package com.agrione.app.viewmodel
+package com.example.agrione.viewmodel
 
 import androidx.lifecycle.LiveData
 

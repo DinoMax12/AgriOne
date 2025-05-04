@@ -3,15 +3,18 @@ package com.example.agrione.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.agrione.R
-import kotlinx.android.synthetic.main.single_normal_attributes_ecomm.view.*
 
 class AttributesNormalAdapter(
     private val allData: List<Map<String, Any>>
 ) : RecyclerView.Adapter<AttributesNormalAdapter.AttributesNormalViewHolder>() {
 
-    class AttributesNormalViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+    class AttributesNormalViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val attributeTitle: TextView = itemView.findViewById(R.id.normalAttributeTitle)
+        val attributeValue: TextView = itemView.findViewById(R.id.normalAttributeValue)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AttributesNormalViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -24,8 +27,8 @@ class AttributesNormalAdapter(
     override fun onBindViewHolder(holder: AttributesNormalViewHolder, position: Int) {
         val currentData = allData[position]
         for ((key, value) in currentData) {
-            holder.itemView.normalAttributeTitle.text = "$key - "
-            holder.itemView.normalAttributeValue.text = value.toString()
+            holder.attributeTitle.text = "$key - "
+            holder.attributeValue.text = value.toString()
         }
     }
 }

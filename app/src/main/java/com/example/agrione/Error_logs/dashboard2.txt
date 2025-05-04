@@ -1,0 +1,332 @@
+2025-04-26 10:49:39.755 20437-21367 ActivityManagerWrapper  com.mi.android.globallauncher        E  getRecentTasks: mainTaskId=1808   userId=0   baseIntent=Intent { act=android.intent.action.MAIN flag=268435456 cmp=ComponentInfo{com.example.agrione/com.example.agrione.view.dashboard.DashboardActivity} }
+2025-04-26 10:49:39.767 19726-19726 Zygote                  pid-19726                            E  process_name_ptr:19726 com.example.agrione
+2025-04-26 10:49:39.773 20437-21367 ActivityManagerWrapper  com.mi.android.globallauncher        E  getRecentTasks: mainTaskId=1808   userId=0   baseIntent=Intent { act=android.intent.action.MAIN flag=268435456 cmp=ComponentInfo{com.example.agrione/com.example.agrione.view.dashboard.DashboardActivity} }
+2025-04-26 10:49:39.865 20437-21367 ActivityManagerWrapper  com.mi.android.globallauncher        E  getRecentTasks: mainTaskId=1808   userId=0   baseIntent=Intent { act=android.intent.action.MAIN flag=268435456 cmp=ComponentInfo{com.example.agrione/com.example.agrione.view.dashboard.DashboardActivity} }
+2025-04-26 10:49:39.875 20437-21367 ActivityManagerWrapper  com.mi.android.globallauncher        E  getRecentTasks: mainTaskId=1808   userId=0   baseIntent=Intent { act=android.intent.action.MAIN flag=268435456 cmp=ComponentInfo{com.example.agrione/com.example.agrione.view.dashboard.DashboardActivity} }
+---------------------------- PROCESS STARTED (19726) for package com.example.agrione ----------------------------
+2025-04-26 10:49:40.124 19726-19726 nativeloader            com.example.agrione                  D  Configuring clns-4 for other apk /system/framework/org.apache.http.legacy.jar. target_sdk_version=34, uses_libraries=ALL, library_path=/data/app/~~Q8MX4hq7PAYJg3tctR0j2A==/com.example.agrione-iaEJw0Je9ek5h6fZ14IJqg==/lib/arm64, permitted_path=/data:/mnt/expand:/data/user/0/com.example.agrione
+2025-04-26 10:49:40.124 19726-19726 nativeloader            com.example.agrione                  D  Extending system_exposed_libraries: libapuwareapusys.mtk.so:libapuwareapusys_v2.mtk.so:libapuwarexrp.mtk.so:libapuwarexrp_v2.mtk.so:libapuwareutils.mtk.so:libapuwareutils_v2.mtk.so:libapuwarehmp.mtk.so:libmcv_runtime_usdk.mtk.so:libneuron_graph_delegate.mtk.so:libneuronusdk_adapter.mtk.so:libtflite_mtk.mtk.so:libarmnn_ndk.mtk.so:libcmdl_ndk.mtk.so:libnir_neon_driver_ndk.mtk.so:libmvpu_runtime.mtk.so:libmvpu_runtime_pub.mtk.so:libmvpu_engine_pub.mtk.so:libmvpu_pattern_pub.mtk.so:libmvpuop_mtk_cv.mtk.so:libmvpuop_mtk_nn.mtk.so:libteeservice_client.trustonic.so:libmisys_jni.xiaomi.so
+2025-04-26 10:49:40.127 19726-19726 ziparchive              com.example.agrione                  W  Unable to open '/data/data/com.example.agrione/code_cache/.overlay/base.apk/classes5.dm': No such file or directory
+2025-04-26 10:49:40.129 19726-19726 ziparchive              com.example.agrione                  W  Unable to open '/data/app/~~Q8MX4hq7PAYJg3tctR0j2A==/com.example.agrione-iaEJw0Je9ek5h6fZ14IJqg==/base.dm': No such file or directory
+2025-04-26 10:49:40.129 19726-19726 ziparchive              com.example.agrione                  W  Unable to open '/data/app/~~Q8MX4hq7PAYJg3tctR0j2A==/com.example.agrione-iaEJw0Je9ek5h6fZ14IJqg==/base.dm': No such file or directory
+2025-04-26 10:49:40.432 19726-19726 nativeloader            com.example.agrione                  D  Configuring clns-5 for other apk /data/app/~~Q8MX4hq7PAYJg3tctR0j2A==/com.example.agrione-iaEJw0Je9ek5h6fZ14IJqg==/base.apk. target_sdk_version=34, uses_libraries=, library_path=/data/app/~~Q8MX4hq7PAYJg3tctR0j2A==/com.example.agrione-iaEJw0Je9ek5h6fZ14IJqg==/lib/arm64, permitted_path=/data:/mnt/expand:/data/user/0/com.example.agrione
+2025-04-26 10:49:40.444 19726-19726 nativeloader            com.example.agrione                  D  Load libframework-connectivity-jni.so using APEX ns com_android_tethering for caller /apex/com.android.tethering/javalib/framework-connectivity.jar: ok
+2025-04-26 10:49:40.449 19726-19726 GraphicsEnvironment     com.example.agrione                  V  ANGLE Developer option for 'com.example.agrione' set to: 'default'
+2025-04-26 10:49:40.450 19726-19726 GraphicsEnvironment     com.example.agrione                  V  ANGLE GameManagerService for com.example.agrione: false
+2025-04-26 10:49:40.450 19726-19726 GraphicsEnvironment     com.example.agrione                  V  App is not on the allowlist for updatable production driver.
+2025-04-26 10:49:40.454 19726-19726 ForceDarkHelperStubImpl com.example.agrione                  I  initialize for com.example.agrione , ForceDarkOrigin
+2025-04-26 10:49:40.455 19726-19726 nativeloader            com.example.agrione                  D  Load libforcedarkimpl.so using system ns (caller=/system_ext/framework/miui-framework.jar): ok
+2025-04-26 10:49:40.455 19726-19726 example.agrione         com.example.agrione                  D  JNI_OnLoad success
+2025-04-26 10:49:40.456 19726-19726 MiuiForceDarkConfig     com.example.agrione                  I  setConfig density:2.750000, mainRule:0, secondaryRule:0, tertiaryRule:0
+2025-04-26 10:49:40.459 19726-19726 NetworkSecurityConfig   com.example.agrione                  D  No Network Security Config specified, using platform default
+2025-04-26 10:49:40.460 19726-19726 NetworkSecurityConfig   com.example.agrione                  D  No Network Security Config specified, using platform default
+2025-04-26 10:49:40.476 19726-19726 Compatibil...geReporter com.example.agrione                  D  Compat change id reported: 183155436; UID 10458; state: ENABLED
+2025-04-26 10:49:40.494 19726-19726 FirebaseApp             com.example.agrione                  I  Device unlocked: initializing all Firebase APIs for app [DEFAULT]
+2025-04-26 10:49:40.502 19726-19726 FirebaseInitProvider    com.example.agrione                  I  FirebaseApp initialization successful
+2025-04-26 10:49:40.529 19726-19758 libMEOW                 com.example.agrione                  D  meow new tls: 0xb400007295aaa180
+2025-04-26 10:49:40.530 19726-19758 libMEOW                 com.example.agrione                  D  meow reload base cfg path: na
+2025-04-26 10:49:40.530 19726-19758 libMEOW                 com.example.agrione                  D  meow reload overlay cfg path: na
+2025-04-26 10:49:40.530 19726-19758 QT                      com.example.agrione                  W  qt_process_init() called
+2025-04-26 10:49:40.530 19726-19758 QT                      com.example.agrione                  E  [QT]file does not exist
+2025-04-26 10:49:40.530 19726-19758 QT                      com.example.agrione                  W  Support!!
+2025-04-26 10:49:40.532 19726-19758 QT                      com.example.agrione                  E  [QT]file does not exist
+2025-04-26 10:49:40.532 19726-19758 libMEOW                 com.example.agrione                  D  applied 1 plugins for [com.example.agrione]:
+2025-04-26 10:49:40.532 19726-19758 libMEOW                 com.example.agrione                  D    plugin 1: [libMEOW_gift.so]:
+2025-04-26 10:49:40.532 19726-19758 libMEOW                 com.example.agrione                  D  meow delete tls: 0xb400007295aaa180
+2025-04-26 10:49:40.670 19726-19726 AppCompatDelegate       com.example.agrione                  D  Checking for metadata for AppLocalesMetadataHolderService : Service not found
+2025-04-26 10:49:40.726 19726-19726 ScrollerOp...ionManager com.example.agrione                  D  registerConfigChangedListener
+2025-04-26 10:49:40.729 19726-19726 MSYNC3-Var...efreshRate com.example.agrione                  I  Variable refreshrate is disabled
+2025-04-26 10:49:40.729 19726-19726 ScrollerOp...ionManager com.example.agrione                  D  registerConfigChangedListener
+2025-04-26 10:49:40.733 19726-19764 nativeloader            com.example.agrione                  D  Load libpowerhalwrap_jni.so using system ns (caller=/system/framework/mediatek-framework.jar): ok
+2025-04-26 10:49:40.733 19726-19764 PowerHalWrapper         com.example.agrione                  I  PowerHalWrapper.getInstance 
+2025-04-26 10:49:40.796 19726-19726 Compatibil...geReporter com.example.agrione                  D  Compat change id reported: 210923482; UID 10458; state: ENABLED
+2025-04-26 10:49:40.805 19726-19726 example.agrione         com.example.agrione                  W  Accessing hidden method Landroid/view/View;->computeFitSystemWindows(Landroid/graphics/Rect;Landroid/graphics/Rect;)Z (unsupported, reflection, allowed)
+2025-04-26 10:49:40.894 19726-19726 ScrollerOp...ionManager com.example.agrione                  D  registerConfigChangedListener
+2025-04-26 10:49:40.950 19726-19726 IS_CTS_MODE             com.example.agrione                  D  false
+2025-04-26 10:49:40.950 19726-19726 MULTI_WINDOW_ENABLED    com.example.agrione                  D  false
+2025-04-26 10:49:40.952 19726-19726 DecorView[]             com.example.agrione                  D  getWindowModeFromSystem  windowmode is 1
+2025-04-26 10:49:40.964 19726-19726 ScrollerOp...ionManager com.example.agrione                  D  registerConfigChangedListener
+2025-04-26 10:49:40.981 19726-19726 example.agrione         com.example.agrione                  W  Accessing hidden method Landroid/view/ViewGroup;->makeOptionalFitsSystemWindows()V (unsupported, reflection, allowed)
+2025-04-26 10:49:41.004 19726-19726 ActionBarDrawerToggle   com.example.agrione                  W  DrawerToggle may not show up because NavigationIcon is not visible. You may need to call actionbar.setDisplayHomeAsUpEnabled(true);
+2025-04-26 10:49:41.114 19726-19726 Compatibil...geReporter com.example.agrione                  D  Compat change id reported: 171228096; UID 10458; state: ENABLED
+2025-04-26 10:49:41.114 19726-19726 ScrollerOp...ionManager com.example.agrione                  D  registerConfigChangedListener
+2025-04-26 10:49:41.127 19726-19770 DynamiteModule          com.example.agrione                  W  Local module descriptor class for com.google.android.gms.providerinstaller.dynamite not found.
+2025-04-26 10:49:41.132 19726-19726 ScrollerOp...ionManager com.example.agrione                  D  registerConfigChangedListener
+2025-04-26 10:49:41.135 19726-19726 skia                    com.example.agrione                  D  SkJpegCodec::onGetPixels +
+2025-04-26 10:49:41.140 19726-19770 DynamiteModule          com.example.agrione                  I  Considering local module com.google.android.gms.providerinstaller.dynamite:0 and remote module com.google.android.gms.providerinstaller.dynamite:0
+2025-04-26 10:49:41.140 19726-19770 ProviderInstaller       com.example.agrione                  W  Failed to load providerinstaller module: No acceptable module com.google.android.gms.providerinstaller.dynamite found. Local version is 0 and remote version is 0.
+2025-04-26 10:49:41.151 19726-19770 nativeloader            com.example.agrione                  D  Configuring clns-6 for other apk /system/framework/com.android.media.remotedisplay.jar. target_sdk_version=36, uses_libraries=ALL, library_path=/data/app/~~unaAv6hrJZukOBGAKwTiMA==/com.google.android.gms-Vir5Evma-hhmsPEyhCLgjA==/lib/arm64:/data/app/~~unaAv6hrJZukOBGAKwTiMA==/com.google.android.gms-Vir5Evma-hhmsPEyhCLgjA==/base.apk!/lib/arm64-v8a, permitted_path=/data:/mnt/expand:/data/user/0/com.google.android.gms
+2025-04-26 10:49:41.151 19726-19770 nativeloader            com.example.agrione                  D  Extending system_exposed_libraries: libapuwareapusys.mtk.so:libapuwareapusys_v2.mtk.so:libapuwarexrp.mtk.so:libapuwarexrp_v2.mtk.so:libapuwareutils.mtk.so:libapuwareutils_v2.mtk.so:libapuwarehmp.mtk.so:libmcv_runtime_usdk.mtk.so:libneuron_graph_delegate.mtk.so:libneuronusdk_adapter.mtk.so:libtflite_mtk.mtk.so:libarmnn_ndk.mtk.so:libcmdl_ndk.mtk.so:libnir_neon_driver_ndk.mtk.so:libmvpu_runtime.mtk.so:libmvpu_runtime_pub.mtk.so:libmvpu_engine_pub.mtk.so:libmvpu_pattern_pub.mtk.so:libmvpuop_mtk_cv.mtk.so:libmvpuop_mtk_nn.mtk.so:libteeservice_client.trustonic.so:libmisys_jni.xiaomi.so
+2025-04-26 10:49:41.152 19726-19726 skia                    com.example.agrione                  D  SkJpegCodec::onGetPixels -
+2025-04-26 10:49:41.156 19726-19770 example.agrione         com.example.agrione                  W  Loading /data/misc/apexdata/com.android.art/dalvik-cache/arm64/system@framework@com.android.location.provider.jar@classes.odex non-executable as it requires an image which we failed to load
+2025-04-26 10:49:41.157 19726-19726 skia                    com.example.agrione                  D  SkJpegCodec::onGetPixels +
+2025-04-26 10:49:41.160 19726-19770 nativeloader            com.example.agrione                  D  Configuring clns-7 for other apk /system/framework/com.android.location.provider.jar. target_sdk_version=36, uses_libraries=ALL, library_path=/data/app/~~unaAv6hrJZukOBGAKwTiMA==/com.google.android.gms-Vir5Evma-hhmsPEyhCLgjA==/lib/arm64:/data/app/~~unaAv6hrJZukOBGAKwTiMA==/com.google.android.gms-Vir5Evma-hhmsPEyhCLgjA==/base.apk!/lib/arm64-v8a, permitted_path=/data:/mnt/expand:/data/user/0/com.google.android.gms
+2025-04-26 10:49:41.161 19726-19770 nativeloader            com.example.agrione                  D  Extending system_exposed_libraries: libapuwareapusys.mtk.so:libapuwareapusys_v2.mtk.so:libapuwarexrp.mtk.so:libapuwarexrp_v2.mtk.so:libapuwareutils.mtk.so:libapuwareutils_v2.mtk.so:libapuwarehmp.mtk.so:libmcv_runtime_usdk.mtk.so:libneuron_graph_delegate.mtk.so:libneuronusdk_adapter.mtk.so:libtflite_mtk.mtk.so:libarmnn_ndk.mtk.so:libcmdl_ndk.mtk.so:libnir_neon_driver_ndk.mtk.so:libmvpu_runtime.mtk.so:libmvpu_runtime_pub.mtk.so:libmvpu_engine_pub.mtk.so:libmvpu_pattern_pub.mtk.so:libmvpuop_mtk_cv.mtk.so:libmvpuop_mtk_nn.mtk.so:libteeservice_client.trustonic.so:libmisys_jni.xiaomi.so
+2025-04-26 10:49:41.161 19726-19726 skia                    com.example.agrione                  D  SkJpegCodec::onGetPixels -
+2025-04-26 10:49:41.172 19726-19770 nativeloader            com.example.agrione                  D  Configuring clns-8 for other apk /data/app/~~unaAv6hrJZukOBGAKwTiMA==/com.google.android.gms-Vir5Evma-hhmsPEyhCLgjA==/base.apk. target_sdk_version=36, uses_libraries=, library_path=/data/app/~~unaAv6hrJZukOBGAKwTiMA==/com.google.android.gms-Vir5Evma-hhmsPEyhCLgjA==/lib/arm64:/data/app/~~unaAv6hrJZukOBGAKwTiMA==/com.google.android.gms-Vir5Evma-hhmsPEyhCLgjA==/base.apk!/lib/arm64-v8a, permitted_path=/data:/mnt/expand:/data/user/0/com.google.android.gms
+2025-04-26 10:49:41.181 19726-19726 skia                    com.example.agrione                  D  SkJpegCodec::onGetPixels +
+2025-04-26 10:49:41.183 19726-19726 skia                    com.example.agrione                  D  SkJpegCodec::onGetPixels -
+2025-04-26 10:49:41.188 19726-19770 ProviderInstaller       com.example.agrione                  W  Failed to report request stats: com.google.android.gms.common.security.ProviderInstallerImpl.reportRequestStats [class android.content.Context, long, long]
+2025-04-26 10:49:41.190 19726-19726 ScrollerOp...ionManager com.example.agrione                  D  registerConfigChangedListener
+2025-04-26 10:49:41.202 19726-19726 Activity                com.example.agrione                  W  PerfMonitor: Slow Operation: Activity com.example.agrione/.view.dashboard.DashboardActivity onStart took 131ms
+2025-04-26 10:49:41.213 19726-19726 SurfaceFactory          com.example.agrione                  I  [static] sSurfaceFactory = com.mediatek.view.impl.SurfaceFactoryImpl@e603565
+2025-04-26 10:49:41.221 19726-19756 libc                    com.example.agrione                  W  Access denied finding property "ro.vendor.display.iris_x7.support"
+2025-04-26 10:49:41.224 19726-19726 VRI[DashboardActivity]  com.example.agrione                  D  hardware acceleration = true, forceHwAccelerated = false
+2025-04-26 10:49:41.231 19726-19726 libMEOW                 com.example.agrione                  D  meow new tls: 0xb40000722b214f80
+2025-04-26 10:49:41.231 19726-19726 libMEOW                 com.example.agrione                  D  applied 1 plugins for [com.example.agrione]:
+2025-04-26 10:49:41.231 19726-19726 libMEOW                 com.example.agrione                  D    plugin 1: [libMEOW_gift.so]:
+2025-04-26 10:49:41.233 19726-19726 Looper                  com.example.agrione                  W  PerfMonitor looperActivity : package=com.example.agrione/.view.dashboard.DashboardActivity time=710ms latency=686ms  procState=-1  historyMsgCount=3
+2025-04-26 10:49:41.233 19726-19726 Looper                  com.example.agrione                  W  PerfMonitor looperActivity : package=com.example.agrione/.view.dashboard.DashboardActivity time=0ms latency=1396ms  procState=-1  historyMsgCount=4 (msgIndex=4 wall=710ms seq=4 late=686ms h=android.app.ActivityThread$H w=159)
+2025-04-26 10:49:41.235 19726-19726 FramePredict            com.example.agrione                  D  FramePredict init: false
+2025-04-26 10:49:41.235 19726-19726 Choreographer           com.example.agrione                  I  Skipped 42 frames!  The application may be doing too much work on its main thread.
+2025-04-26 10:49:41.287 19726-19770 nativeloader            com.example.agrione                  D  Load /data/app/~~unaAv6hrJZukOBGAKwTiMA==/com.google.android.gms-Vir5Evma-hhmsPEyhCLgjA==/base.apk!/lib/arm64-v8a/libconscrypt_gmscore_jni.so using ns clns-8 from class loader (caller=/data/app/~~unaAv6hrJZukOBGAKwTiMA==/com.google.android.gms-Vir5Evma-hhmsPEyhCLgjA==/base.apk!classes3.dex): ok
+2025-04-26 10:49:41.289 19726-19770 NativeCrypto            com.example.agrione                  V  Registering com/google/android/gms/org/conscrypt/NativeCrypto's 312 native methods...
+2025-04-26 10:49:41.311 19726-19770 example.agrione         com.example.agrione                  W  Accessing hidden method Ljava/security/spec/ECParameterSpec;->getCurveName()Ljava/lang/String; (unsupported, reflection, allowed)
+2025-04-26 10:49:41.328 19726-19775 example.agrione         com.example.agrione                  W  Accessing hidden method Ldalvik/system/VMStack;->getStackClass2()Ljava/lang/Class; (unsupported, reflection, allowed)
+2025-04-26 10:49:41.376 19726-19726 BufferQueueConsumer     com.example.agrione                  D  [](id:4d0e00000000,api:0,p:-1,c:19726) connect: controlledByApp=false
+2025-04-26 10:49:41.381 19726-19756 libMEOW                 com.example.agrione                  D  meow new tls: 0xb40000729648b280
+2025-04-26 10:49:41.381 19726-19756 libMEOW                 com.example.agrione                  D  applied 1 plugins for [com.example.agrione]:
+2025-04-26 10:49:41.381 19726-19756 libMEOW                 com.example.agrione                  D    plugin 1: [libMEOW_gift.so]:
+2025-04-26 10:49:41.394 19726-19756 libc                    com.example.agrione                  W  Access denied finding property "vendor.migl.debug"
+2025-04-26 10:49:41.394 19726-19756 libMiGL                 com.example.agrione                  E  libmigl:This GPU version is note support Variable Shading Rate
+2025-04-26 10:49:41.396 19726-19756 libEGL                  com.example.agrione                  E  pre_cache appList: com.android.calendar,com.android.contacts,com.android.fileexplorer,com.android.mms,com.android.settings,com.android.thememanager,com.miui.gallery,com.miui.notes,com.miui.player,com.miui.securitycenter,com.miui.video,com.miui.weather2
+2025-04-26 10:49:41.420 19726-19770 ProviderInstaller       com.example.agrione                  I  Installed default security provider GmsCore_OpenSSL
+2025-04-26 10:49:41.474 19726-19726 RecyclerView            com.example.agrione                  E  No adapter attached; skipping layout
+2025-04-26 10:49:41.554 19726-19726 VRI[DashboardActivity]  com.example.agrione                  D  vri.reportNextDraw android.view.ViewRootImpl.performTraversals:3953 android.view.ViewRootImpl.doTraversal:2674 android.view.ViewRootImpl$TraversalRunnable.run:9867 android.view.Choreographer$CallbackRecord.run:1431 android.view.Choreographer$CallbackRecord.run:1439 
+2025-04-26 10:49:41.554 19726-19726 VRI[DashboardActivity]  com.example.agrione                  D  vri.Setup new sync id=0 syncSeqId=0
+2025-04-26 10:49:41.580 19726-19726 libc                    com.example.agrione                  W  Access denied finding property "ro.vendor.display.iris_x7.support"
+2025-04-26 10:49:41.583 19726-19756 example.agrione         com.example.agrione                  D  MiuiProcessManagerServiceStub setSchedFifo
+2025-04-26 10:49:41.583 19726-19756 MiuiProcessManagerImpl  com.example.agrione                  I  setSchedFifo pid:19726, mode:3
+2025-04-26 10:49:41.584 19726-19756 libc                    com.example.agrione                  W  Access denied finding property "ro.vendor.magt.mtk_magt_support"
+2025-04-26 10:49:41.584 19726-19756 hw-ProcessState         com.example.agrione                  D  Binder ioctl to enable oneway spam detection failed: Invalid argument
+2025-04-26 10:49:41.586 19726-19756 libc                    com.example.agrione                  W  Access denied finding property "ro.vendor.display.iris_x7.support"
+2025-04-26 10:49:41.635 19726-19756 example.agrione         com.example.agrione                  E  FI open fail: No such file or directory
+2025-04-26 10:49:41.635 19726-19756 libc                    com.example.agrione                  W  Access denied finding property "ro.vendor.display.iris_x7.support"
+2025-04-26 10:49:41.635 19726-19756 gralloc4                com.example.agrione                  E  Empty SMPTE 2094-40 data
+2025-04-26 10:49:41.635 19726-19756 libc                    com.example.agrione                  W  Access denied finding property "ro.vendor.display.iris_x7.support"
+2025-04-26 10:49:41.636 19726-19756 BLASTBufferQueue        com.example.agrione                  D  [VRI[DashboardActivity]#0](f:0,a:1) acquireNextBufferLocked size=1080x2400 mFrameNumber=1 applyTransaction=true mTimestamp=779571160659927(auto) mPendingTransactions.size=0 graphicBufferId=84722524880898 transform=0
+2025-04-26 10:49:41.638 19726-19756 Parcel                  com.example.agrione                  W  Expecting binder but got null!
+2025-04-26 10:49:41.638 19726-19726 Looper                  com.example.agrione                  W  PerfMonitor doFrame : time=403ms vsyncFrame=0 latency=709ms procState=-1 historyMsgCount=4 (msgIndex=1 wall=710ms seq=4 late=686ms h=android.app.ActivityThread$H w=159)
+2025-04-26 10:49:41.639 19726-19726 VRI[DashboardActivity]  com.example.agrione                  D  vri.reportDrawFinished syncSeqId=0 android.view.ViewRootImpl.lambda$createSyncIfNeeded$4$android-view-ViewRootImpl:4021 android.view.ViewRootImpl$$ExternalSyntheticLambda1.run:6 android.os.Handler.handleCallback:942 android.os.Handler.dispatchMessage:99 android.os.Looper.loopOnce:211 
+2025-04-26 10:49:41.648 19726-19773 GoogleApiManager        com.example.agrione                  E  Failed to get service from broker. 
+                                                                                                    java.lang.SecurityException: Unknown calling package name 'com.google.android.gms'.
+                                                                                                    	at android.os.Parcel.createExceptionOrNull(Parcel.java:3011)
+                                                                                                    	at android.os.Parcel.createException(Parcel.java:2995)
+                                                                                                    	at android.os.Parcel.readException(Parcel.java:2978)
+                                                                                                    	at android.os.Parcel.readException(Parcel.java:2920)
+                                                                                                    	at aubj.a(:com.google.android.gms@251333029@25.13.33 (190400-745790146):36)
+                                                                                                    	at atzq.z(:com.google.android.gms@251333029@25.13.33 (190400-745790146):143)
+                                                                                                    	at atgz.run(:com.google.android.gms@251333029@25.13.33 (190400-745790146):42)
+                                                                                                    	at android.os.Handler.handleCallback(Handler.java:942)
+                                                                                                    	at android.os.Handler.dispatchMessage(Handler.java:99)
+                                                                                                    	at cbvs.mk(:com.google.android.gms@251333029@25.13.33 (190400-745790146):1)
+                                                                                                    	at cbvs.dispatchMessage(:com.google.android.gms@251333029@25.13.33 (190400-745790146):5)
+                                                                                                    	at android.os.Looper.loopOnce(Looper.java:211)
+                                                                                                    	at android.os.Looper.loop(Looper.java:300)
+                                                                                                    	at android.os.HandlerThread.run(HandlerThread.java:67)
+2025-04-26 10:49:41.654 19726-19740 OpenGLRenderer          com.example.agrione                  I  Davey! duration=1110ms; Flags=1, FrameTimelineVsyncId=260561866, IntendedVsync=779570051581683, Vsync=779570748494445, InputEventId=0, HandleInputStart=779570760869773, AnimationStart=779570760883004, PerformTraversalsStart=779570761181696, DrawStart=779571079749465, FrameDeadline=779570068581683, FrameInterval=779570760371004, FrameStartTime=16593161, SyncQueued=779571107201157, SyncStart=779571107322388, IssueDrawCommandsStart=779571108833157, SwapBuffers=779571156325157, FrameCompleted=779571161788157, DequeueBufferDuration=14462, QueueBufferDuration=426846, GpuCompleted=779571161788157, SwapBuffersCompleted=779571161334927, DisplayPresentTime=0, CommandSubmissionCompleted=779571156325157, 
+2025-04-26 10:49:41.661 19726-19772 FlagRegistrar           com.example.agrione                  W  Failed to register com.google.android.gms.providerinstaller#com.example.agrione
+                                                                                                    exag: 17: 17: API: Phenotype.API is not available on this device. Connection failed with: ConnectionResult{statusCode=DEVELOPER_ERROR, resolution=null, message=null}
+                                                                                                    	at exai.a(:com.google.android.gms@251333029@25.13.33 (190400-745790146):13)
+                                                                                                    	at frqh.d(:com.google.android.gms@251333029@25.13.33 (190400-745790146):3)
+                                                                                                    	at frqj.run(:com.google.android.gms@251333029@25.13.33 (190400-745790146):130)
+                                                                                                    	at frsq.execute(:com.google.android.gms@251333029@25.13.33 (190400-745790146):1)
+                                                                                                    	at frqr.f(:com.google.android.gms@251333029@25.13.33 (190400-745790146):1)
+                                                                                                    	at frqr.m(:com.google.android.gms@251333029@25.13.33 (190400-745790146):99)
+                                                                                                    	at frqr.r(:com.google.android.gms@251333029@25.13.33 (190400-745790146):17)
+                                                                                                    	at epop.hC(:com.google.android.gms@251333029@25.13.33 (190400-745790146):35)
+                                                                                                    	at edxt.run(:com.google.android.gms@251333029@25.13.33 (190400-745790146):12)
+                                                                                                    	at frsq.execute(:com.google.android.gms@251333029@25.13.33 (190400-745790146):1)
+                                                                                                    	at edxu.b(:com.google.android.gms@251333029@25.13.33 (190400-745790146):18)
+                                                                                                    	at edyj.b(:com.google.android.gms@251333029@25.13.33 (190400-745790146):36)
+                                                                                                    	at edyl.d(:com.google.android.gms@251333029@25.13.33 (190400-745790146):25)
+                                                                                                    	at ateh.c(:com.google.android.gms@251333029@25.13.33 (190400-745790146):9)
+                                                                                                    	at atgx.q(:com.google.android.gms@251333029@25.13.33 (190400-745790146):48)
+                                                                                                    	at atgx.d(:com.google.android.gms@251333029@25.13.33 (190400-745790146):10)
+                                                                                                    	at atgx.g(:com.google.android.gms@251333029@25.13.33 (190400-745790146):185)
+                                                                                                    	at atgx.onConnectionFailed(:com.google.android.gms@251333029@25.13.33 (190400-745790146):2)
+                                                                                                    	at atgz.run(:com.google.android.gms@251333029@25.13.33 (190400-745790146):70)
+                                                                                                    	at android.os.Handler.handleCallback(Handler.java:942)
+                                                                                                    	at android.os.Handler.dispatchMessage(Handler.java:99)
+                                                                                                    	at cbvs.mk(:com.google.android.gms@251333029@25.13.33 (190400-745790146):1)
+                                                                                                    	at cbvs.dispatchMessage(:com.google.android.gms@251333029@25.13.33 (190400-745790146):5)
+                                                                                                    	at android.os.Looper.loopOnce(Looper.java:211)
+                                                                                                    	at android.os.Looper.loop(Looper.java:300)
+                                                                                                    	at android.os.HandlerThread.run(HandlerThread.java:67)
+                                                                                                    Caused by: atcw: 17: API: Phenotype.API is not available on this device. Connection failed with: ConnectionResult{statusCode=DEVELOPER_ERROR, resolution=null, message=null}
+                                                                                                    	at atzc.a(:com.google.android.gms@251333029@25.13.33 (190400-745790146):15)
+                                                                                                    	at atek.a(:com.google.android.gms@251333029@25.13.33 (190400-745790146):1)
+                                                                                                    	at ateh.c(:com.google.android.gms@251333029@25.13.33 (190400-745790146):5)
+                                                                                                    	at atgx.q(:com.google.android.gms@251333029@25.13.33 (190400-745790146):48) 
+                                                                                                    	at atgx.d(:com.google.android.gms@251333029@25.13.33 (190400-745790146):10) 
+                                                                                                    	at atgx.g(:com.google.android.gms@251333029@25.13.33 (190400-745790146):185) 
+                                                                                                    	at atgx.onConnectionFailed(:com.google.android.gms@251333029@25.13.33 (190400-745790146):2) 
+                                                                                                    	at atgz.run(:com.google.android.gms@251333029@25.13.33 (190400-745790146):70) 
+                                                                                                    	at android.os.Handler.handleCallback(Handler.java:942) 
+                                                                                                    	at android.os.Handler.dispatchMessage(Handler.java:99) 
+                                                                                                    	at cbvs.mk(:com.google.android.gms@251333029@25.13.33 (190400-745790146):1) 
+                                                                                                    	at cbvs.dispatchMessage(:com.google.android.gms@251333029@25.13.33 (190400-745790146):5) 
+                                                                                                    	at android.os.Looper.loopOnce(Looper.java:211) 
+                                                                                                    	at android.os.Looper.loop(Looper.java:300) 
+                                                                                                    	at android.os.HandlerThread.run(HandlerThread.java:67) 
+2025-04-26 10:49:41.670 19726-19726 Looper                  com.example.agrione                  W  PerfMonitor doFrame : time=15ms vsyncFrame=0 latency=396ms procState=-1 historyMsgCount=41
+2025-04-26 10:49:41.674 19726-19756 gralloc4                com.example.agrione                  E  Empty SMPTE 2094-40 data
+2025-04-26 10:49:41.681 19726-19726 DecorView[]             com.example.agrione                  D  onWindowFocusChanged hasWindowFocus true
+2025-04-26 10:49:41.684 19726-19726 HandWritingStubImpl     com.example.agrione                  I  refreshLastKeyboardType: 1
+2025-04-26 10:49:41.684 19726-19726 HandWritingStubImpl     com.example.agrione                  I  getCurrentKeyboardType: 1
+2025-04-26 10:49:41.700 19726-19801 example.agrione         com.example.agrione                  W  Accessing hidden field Ljava/net/Socket;->impl:Ljava/net/SocketImpl; (unsupported, reflection, allowed)
+2025-04-26 10:49:41.718 19726-19756 gralloc4                com.example.agrione                  E  Empty SMPTE 2094-40 data
+2025-04-26 10:49:41.723 19726-19726 HandWritingStubImpl     com.example.agrione                  I  getCurrentKeyboardType: 1
+2025-04-26 10:49:41.779 19726-19756 gralloc4                com.example.agrione                  E  Empty SMPTE 2094-40 data
+2025-04-26 10:49:41.782 19726-19756 gralloc4                com.example.agrione                  E  Empty SMPTE 2094-40 data
+2025-04-26 10:49:41.788 19726-19731 example.agrione         com.example.agrione                  I  Compiler allocated 5181KB to compile void android.view.ViewRootImpl.performTraversals()
+2025-04-26 10:49:41.794 19726-19756 gralloc4                com.example.agrione                  E  Empty SMPTE 2094-40 data
+2025-04-26 10:49:41.811 19726-19801 example.agrione         com.example.agrione                  W  Accessing hidden method Ljava/security/spec/ECParameterSpec;->setCurveName(Ljava/lang/String;)V (unsupported, reflection, allowed)
+2025-04-26 10:49:41.812 19726-19756 gralloc4                com.example.agrione                  E  Empty SMPTE 2094-40 data
+2025-04-26 10:49:42.407 19726-19769 Firestore               com.example.agrione                  W  (24.10.2) [Firestore]: Listen for Query(target=Query(products order by __name__);limitType=LIMIT_TO_FIRST) failed: Status{code=PERMISSION_DENIED, description=Missing or insufficient permissions., cause=null}
+2025-04-26 10:49:49.288 19726-19740 MIUIScout ANR           com.example.agrione                  W  AnrScout only want msg within 20s, so stop here
+2025-04-26 10:49:49.292 19726-19740 MIUIScout ANR           com.example.agrione                  D  get period history msg: (Current message: duration=7091ms seq=146 h=android.os.Handler c=com.example.agrione.view.dashboard.DashboardActivity$$ExternalSyntheticLambda6)
+2025-04-26 10:49:49.292 19726-19740 MIUIScout ANR           com.example.agrione                  D  get period history msg:messages for the same target android.app.ActivityThread$H execute time>50ms (count=2 totalwalltime=710ms h=android.app.ActivityThread$H whatORcallback=159)
+2025-04-26 10:49:49.292 19726-19740 MIUIScout ANR           com.example.agrione                  D  get period history msg:messages for the same target android.view.Choreographer$FrameHandler execute time>50ms (count=8 totalwalltime=510ms h=android.view.Choreographer$FrameHandler whatORcallback=android.view.Choreographer$FrameDisplayEventReceiver)
+2025-04-26 10:49:49.292 19726-19740 MIUIScout ANR           com.example.agrione                  D  get period history msg:execute time>50ms (msgIndex=4seq=4 plan=10:49:39.837 late=686ms wall=710ms h=android.app.ActivityThread$H w=159)
+2025-04-26 10:49:49.292 19726-19740 MIUIScout ANR           com.example.agrione                  D  get period history msg:In recent 20s, total historyMsgCount=145
+2025-04-26 10:49:49.297 19726-19740 MIUIScout ANR           com.example.agrione                  W  Print Message Id: 0 MessageInfo: { when=-7s88ms callback=com.google.android.gms.tasks.zzi target=com.google.android.gms.internal.tasks.zza }
+2025-04-26 10:49:49.297 19726-19740 MIUIScout ANR           com.example.agrione                  W  Print Message Id: 1 MessageInfo: { when=-6s890ms callback=com.google.android.gms.tasks.zzk target=com.google.android.gms.internal.tasks.zza }
+2025-04-26 10:49:49.297 19726-19740 MIUIScout ANR           com.example.agrione                  W  Print Message Id: 2 MessageInfo: { when=-6s549ms what=131 obj=android.app.ActivityThread$ProviderRefCount@6044cd8 target=android.app.ActivityThread$H }
+2025-04-26 10:49:49.297 19726-19740 MIUIScout ANR           com.example.agrione                  W  Print Message Id: 3 MessageInfo: { when=-6s474ms callback=android.view.View$ScrollabilityCache target=android.view.ViewRootImpl$ViewRootHandler }
+2025-04-26 10:49:49.297 19726-19740 MIUIScout ANR           com.example.agrione                  W  Print Message Id: 4 MessageInfo: { when=-6s474ms callback=android.view.View$ScrollabilityCache target=android.view.ViewRootImpl$ViewRootHandler }
+2025-04-26 10:49:49.297 19726-19740 MIUIScout ANR           com.example.agrione                  W  (Print messages: 5, polling=false, quitting=false)
+2025-04-26 10:49:49.740 19726-19728 example.agrione         com.example.agrione                  I  Thread[2,tid=19728,WaitingInMainSignalCatcherLoop,Thread*=0xb400007295a02000,peer=0x143c2780,"Signal Catcher"]: reacting to signal 3
+2025-04-26 10:49:49.740 19726-19728 example.agrione         com.example.agrione                  I  
+2025-04-26 10:49:50.045 19726-19728 example.agrione         com.example.agrione                  I  Wrote stack traces to tombstoned
+2025-04-26 10:49:51.355 19726-19773 GoogleApiManager        com.example.agrione                  E  Failed to get service from broker. 
+                                                                                                    java.lang.SecurityException: Unknown calling package name 'com.google.android.gms'.
+                                                                                                    	at android.os.Parcel.createExceptionOrNull(Parcel.java:3011)
+                                                                                                    	at android.os.Parcel.createException(Parcel.java:2995)
+                                                                                                    	at android.os.Parcel.readException(Parcel.java:2978)
+                                                                                                    	at android.os.Parcel.readException(Parcel.java:2920)
+                                                                                                    	at aubj.a(:com.google.android.gms@251333029@25.13.33 (190400-745790146):36)
+                                                                                                    	at atzq.z(:com.google.android.gms@251333029@25.13.33 (190400-745790146):143)
+                                                                                                    	at atgz.run(:com.google.android.gms@251333029@25.13.33 (190400-745790146):42)
+                                                                                                    	at android.os.Handler.handleCallback(Handler.java:942)
+                                                                                                    	at android.os.Handler.dispatchMessage(Handler.java:99)
+                                                                                                    	at cbvs.mk(:com.google.android.gms@251333029@25.13.33 (190400-745790146):1)
+                                                                                                    	at cbvs.dispatchMessage(:com.google.android.gms@251333029@25.13.33 (190400-745790146):5)
+                                                                                                    	at android.os.Looper.loopOnce(Looper.java:211)
+                                                                                                    	at android.os.Looper.loop(Looper.java:300)
+                                                                                                    	at android.os.HandlerThread.run(HandlerThread.java:67)
+2025-04-26 10:49:51.412 19726-19734 System                  com.example.agrione                  W  A resource failed to call close. 
+2025-04-26 10:49:53.991  1571-19811 ActivityManager         system_server                        E  ANR in com.example.agrione (com.example.agrione/.view.dashboard.DashboardActivity)
+                                                                                                    PID: 19726
+                                                                                                    Reason: Input dispatching timed out (604ae8c com.example.agrione/com.example.agrione.view.dashboard.DashboardActivity (server) is not responding. Waited 5000ms for MotionEvent(action=DOWN))
+                                                                                                    Parent: com.example.agrione/.view.dashboard.DashboardActivity
+                                                                                                    ErrorId: 10f1c6be-81f0-469e-83c0-e0acb99eebde
+                                                                                                    Frozen: false
+                                                                                                    Load: 17.5 / 17.96 / 17.7
+                                                                                                    ----- Output from /proc/pressure/memory -----
+                                                                                                    some avg10=0.00 avg60=0.33 avg300=0.60 total=2289811705
+                                                                                                    full avg10=0.00 avg60=0.10 avg300=0.16 total=793403199
+                                                                                                    ----- End output from /proc/pressure/memory -----
+                                                                                                    
+                                                                                                    CPU usage from 133218ms to 0ms ago (2025-04-26 10:47:35.968 to 2025-04-26 10:49:49.186) with 99% awake:
+                                                                                                      19% 1571/system_server: 8.3% user + 10% kernel / faults: 24991 minor 23 major
+                                                                                                      4.2% 2199/com.android.systemui: 2.7% user + 1.4% kernel / faults: 8500 minor 13 major
+                                                                                                      3.2% 928/surfaceflinger: 2.1% user + 1.1% kernel / faults: 2455 minor 24 major
+                                                                                                      2.5% 6343/com.google.android.gms.persistent: 1.8% user + 0.7% kernel / faults: 8166 minor 9 major
+                                                                                                      2.4% 3477/com.google.android.providers.media.module: 1.4% user + 1% kernel / faults: 4742 minor 24 major
+                                                                                                      2.3% 13226/adbd: 0.7% user + 1.6% kernel / faults: 2668 minor
+                                                                                                      1.8% 158/kswapd0: 0% user + 1.8% kernel
+                                                                                                      1.8% 830/android.hardware.graphics.composer@2.1-service: 0.6% user + 1.1% kernel / faults: 10 minor
+                                                                                                      1.7% 2198/com.android.phone: 1.1% user + 0.6% kernel / faults: 7491 minor 20 major
+                                                                                                      1.5% 538/logd: 0.5% user + 1% kernel / faults: 3655 minor
+                                                                                                      1.3% 16840/com.whatsapp: 0.9% user + 0.3% kernel / faults: 7023 minor 1 major
+                                                                                                      0.4% 822/android.hardware.audio.service.mediatek: 0.4% user + 0% kernel / faults: 556 minor
+                                                                                                      1% 24002/process-tracker: 0.2% user + 0.8% kernel / faults: 32 minor 1 major
+                                                                                                      0.9% 22559/com.google.android.gms: 0.6% user + 0.3% kernel / faults: 7039 minor 13 major
+                                                                                                      0.7% 23985/logcat: 0.2% user + 0.4% kernel
+                                                                                                      0.6% 30470/com.miui.securitycenter.remote: 0.3% user + 0.2% kernel / faults: 10751 minor 40 major
+                                                                                                      0.5% 312/irq/48-5-0034: 0% user + 0.5% kernel
+                                                                                                      0.5% 539/lmkd: 0% user + 0.5% kernel
+                                                                                                      0.5% 8111/kworker/u16:4: 0% user + 0.5% kernel / faults: 10 minor
+                                                                                                      0.4% 28696/com.miui.msa.global: 0.3% user + 0.1% kernel / faults: 3617 minor 20 major
+                                                                                                      0.5% 32040/kworker/u16:3: 0% user + 0.5% kernel / faults: 13 minor
+                                                                                                      0.4% 811/statsd: 0.3% user + 0.1% kernel / faults: 341 minor
+                                                                                                      0.4% 835/android.hardware.sensors@2.0-service.multihal-mediatek: 0.1% user + 0.3% kernel / faults: 69 minor 4 major
+                                                                                                      0.4% 20437/com.mi.android.globallauncher: 0.2% user + 0.2% kernel / faults: 2784 minor 12 major
+                                                                                                      0.4% 8/rcu_preempt: 0% user + 0.4% kernel
+                                                                                                      0.3% 14557/kworker/u16:0: 0% user + 0.3% kernel / faults: 30 minor
+                                                                                                      0.3% 907/audioserver: 0.2% user + 0.1% kernel / faults: 667 minor 4 major
+                                                                                                      0.3% 8636/kworker/u16:10: 0% user + 0.3% kernel / faults: 78 minor
+                                                                                                      0.3% 382/charger_thread: 0% user + 0.3% kernel
+                                                                                                      0.3% 367/ipi_cpu_dvfs_rt: 0% user + 0.3% kernel
+                                                                                                      0.3% 1489/mtkfusionrild: 0.2% user + 0.1% kernel / faults: 251 minor 2 major
+                                                                                                      0.3% 4073/com.lbe.security.miui: 0.1% user + 0.1% kernel / faults: 213 minor 4 major
+                                                                                                      0.3% 288/teei_switch_thr: 0% user + 0.3% kernel
+                                                                                                      0.3% 1199/vendor.mediatek.hardware.pq@2.2-service: 0.1% user + 0.1% kernel / faults: 63 minor 1 major
+                                                                                                      0.3% 5447/com.miui.powerkeeper: 0.1% user + 0.1% kernel / faults: 727 minor 1 major
+                                                                                                      0.2% 18850/com.google.android.googlequicksearchbox:search: 0.1% user + 0.1% kernel / faults: 1083 minor 21 major
+                                                                                                      0.2% 2109/com.android.networkstack.process: 0.1% user + 0% kernel / faults: 650 minor 2 major
+                                                                                                      0.2% 211/pbm: 0% user + 0.2% kernel
+                                                                                                      0.2% 377/irq/52-NVT-ts: 0% user + 0.2% kernel
+                                                                                                      0.1% 7794/kworker/u16:2: 0% user + 0.1% kernel / faults: 5 minor
+                                                                                                      0.1% 28614/com.google.android.apps.wellbeing: 0.1% user + 0% kernel / faults: 412 minor
+                                                                                                      0.1% 4912/main_thread: 0% user + 0.1% kernel
+                                                                                                      0.1% 616/keystore2: 0.1% user + 0% kernel / faults: 584 minor 50 major
+                                                                                                      0.1% 10417/kworker/0:3: 0% user + 0.1% kernel
+2025-04-26 10:49:53.992  1571-19811 ActivityManager         system_server                        E   +0% 19245/com.miui.android.fashiongallery: 0% user + 0% kernel
+                                                                                                     +0% 19419/com.google.android.webview:sandboxed_process0:org.chromium.content.app.SandboxedProcessService0:0: 0% user + 0% kernel
+                                                                                                     +0% 19462/com.google.android.webview:webview_service: 0% user + 0% kernel
+                                                                                                     +0% 19485/com.android.htmlviewer:remote: 0% user + 0% kernel
+                                                                                                     +0% 19547/kworker/3:1: 0% user + 0% kernel
+                                                                                                     +0% 19553/kworker/u16:5: 0% user + 0% kernel
+                                                                                                     +0% 19558/com.miui.screenrecorder: 0% user + 0% kernel
+                                                                                                     +0% 19589/com.miui.msa.global:ui: 0% user + 0% kernel
+                                                                                                     +0% 19655/kworker/u16:7: 0% user + 0% kernel
+                                                                                                     +0% 19666/kworker/u16:8: 0% user + 0% kernel
+                                                                                                     +0% 19726/com.example.agrione: 0% user + 0% kernel
+                                                                                                     +0% 19776/kbase_event: 0% user + 0% kernel
+                                                                                                     +0% 19810/kworker/1:1: 0% user + 0% kernel
+                                                                                                    11% TOTAL: 6.2% user + 5.2% kernel + 0.2% iowait + 0.2% softirq
+                                                                                                    CPU usage from 120ms to 527ms later (2025-04-26 10:49:49.306 to 2025-04-26 10:49:49.713):
+                                                                                                      84% 28696/com.miui.msa.global: 59% user + 25% kernel / faults: 690 minor
+                                                                                                        42% 28707/HeapTaskDaemon: 29% user + 12% kernel
+                                                                                                        33% 28857/OnDeviceIntelli: 25% user + 8.4% kernel
+                                                                                                        4.2% 28708/ReferenceQueueD: 4.2% user + 0% kernel
+                                                                                                      58% 1571/system_server: 58% user + 0% kernel / faults: 823 minor
+                                                                                                        37% 19811/AnrConsumer: 12% user + 24% kernel
+                                                                                                        6.1% 1764/InputDispatcher: 3% user + 3% kernel
+                                                                                                        6.1% 1844/miui-gesture: 3% user + 3% kernel
+                                                                                                        3% 1603/binder:1571_2: 3% user + 0% kernel
+                                                                                                        3% 1606/android.ui: 3% user + 0% kernel
+                                                                                                        3% 1707/SensorService: 3% user + 0% kernel
+                                                                                                        3% 1842/SchedBoostServi: 3% user + 0% kernel
+                                                                                                        3% 1851/SmartPowerDispl: 0% user + 3% kernel
+                                                                                                      35% 616/keystore2: 16% user + 18% kernel
+                                                                                                        16% 627/binder:616_1: 5.4% user + 10% kernel
+                                                                                                        13% 17771/binder:616_9: 8.1% user + 5.4% kernel
+                                                                                                        5.4% 14132/binder:616_6: 2.7% user + 2.7% kernel
+                                                                                                        5.4% 19661/binder:616_6: 5.4% user + 0% kernel
+                                                                                                      16% 538/logd: 5.3% user + 10% kernel / faults: 45 minor
+                                                                                                        8% 547/logd.writer: 5.3% user + 2.6% kernel
+                                                                                                        8% 23997/logd.reader.per: 0% user + 8% kernel
+                                                                                                      16% 617/android.hardware.keymaster@4.1-service.beanpod: 5.4% user + 10% kernel / faults: 2 minor 1 major
+                                                                                                      21% 13226/adbd: 7% user + 14% kernel / faults: 2 minor
+                                                                                                        14% 23956/UsbFfs-worker: 3.5% user + 10% kernel
+                                                                                                        10% 13226/adbd: 3.5% user + 7% kernel
+                                                                                                      10% 288/teei_switch_thr: 0% user + 10% kernel
+                                                                                                      7.8% 19666/kworker/u16:8: 0% user + 7.8% kernel
+                                                                                                      8.2% 23985/logcat: 0% user + 8.2% kernel
+                                                                                                      2.4% 1/init: 0% user + 2.4% kernel
+                                                                                                        2.4% 1/init: 0% user + 2.4% kernel
+                                                                                                      2.4% 34/migration/5: 0% user + 2.4% kernel
+                                                                                                      2.5% 312/irq/48-5-0034: 0% user + 2.5% kernel
+                                                                                                      2.6% 377/irq/52-NVT-ts: 0% user + 2.6% kernel
+                                                                                                      2.6% 540/servicemanager: 2.6% user + 0% kernel
+                                                                                                      3.2% 2199/com.android.systemui: 0% user + 3.2% kernel / faults: 1 minor
+                                                                                                      3.9% 19655/kworker/u16:7: 0% user + 3.9% kernel
+                                                                                                      4.4% 32040/kworker/u16:3: 0% user + 4.4% kernel
+                                                                                                    39% TOTAL: 19% user + 19% kernel
+---------------------------- PROCESS ENDED (19726) for package com.example.agrione ----------------------------
+2025-04-26 10:49:56.652 20437-21367 ActivityManagerWrapper  com.mi.android.globallauncher        E  getRecentTasks: mainTaskId=1808   userId=0   baseIntent=Intent { act=android.intent.action.MAIN flag=268435456 cmp=ComponentInfo{com.example.agrione/com.example.agrione.view.dashboard.DashboardActivity} }
+2025-04-26 10:49:57.569 20437-21367 ActivityManagerWrapper  com.mi.android.globallauncher        E  getRecentTasks: mainTaskId=1808   userId=0   baseIntent=Intent { act=android.intent.action.MAIN flag=268435456 cmp=ComponentInfo{com.example.agrione/com.example.agrione.view.dashboard.DashboardActivity} }
+2025-04-26 10:49:57.578 20437-21367 ActivityManagerWrapper  com.mi.android.globallauncher        E  getRecentTasks: mainTaskId=1808   userId=0   baseIntent=Intent { act=android.intent.action.MAIN flag=268435456 cmp=ComponentInfo{com.example.agrione/com.example.agrione.view.dashboard.DashboardActivity} }

@@ -1,4 +1,4 @@
-package com.agrione.view.user
+package com.example.agrione.view.user
 
 import android.app.Activity
 import android.app.AlertDialog
@@ -25,12 +25,15 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
-import com.agrione.R
-import com.agrione.adapter.PostListUserProfileAdapter
-import com.agrione.utilities.CellClickListener
-import com.agrione.viewmodel.UserDataViewModel
-import com.agrione.viewmodel.UserProfilePostsViewModel
-import kotlinx.android.synthetic.main.fragment_user.*
+import com.example.agrione.R
+import com.example.agrione.adapter.PostListUserProfileAdapter
+import com.example.agrione.utilities.CellClickListener
+import com.example.agrione.viewmodel.UserDataViewModel
+import com.example.agrione.viewmodel.UserProfilePostsViewModel
+import com.example.agrione.databinding.FragmentUserBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.io.IOException
 import java.util.*
 
@@ -40,6 +43,10 @@ private lateinit var viewModel: UserProfilePostsViewModel
 private lateinit var userDataViewModel: UserDataViewModel
 
 class UserFragment : Fragment(), CellClickListener {
+    private var _binding: FragmentUserBinding? = null
+    private val binding get() = _binding!!
+    private val coroutineScope = CoroutineScope(Dispatchers.Main)
+
     private var param1: String? = null
     private var param2: String? = null
     private val PICK_IMAGE_REQUEST = 71
@@ -62,26 +69,30 @@ class UserFragment : Fragment(), CellClickListener {
         viewModel = ViewModelProvider(requireActivity())[UserProfilePostsViewModel::class.java]
         userDataViewModel = ViewModelProvider(requireActivity())[UserDataViewModel::class.java]
         storageReference = FirebaseStorage.getInstance().reference
-        viewModel.getAllPosts(firebaseAuth.currentUser!!.email)
+
+        // Check if user is logged in before accessing email
+        val currentUser = firebaseAuth.currentUser
+        if (currentUser != null) {
+            viewModel.getAllPosts(currentUser.email!!)
+        } else {
+            // Handle case when user is not logged in
+            Toast.makeText(requireContext(), "Please log in to view profile", Toast.LENGTH_SHORT).show()
+            // Navigate back or to login screen
+            requireActivity().onBackPressed()
+        }
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewModel.liveData1.observe(viewLifecycleOwner, Observer {
-            it?.let { user -> viewModel.getAllPostsOfUser(user) }
-        })
+        _binding = FragmentUserBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
-        viewModel.liveData2.observe(viewLifecycleOwner) {
-            Log.d("Live Data In Frag", it.toString())
-        }
-
-        viewModel.userProfilePostsLiveData2.observe(viewLifecycleOwner) {
-            Log.d("Some Part 2", it.toString())
-        }
-
-        return inflater.inflate(R.layout.fragment_user, container, false)
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     companion object {
@@ -101,7 +112,7 @@ class UserFragment : Fragment(), CellClickListener {
         setHasOptionsMenu(true)
         (activity as AppCompatActivity).supportActionBar?.title = "Profile"
 
-        cityEditUserProfile.visibility = View.GONE
+        binding.cityEditUserProfile.visibility = View.GONE
 
         viewModel.userProfilePostsLiveData.observe(viewLifecycleOwner) {
             Log.d("Some Part", it.toString())
@@ -111,17 +122,17 @@ class UserFragment : Fragment(), CellClickListener {
             Log.d("User Fragment", it.data.toString())
         }
 
-        uploadProgressBarProfile.visibility = View.GONE
-        uploadBackProgressProfile.visibility = View.GONE
+        binding.uploadProgressBarProfile.visibility = View.GONE
+        binding.uploadBackProgressProfile.visibility = View.GONE
 
-        uploadUserBackgroundImage.setOnClickListener {
+        binding.uploadUserBackgroundImage.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK).apply { type = "image/* video/*" }
             startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST)
             uploadProfOrBack = 1
             Toast.makeText(requireContext(), "Uploading Background Image", Toast.LENGTH_SHORT).show()
         }
 
-        uploadProfilePictureImage.setOnClickListener {
+        binding.uploadProfilePictureImage.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK).apply { type = "image/* video/*" }
             startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST)
             uploadProfOrBack = 0
@@ -129,60 +140,82 @@ class UserFragment : Fragment(), CellClickListener {
         }
 
         userDataViewModel.userliveData.observe(viewLifecycleOwner) {
-            userNameUserProfileFrag.text = it.getString("name")
-            userCityUserProfileFrag.text = "City: " + (it.getString("city") ?: "")
+            binding.userNameUserProfileFrag.text = it.getString("name")
+            binding.userCityUserProfileFrag.text = "City: " + (it.getString("city") ?: "")
 
             if (it.getString("profileImage").isNullOrBlank()) {
-                uploadProfilePictureImage.visibility = View.VISIBLE
+                binding.uploadProfilePictureImage.visibility = View.VISIBLE
             } else {
-                uploadProfilePictureImage.visibility = View.GONE
-                Glide.with(requireContext()).load(it.getString("profileImage")).into(userImageUserFrag)
+                binding.uploadProfilePictureImage.visibility = View.GONE
+                Glide.with(requireContext()).load(it.getString("profileImage")).into(binding.userImageUserFrag)
             }
 
             if (it.getString("backImage").isNullOrBlank()) {
-                uploadUserBackgroundImage.visibility = View.VISIBLE
+                binding.uploadUserBackgroundImage.visibility = View.VISIBLE
             } else {
-                uploadUserBackgroundImage.visibility = View.GONE
-                Glide.with(requireContext()).load(it.getString("backImage")).into(userBackgroundImage)
+                binding.uploadUserBackgroundImage.visibility = View.GONE
+                Glide.with(requireContext()).load(it.getString("backImage")).into(binding.userBackgroundImage)
             }
 
             val posts = it.get("posts") as? List<*> ?: emptyList<String>()
-            userPostsCountUserProfileFrag.text = "Posts: ${posts.size}"
-            userEmailUserProfileFrag.text = firebaseAuth.currentUser!!.email
+            binding.userPostsCountUserProfileFrag.text = "Posts: ${posts.size}"
+            
+            // Safely access current user email
+            val currentUser = firebaseAuth.currentUser
+            binding.userEmailUserProfileFrag.text = currentUser?.email ?: "Not logged in"
 
             val about = it.getString("about")
             if (about.isNullOrBlank()) {
-                aboutValueUserProfileFrag.visibility = View.GONE
-                aboutValueEditUserProfileFrag.visibility = View.GONE
-                saveBtnAboutUserProfileFrag.visibility = View.GONE
+                binding.aboutValueUserProfileFrag.visibility = View.GONE
+                binding.aboutValueEditUserProfileFrag.visibility = View.GONE
+                binding.saveBtnAboutUserProfileFrag.visibility = View.GONE
             } else {
-                aboutValueUserProfileFrag.visibility = View.VISIBLE
-                aboutValueUserProfileFrag.text = about
+                binding.aboutValueUserProfileFrag.visibility = View.VISIBLE
+                binding.aboutValueUserProfileFrag.text = about
             }
         }
 
-        imageEdit.setOnClickListener {
-            uploadProfilePictureImage.visibility = View.VISIBLE
-            uploadUserBackgroundImage.visibility = View.VISIBLE
-            imageChecked.visibility = View.VISIBLE
-            imageEdit.visibility = View.GONE
-            cityEditUserProfile.setText(userCityUserProfileFrag.text.toString().removePrefix("City: "))
-            cityEditUserProfile.visibility = View.VISIBLE
-            aboutValueEditUserProfileFrag.setText(aboutValueUserProfileFrag.text.toString())
-            aboutValueEditUserProfileFrag.visibility = View.VISIBLE
-            aboutValueUserProfileFrag.visibility = View.GONE
+        binding.imageEdit.setOnClickListener {
+            binding.uploadProfilePictureImage.visibility = View.VISIBLE
+            binding.uploadUserBackgroundImage.visibility = View.VISIBLE
+            binding.imageChecked.visibility = View.VISIBLE
+            binding.imageEdit.visibility = View.GONE
+            binding.cityEditUserProfile.setText(binding.userCityUserProfileFrag.text.toString().removePrefix("City: "))
+            binding.cityEditUserProfile.visibility = View.VISIBLE
+            binding.aboutValueEditUserProfileFrag.setText(binding.aboutValueUserProfileFrag.text.toString())
+            binding.aboutValueEditUserProfileFrag.visibility = View.VISIBLE
+            binding.aboutValueUserProfileFrag.visibility = View.GONE
         }
 
-        imageChecked.setOnClickListener {
-            uploadProfilePictureImage.visibility = View.GONE
-            uploadUserBackgroundImage.visibility = View.GONE
-            imageEdit.visibility = View.VISIBLE
-            cityEditUserProfile.visibility = View.GONE
-            imageChecked.visibility = View.GONE
-            userDataViewModel.updateUserField(requireContext(), firebaseAuth.currentUser!!.email!!, aboutValueEditUserProfileFrag.text.toString(), cityEditUserProfile.text.toString())
-            userDataViewModel.getUserData(firebaseAuth.currentUser!!.email!!)
-            aboutValueEditUserProfileFrag.visibility = View.GONE
-            aboutValueUserProfileFrag.visibility = View.VISIBLE
+        binding.imageChecked.setOnClickListener {
+            binding.uploadProfilePictureImage.visibility = View.GONE
+            binding.uploadUserBackgroundImage.visibility = View.GONE
+            binding.imageEdit.visibility = View.VISIBLE
+            binding.cityEditUserProfile.visibility = View.GONE
+            binding.imageChecked.visibility = View.GONE
+            
+            // Safely access current user email
+            val currentUser = firebaseAuth.currentUser
+            if (currentUser != null) {
+                coroutineScope.launch {
+                    try {
+                        userDataViewModel.updateUserField(
+                            requireContext(),
+                            currentUser.email!!,
+                            binding.aboutValueEditUserProfileFrag.text.toString(),
+                            binding.cityEditUserProfile.text.toString()
+                        )
+                        userDataViewModel.getUserData(currentUser.email!!)
+                    } catch (e: Exception) {
+                        Toast.makeText(requireContext(), "Error updating user data: ${e.message}", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            } else {
+                Toast.makeText(requireContext(), "Please log in to update profile", Toast.LENGTH_SHORT).show()
+            }
+            
+            binding.aboutValueEditUserProfileFrag.visibility = View.GONE
+            binding.aboutValueUserProfileFrag.visibility = View.VISIBLE
         }
     }
 
@@ -195,13 +228,13 @@ class UserFragment : Fragment(), CellClickListener {
                 bitmap = MediaStore.Images.Media.getBitmap(requireActivity().contentResolver, filePath)
                 if (bitmap != null) {
                     if (uploadProfOrBack == 0) {
-                        uploadProgressBarProfile.visibility = View.VISIBLE
-                        uploadProfilePictureImage.visibility = View.GONE
+                        binding.uploadProgressBarProfile.visibility = View.VISIBLE
+                        binding.uploadProfilePictureImage.visibility = View.GONE
                     } else {
-                        uploadBackProgressProfile.visibility = View.VISIBLE
-                        uploadUserBackgroundImage.visibility = View.GONE
+                        binding.uploadBackProgressProfile.visibility = View.VISIBLE
+                        binding.uploadUserBackgroundImage.visibility = View.GONE
                     }
-                    userImageUserFrag.setImageBitmap(bitmap)
+                    binding.userImageUserFrag.setImageBitmap(bitmap)
                     uploadImage()
                 }
             } catch (e: IOException) {
@@ -234,10 +267,10 @@ class UserFragment : Fragment(), CellClickListener {
 
     private fun showUploadError() {
         Toast.makeText(requireContext(), "Upload failed", Toast.LENGTH_SHORT).show()
-        uploadProgressBarProfile.visibility = View.GONE
-        uploadBackProgressProfile.visibility = View.GONE
-        uploadUserBackgroundImage.visibility = View.VISIBLE
-        uploadProfilePictureImage.visibility = View.VISIBLE
+        binding.uploadProgressBarProfile.visibility = View.GONE
+        binding.uploadBackProgressProfile.visibility = View.GONE
+        binding.uploadUserBackgroundImage.visibility = View.VISIBLE
+        binding.uploadProfilePictureImage.visibility = View.VISIBLE
     }
 
     fun uploadUserPhotos(uri: String?, postID: UUID?) {
@@ -246,27 +279,23 @@ class UserFragment : Fragment(), CellClickListener {
             userRef.update("profileImage", uri)
                 .addOnSuccessListener {
                     Toast.makeText(requireContext(), "Profile Updated", Toast.LENGTH_SHORT).show()
-                    uploadProgressBarProfile.visibility = View.GONE
-                    imageEdit.visibility = View.VISIBLE
-                    imageChecked.visibility = View.GONE
-                    userImageUserFrag.setImageBitmap(bitmap)
-                    userDataViewModel.getUserData(firebaseAuth.currentUser!!.email!!)
-                }.addOnFailureListener {
-                    uploadProgressBarProfile.visibility = View.GONE
-                    Toast.makeText(requireContext(), "Failed to update profile", Toast.LENGTH_SHORT).show()
+                    binding.uploadProgressBarProfile.visibility = View.GONE
+                    binding.imageEdit.visibility = View.VISIBLE
                 }
-        } else if (uploadProfOrBack == 1) {
+                .addOnFailureListener {
+                    Toast.makeText(requireContext(), "Failed to update profile", Toast.LENGTH_SHORT).show()
+                    binding.uploadProgressBarProfile.visibility = View.GONE
+                }
+        } else {
             userRef.update("backImage", uri)
                 .addOnSuccessListener {
                     Toast.makeText(requireContext(), "Background Updated", Toast.LENGTH_SHORT).show()
-                    uploadBackProgressProfile.visibility = View.GONE
-                    userBackgroundImage.setImageBitmap(bitmap)
-                    imageEdit.visibility = View.VISIBLE
-                    imageChecked.visibility = View.GONE
-                    userDataViewModel.getUserData(firebaseAuth.currentUser!!.email!!)
-                }.addOnFailureListener {
-                    uploadBackProgressProfile.visibility = View.GONE
+                    binding.uploadBackProgressProfile.visibility = View.GONE
+                    binding.imageEdit.visibility = View.VISIBLE
+                }
+                .addOnFailureListener {
                     Toast.makeText(requireContext(), "Failed to update background", Toast.LENGTH_SHORT).show()
+                    binding.uploadBackProgressProfile.visibility = View.GONE
                 }
         }
     }
@@ -277,9 +306,15 @@ class UserFragment : Fragment(), CellClickListener {
             .setMessage("Do you want to edit your post?")
             .setPositiveButton("View") { _, _ -> }
             .setNegativeButton("Delete") { _, _ ->
-                userDataViewModel.deleteUserPost(firebaseAuth.currentUser!!.email!!, name)
-                userDataViewModel.getUserData(firebaseAuth.currentUser!!.email!!)
-                viewModel.getAllPosts(firebaseAuth.currentUser!!.email)
+                coroutineScope.launch {
+                    try {
+                        userDataViewModel.deleteUserPost(firebaseAuth.currentUser!!.email!!, name)
+                        userDataViewModel.getUserData(firebaseAuth.currentUser!!.email!!)
+                        viewModel.getAllPosts(firebaseAuth.currentUser!!.email)
+                    } catch (e: Exception) {
+                        Toast.makeText(requireContext(), "Error deleting post: ${e.message}", Toast.LENGTH_SHORT).show()
+                    }
+                }
             }
             .setNeutralButton("Cancel", null)
             .show()
@@ -291,9 +326,11 @@ class UserFragment : Fragment(), CellClickListener {
         super.onActivityCreated(savedInstanceState)
         viewModel.liveData3.observe(viewLifecycleOwner) {
             val adapter = PostListUserProfileAdapter(requireContext(), it, this)
-            userProfilePostsRecycler.adapter = adapter
-            userProfilePostsRecycler.layoutManager = LinearLayoutManager(requireContext())
+            binding.userProfilePostsRecycler.adapter = adapter
+            binding.userProfilePostsRecycler.layoutManager = LinearLayoutManager(requireContext())
             adapter.notifyDataSetChanged()
         }
     }
 }
+
+

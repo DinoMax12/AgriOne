@@ -4,41 +4,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- Uncomment and adjust if you need an AppBarLayout and Toolbar -->
-    <!--
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/actionBar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolBar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary" />
-    </com.google.android.material.appbar.AppBarLayout>
-    -->
-
-    <!-- FrameLayout to hold main content -->
     <FrameLayout
         android:id="@+id/frame_layout"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/bottomNav"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- BottomNavigationView with custom styling -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNav"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="56dp"
-        app:menu="@menu/dash_menu"  <!-- You should define this menu resource -->
-    android:backgroundTintMode="screen"
-    app:backgroundTint="@color/colorPrimary"  <!-- Make sure this is defined in colors.xml -->
-    app:labelVisibilityMode="labeled"
-    app:layout_constraintBottom_toBottomOf="parent" />
-
+        app:menu="@menu/dash_menu"
+        android:backgroundTintMode="screen"
+        app:backgroundTint="@color/colorPrimary"
+        app:labelVisibilityMode="labeled"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

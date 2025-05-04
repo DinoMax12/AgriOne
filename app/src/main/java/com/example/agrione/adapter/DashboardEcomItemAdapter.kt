@@ -4,12 +4,13 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.agrione.R
 import com.example.agrione.utilities.CellClickListener
 import com.google.firebase.firestore.DocumentSnapshot
-import kotlinx.android.synthetic.main.single_dashboard_ecomm_item.view.*
 
 class DashboardEcomItemAdapter(
     private val context: Context,
@@ -18,7 +19,11 @@ class DashboardEcomItemAdapter(
     private val cellClickListener: CellClickListener
 ) : RecyclerView.Adapter<DashboardEcomItemAdapter.DashboardEcomItemViewHolder>() {
 
-    class DashboardEcomItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+    class DashboardEcomItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val itemTitle: TextView = itemView.findViewById(R.id.itemTitle)
+        val itemPrice: TextView = itemView.findViewById(R.id.itemPrice)
+        val itemImage: ImageView = itemView.findViewById(R.id.itemImage)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DashboardEcomItemViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.single_dashboard_ecomm_item, parent, false)
@@ -30,14 +35,14 @@ class DashboardEcomItemAdapter(
     override fun onBindViewHolder(holder: DashboardEcomItemViewHolder, position: Int) {
         val currentData = allData[itemsToShow[position]]
 
-        holder.itemView.itemTitle.text = currentData.get("title").toString()
-        holder.itemView.itemPrice.text = "\u20B9${currentData.get("price").toString()}"
+        holder.itemTitle.text = currentData.get("title").toString()
+        holder.itemPrice.text = "\u20B9${currentData.get("price").toString()}"
 
         val allImages = currentData.get("imageUrl") as? ArrayList<*> ?: arrayListOf<String>()
         if (allImages.isNotEmpty()) {
             Glide.with(context)
                 .load(allImages[0])
-                .into(holder.itemView.itemImage)
+                .into(holder.itemImage)
         }
 
         holder.itemView.setOnClickListener {

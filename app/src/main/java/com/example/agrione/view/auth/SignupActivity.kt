@@ -1,51 +1,49 @@
-package com.project.agrione.view.auth
+package com.example.agrione.view.auth
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.GoogleAuthProvider
-import com.project.agrione.R
-import com.project.agrione.databinding.ActivitySignupBinding
-import com.project.agrione.utilities.hide
-import com.project.agrione.utilities.show
-import com.project.agrione.utilities.toast
-import com.project.agrione.view.dashboard.DashboardActivity
-import com.project.agrione.viewmodel.AuthListener
-import com.project.agrione.viewmodel.AuthViewModel
-import kotlinx.android.synthetic.main.activity_signup.*
+import com.example.agrione.R
+import com.example.agrione.databinding.ActivitySignupBinding
+import com.example.agrione.view.dashboard.DashboardActivity
+import com.example.agrione.viewmodel.AuthListener
+import com.example.agrione.viewmodel.AuthViewModel
 
 class SignupActivity : AppCompatActivity(), AuthListener {
 
     lateinit var googleSignInClient: GoogleSignInClient
     val firebaseAuth = FirebaseAuth.getInstance()
     lateinit var viewModel: AuthViewModel
+    private lateinit var binding: ActivitySignupBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val binding: ActivitySignupBinding =
-            DataBindingUtil.setContentView(this, R.layout.activity_signup)
-        viewModel = ViewModelProviders.of(this).get(AuthViewModel::class.java)
+        // ViewBinding initialization
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_signup)
+
+        // Initialize ViewModel and set the AuthListener
+        viewModel = ViewModelProvider(this).get(AuthViewModel::class.java)
         binding.authViewModel = viewModel
         viewModel.authListener = this
 
-        loginRedirectTextSignup.setOnClickListener {
+        // Set up click listeners for the buttons
+        binding.loginRedirectTextSignup.setOnClickListener {
             Intent(this, LoginActivity::class.java).also {
                 startActivity(it)
             }
         }
 
-        signGoogleBtnSignup.setOnClickListener {
+        binding.signGoogleBtnSignup.setOnClickListener {
             signIn()
         }
     }
@@ -71,12 +69,13 @@ class SignupActivity : AppCompatActivity(), AuthListener {
     }
 
     override fun onStarted() {
-        progressSignup.show()
+        // Use the ViewBinding to show progress
+        binding.progressSignup.visibility = android.view.View.VISIBLE
     }
 
     override fun onSuccess(authRepo: LiveData<String>) {
         authRepo.observe(this, Observer {
-            progressSignup.hide()
+            binding.progressSignup.visibility = android.view.View.GONE
             if (it.toString() == "Success") {
                 toast("Account Created")
                 Intent(this, DashboardActivity::class.java).also {
@@ -87,7 +86,12 @@ class SignupActivity : AppCompatActivity(), AuthListener {
     }
 
     override fun onFailure(message: String) {
-        progressSignup.hide()
+        binding.progressSignup.visibility = android.view.View.GONE
         toast("Failure")
+    }
+
+    // Custom toast extension function
+    private fun toast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 }

@@ -1,4 +1,4 @@
-package com.project.agrione.view.apmc
+package com.example.agrione.view.apmc
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,9 +8,9 @@ import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.project.agrione.R
-import com.project.agrione.adapter.ApmcAdapter
-import com.project.agrione.databinding.FragmentApmcBinding
+import com.example.agrione.R
+import com.example.agrione.adapter.ApmcAdapter
+import com.example.agrione.databinding.FragmentApmcBinding
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -35,7 +35,7 @@ class ApmcFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.progressApmc.visibility = View.GONE
-        binding.loadingTextApmc.visibility = View.GONE
+        binding.loadingTextAPMC.visibility = View.GONE
 
         (activity as AppCompatActivity).supportActionBar?.title = "APMC"
 

@@ -1,4 +1,4 @@
-package com.agrione.app.viewmodel
+package com.example.agrione.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
