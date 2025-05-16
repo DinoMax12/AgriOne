@@ -56,16 +56,25 @@
 
     <TextView
         android:id="@+id/navbarUserName"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="25dp"
         android:layout_marginTop="25dp"
+        android:layout_marginEnd="25dp"
+        android:ellipsize="marquee"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:scrollHorizontally="true"
+        android:singleLine="true"
         android:text="User Name"
         android:textColor="#fff"
         android:textSize="20sp"
         android:textStyle="bold"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:freezesText="true"
         app:layout_constraintBottom_toTopOf="@id/cityTextNavHeader"
         app:layout_constraintStart_toEndOf="@+id/circularRevealCardView"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView

@@ -22,6 +22,7 @@ import android.util.Log
 import android.view.Gravity
 import android.view.MenuItem
 import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -120,6 +121,7 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
 
             if (firstTime == true) {
                 // First time user, show intro
+                sharedPreferences.edit().putBoolean("firstTime", false).apply() // SET FLAG TO FALSE
                 Intent(this, IntroActivity::class.java).also {
                     startActivity(it)
                 }
@@ -151,6 +153,49 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
     private fun initializeUI() {
         viewModel = ViewModelProvider(this).get(UserDataViewModel::class.java)
         binding.userDataViewModel = viewModel
+
+        // Observe user data changes
+        viewModel.userliveData.observe(this) { userData ->
+            try {
+                val posts = userData.get("posts") as? List<String> ?: emptyList()
+                val name = userData.getString("name") ?: ""
+                val email = userData.getString("email") ?: ""
+                val profileImageUrl = userData.getString("profileImageUrl")
+                val about = userData.getString("about") ?: ""
+                val city = userData.getString("city") ?: ""
+
+                // Update UI with user data
+                val headerView = binding.navView.getHeaderView(0)
+                val nameTextView = headerView.findViewById<TextView>(R.id.navbarUserName)
+                val emailTextView = headerView.findViewById<TextView>(R.id.navbarUserEmail)
+                val profileImageView = headerView.findViewById<ImageView>(R.id.navbarUserImage)
+
+                nameTextView.text = name
+                // Start marquee effect if text is too long
+                if (name.length > 15) {
+                    nameTextView.isSelected = true
+                }
+
+                emailTextView.text = email
+
+                // Load profile image if available
+                profileImageUrl?.let { url ->
+                    if (url.isNotEmpty()) {
+                        Glide.with(this)
+                            .load(url)
+                            .placeholder(R.drawable.ic_user_profile)
+                            .error(R.drawable.ic_user_profile)
+                            .into(profileImageView)
+                    }
+                }
+
+                // Update other UI elements as needed
+                userName = name
+            } catch (e: Exception) {
+                Log.e("DashboardActivity", "Error processing user data: ${e.message}")
+                // Handle the error appropriately
+            }
+        }
 
         toggle = ActionBarDrawerToggle(this, binding.drawerLayout, R.string.open, R.string.close)
         binding.drawerLayout.addDrawerListener(toggle)
@@ -261,25 +306,35 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
         }
 
         if (!TEMP_BYPASS_INTRO) {
-            viewModel.userliveData.observe(this, Observer {
-                val headerView = binding.navView.getHeaderView(0)
-                val posts = it.get("posts") as List<String>
-                val city = it.get("city")
-                userName = it.get("name").toString()
+        viewModel.userliveData.observe(this, Observer {
+                try {
+                    val headerView = binding.navView.getHeaderView(0)
+                    val posts = it.get("posts") as? List<String> ?: emptyList()
+                    val city = it.getString("city") ?: ""
+                    val name = it.getString("name") ?: ""
+                    val email = it.getString("email") ?: ""
+                    val profileImage = it.getString("profileImage")
 
-                if(city == null) {
-                    headerView.findViewById<TextView>(R.id.cityTextNavHeader).text = "City: "
-                } else {
-                    headerView.findViewById<TextView>(R.id.cityTextNavHeader).text = "City: " + it.get("city").toString()
+                    userName = name
+
+                    headerView.findViewById<TextView>(R.id.cityTextNavHeader).text = "City: $city"
+                    headerView.findViewById<TextView>(R.id.navbarUserName).text = name
+                    headerView.findViewById<TextView>(R.id.navbarUserEmail).text = email
+                    
+                    profileImage?.let { imageUrl ->
+                        if (imageUrl.isNotEmpty()) {
+                            Glide.with(this)
+                                .load(imageUrl)
+                                .placeholder(R.drawable.ic_user_profile)
+                                .error(R.drawable.ic_user_profile)
+                                .into(headerView.findViewById(R.id.navbarUserImage))
+                        }
+                    }
+
+                    headerView.findViewById<TextView>(R.id.navBarUserPostCount).text = "Posts Count: ${posts.size}"
+                } catch (e: Exception) {
+                    Log.e("DashboardActivity", "Error processing user data: ${e.message}")
                 }
-
-                headerView.findViewById<TextView>(R.id.navbarUserName).text = userName
-                headerView.findViewById<TextView>(R.id.navbarUserEmail).text = firebaseAuth.currentUser!!.email
-                Glide.with(this).load(it.get("profileImage")).into(headerView.findViewById(R.id.navbarUserImage))
-
-                it.getString("name")?.let { it1 -> Log.d("User Data from VM", it1) }
-
-                headerView.findViewById<TextView>(R.id.navBarUserPostCount).text = "Posts Count: " + posts.size.toString()
             })
         }
     }
@@ -312,7 +367,7 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
 
                     if (mLocation == null) {
                         startLocationUpdates()
-                    } else {
+            } else {
                         updateLocationData()
                     }
                 }

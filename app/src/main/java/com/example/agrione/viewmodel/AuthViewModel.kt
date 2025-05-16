@@ -44,6 +44,13 @@ class AuthViewModel : ViewModel() {
             return
         }
 
+        // Validate password match
+        if (password != confPassword) {
+            authListener?.onFailure("Passwords do not match.")
+            return
+        }
+
+        // Create user data with all required fields
         val data = hashMapOf(
             "name" to name,
             "mobNo" to mobNo,
@@ -51,7 +58,10 @@ class AuthViewModel : ViewModel() {
             "city" to city,
             "userType" to userType,
             "posts" to userPosts,
-            "profileImage" to ""
+            "profileImage" to "",  // Initialize empty profile image
+            "backImage" to "",     // Initialize empty background image
+            "about" to "",         // Initialize empty about section
+            "createdAt" to System.currentTimeMillis()  // Add timestamp
         )
 
         val authRepo = AuthRepository().signInWithEmail(email!!, password!!, data)
@@ -67,10 +77,16 @@ class AuthViewModel : ViewModel() {
                 try {
                     val account = task.getResult(ApiException::class.java)!!
                     val dataMap = hashMapOf(
+                        "name" to account.displayName.toString(),
+                        "email" to account.email.toString(),
+                        "mobNo" to "",  // Google sign-in doesn't provide phone number
+                        "city" to "",   // Google sign-in doesn't provide city
                         "userType" to userType,
                         "posts" to userPosts,
-                        "name" to account.displayName.toString(),
-                        "profileImage" to account.photoUrl.toString()
+                        "profileImage" to (account.photoUrl?.toString() ?: ""),  // Use Google profile photo if available
+                        "backImage" to "",  // Initialize empty background image
+                        "about" to "",      // Initialize empty about section
+                        "createdAt" to System.currentTimeMillis()  // Add timestamp
                     )
                     authRepository = AuthRepository()
                     val result = authRepository.signInToGoogle(

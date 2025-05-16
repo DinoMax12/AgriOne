@@ -55,10 +55,21 @@ class LoginActivity : AppCompatActivity(), AuthListener {
         viewModel.authListener = this
 
         // Only check for logged in user if we're not coming from DashboardActivity
-        if (!isFromDashboard && firebaseAuth.currentUser != null && !isNavigating) {
+        // Add a flag to shared preferences to prevent loops
+        val sharedPreferences = getSharedPreferences("AgrionePrefs", Context.MODE_PRIVATE)
+        val isLoginAttempted = sharedPreferences.getBoolean("login_attempted", false)
+
+        if (!isFromDashboard && firebaseAuth.currentUser != null && !isNavigating && !isLoginAttempted) {
+            // Set flag to prevent loops
+            sharedPreferences.edit().putBoolean("login_attempted", true).apply()
             Log.d("LoginActivity", "User already logged in, navigating to Dashboard.")
             navigateToDashboard()
             return
+        }
+
+        // Reset login_attempted flag if we're explicitly on the login screen
+        if (isFromDashboard) {
+            sharedPreferences.edit().putBoolean("login_attempted", false).apply()
         }
 
         setupClickListeners()
@@ -98,6 +109,9 @@ class LoginActivity : AppCompatActivity(), AuthListener {
             val intent = Intent(this, DashboardActivity::class.java).apply {
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             }
+            // Clear login_attempted flag when explicitly navigating
+            getSharedPreferences("AgrionePrefs", Context.MODE_PRIVATE)
+                .edit().putBoolean("login_attempted", false).apply()
             startActivity(intent)
             finish()
         }

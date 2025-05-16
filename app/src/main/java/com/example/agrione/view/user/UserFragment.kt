@@ -140,7 +140,13 @@ class UserFragment : Fragment(), CellClickListener {
         }
 
         userDataViewModel.userliveData.observe(viewLifecycleOwner) {
-            binding.userNameUserProfileFrag.text = it.getString("name")
+            val name = it.getString("name") ?: ""
+            binding.userNameUserProfileFrag.text = name
+            // Start marquee effect if text is too long
+            if (name.length > 15) {
+                binding.userNameUserProfileFrag.isSelected = true
+            }
+            
             binding.userCityUserProfileFrag.text = "City: " + (it.getString("city") ?: "")
 
             if (it.getString("profileImage").isNullOrBlank()) {
@@ -246,27 +252,53 @@ class UserFragment : Fragment(), CellClickListener {
     private fun uploadImage() {
         filePath?.let {
             postID = UUID.randomUUID()
-            val ref = storageReference?.child("users/${postID}")
+            // Update path to be more specific based on upload type
+            val path = if (uploadProfOrBack == 0) {
+                "users/${firebaseAuth.currentUser?.email}/profile/${postID}"
+            } else {
+                "users/${firebaseAuth.currentUser?.email}/background/${postID}"
+            }
+            
+            Log.d("UploadDebug", "Starting upload to path: $path")
+            val ref = storageReference?.child(path)
+            
             val uploadTask = ref?.putFile(it)
-            uploadTask?.continueWithTask(Continuation<UploadTask.TaskSnapshot, Task<Uri>> { task ->
-                if (!task.isSuccessful) {
-                    throw task.exception ?: Exception("Upload failed")
+                ?.addOnProgressListener { taskSnapshot ->
+                    val progress = (100.0 * taskSnapshot.bytesTransferred / taskSnapshot.totalByteCount).toInt()
+                    Log.d("UploadDebug", "Upload progress: $progress%")
                 }
-                ref.downloadUrl
-            })?.addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    uploadUserPhotos(task.result.toString(), postID)
-                } else {
+                ?.addOnFailureListener { e ->
+                    Log.e("UploadDebug", "Upload failed", e)
                     showUploadError()
                 }
-            }?.addOnFailureListener {
-                showUploadError()
+
+            uploadTask?.continueWithTask(Continuation<UploadTask.TaskSnapshot, Task<Uri>> { task ->
+                if (!task.isSuccessful) {
+                    task.exception?.let {
+                        Log.e("UploadDebug", "Task failed", it)
+                        throw it
+                    }
+                }
+                Log.d("UploadDebug", "Getting download URL")
+                return@Continuation ref.downloadUrl
+            })?.addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val downloadUri = task.result
+                    Log.d("UploadDebug", "Download URL obtained: ${downloadUri}")
+                    uploadUserPhotos(downloadUri.toString(), postID)
+                } else {
+                    Log.e("UploadDebug", "Failed to get download URL", task.exception)
+                    showUploadError()
+                }
             }
+        } ?: run {
+            Log.e("UploadDebug", "No file path available")
+            showUploadError()
         }
     }
 
     private fun showUploadError() {
-        Toast.makeText(requireContext(), "Upload failed", Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), "Upload failed. Please try again.", Toast.LENGTH_SHORT).show()
         binding.uploadProgressBarProfile.visibility = View.GONE
         binding.uploadBackProgressProfile.visibility = View.GONE
         binding.uploadUserBackgroundImage.visibility = View.VISIBLE

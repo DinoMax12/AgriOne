@@ -5,12 +5,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.agrione.R
 import com.example.agrione.adapter.ApmcAdapter
 import com.example.agrione.databinding.FragmentApmcBinding
+import com.example.agrione.model.APMCRepository
+import com.example.agrione.model.data.APMCCustomRecords
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -22,6 +25,7 @@ class ApmcFragment : Fragment() {
     private lateinit var adapter: ApmcAdapter
     private var someMap: Map<Any, Array<String>>? = null
     private var states: Array<String>? = null
+    private val repository = APMCRepository()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,14 +38,67 @@ class ApmcFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setupUI()
+        setupSpinners()
+        setupObservers()
+    }
+
+    private fun setupUI() {
         binding.progressApmc.visibility = View.GONE
         binding.loadingTextAPMC.visibility = View.GONE
+        binding.textAPMCWarning.visibility = View.VISIBLE
+        binding.recycleAPMC.visibility = View.GONE
 
         (activity as AppCompatActivity).supportActionBar?.title = "APMC"
 
         val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
         binding.dateValueTextApmc.text = sdf.format(Date())
 
+        // Setup RecyclerView
+        binding.recycleAPMC.layoutManager = LinearLayoutManager(requireContext())
+    }
+
+    private fun setupObservers() {
+        repository.apmcData.observe(viewLifecycleOwner) { apmcData ->
+            binding.progressApmc.visibility = View.GONE
+            binding.loadingTextAPMC.visibility = View.GONE
+            
+            if (apmcData.records.isNotEmpty()) {
+                binding.textAPMCWarning.visibility = View.GONE
+                binding.recycleAPMC.visibility = View.VISIBLE
+                
+                // Convert records to custom format for the adapter
+                val customRecords = apmcData.records.groupBy { it.market }.map { (market, records) ->
+                    APMCCustomRecords(
+                        state = records.first().state,
+                        district = records.first().district,
+                        market = market,
+                        commodity = records.map { it.commodity }.toMutableList(),
+                        min_price = records.map { it.min_price }.toMutableList(),
+                        max_price = records.map { it.max_price }.toMutableList()
+                    )
+                }
+                
+                adapter = ApmcAdapter(customRecords)
+                binding.recycleAPMC.adapter = adapter
+            } else {
+                binding.textAPMCWarning.visibility = View.VISIBLE
+                binding.recycleAPMC.visibility = View.GONE
+                binding.textAPMCWarning.text = "No data available for selected district"
+            }
+        }
+
+        repository.errorMessage.observe(viewLifecycleOwner) { error ->
+            binding.progressApmc.visibility = View.GONE
+            binding.loadingTextAPMC.visibility = View.GONE
+            binding.textAPMCWarning.visibility = View.VISIBLE
+            binding.recycleAPMC.visibility = View.GONE
+            binding.textAPMCWarning.text = error
+            Toast.makeText(requireContext(), error, Toast.LENGTH_LONG).show()
+        }
+    }
+
+    private fun setupSpinners() {
         states = arrayOf(
             "None", "Andhra Pradesh", "Chandigarh", "Chattisgarh", "Gujarat", "Hariyana", "Himachal Pradesh",
             "Jammu & Kashmir", "Jharkhand", "Karnataka", "Kerala", "Madhya Pradesh", "Maharashtra", "Odisha",
@@ -87,8 +144,74 @@ class ApmcFragment : Fragment() {
             "Tamil Nadu" to emptyDistricts,
             "Telangana" to emptyDistricts,
             "Uttarakhand" to emptyDistricts
-            // Add rest here if needed
         )
+
+        // Set up state spinner selection listener
+        binding.spinner1.onItemSelectedListener = object : android.widget.AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: android.widget.AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val selectedState = states!![position]
+                if (selectedState != "None") {
+                    // Get districts for selected state
+                    val districts = someMap?.get(selectedState) ?: emptyDistricts
+                    
+                    // Create and set adapter for district spinner
+                    val districtAdapter = ArrayAdapter(
+                        requireContext(),
+                        android.R.layout.simple_spinner_dropdown_item,
+                        districts
+                    )
+                    binding.spinner2.adapter = districtAdapter
+                    
+                    // Enable district spinner
+                    binding.spinner2.isEnabled = true
+                } else {
+                    // If "None" is selected, disable district spinner
+                    binding.spinner2.isEnabled = false
+                    binding.spinner2.adapter = ArrayAdapter(
+                        requireContext(),
+                        android.R.layout.simple_spinner_dropdown_item,
+                        emptyDistricts
+                    )
+                }
+            }
+
+            override fun onNothingSelected(parent: android.widget.AdapterView<*>?) {
+                // Handle nothing selected
+                binding.spinner2.isEnabled = false
+                binding.spinner2.adapter = ArrayAdapter(
+                    requireContext(),
+                    android.R.layout.simple_spinner_dropdown_item,
+                    emptyDistricts
+                )
+            }
+        }
+
+        // Set up district spinner selection listener
+        binding.spinner2.onItemSelectedListener = object : android.widget.AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: android.widget.AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val selectedState = binding.spinner1.selectedItem.toString()
+                val selectedDistrict = binding.spinner2.selectedItem.toString()
+                
+                if (selectedState != "None" && selectedDistrict != "None") {
+                    loadApmcData(selectedState, selectedDistrict)
+                }
+            }
+
+            override fun onNothingSelected(parent: android.widget.AdapterView<*>?) {
+                // Handle nothing selected
+            }
+        }
+    }
+
+    private fun loadApmcData(state: String, district: String) {
+        // Show loading state
+        binding.progressApmc.visibility = View.VISIBLE
+        binding.loadingTextAPMC.visibility = View.VISIBLE
+        binding.textAPMCWarning.visibility = View.GONE
+        binding.recycleAPMC.visibility = View.GONE
+        
+        // Fetch data from repository
+        repository.getAPMCDataByDistrict(district)
     }
 
     override fun onDestroyView() {

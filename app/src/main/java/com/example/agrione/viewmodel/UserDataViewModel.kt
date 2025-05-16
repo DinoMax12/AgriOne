@@ -21,8 +21,16 @@ class UserDataViewModel : ViewModel() {
 
         firebaseFireStore.collection("users").document(userId)
             .get()
-            .addOnCompleteListener {
-                userliveData.value = it.result
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    userliveData.value = task.result
+                } else {
+                    Log.e("UserDataViewModel", "Error getting user data: ${task.exception}")
+                    // Handle the error appropriately
+                    if (task.exception?.message?.contains("PERMISSION_DENIED") == true) {
+                        Log.e("UserDataViewModel", "Permission denied. Please check Firestore rules.")
+                    }
+                }
             }
     }
 

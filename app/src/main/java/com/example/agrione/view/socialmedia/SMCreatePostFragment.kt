@@ -171,107 +171,159 @@ class SMCreatePostFragment : Fragment() {
     private fun uploadImage() {
         binding.progressCreatePost.visibility = View.VISIBLE
         binding.progressTitle.visibility = View.VISIBLE
+        
+        // First verify user is authenticated
+        val currentUser = authUser?.currentUser
+        if (currentUser == null) {
+            Toast.makeText(requireActivity().applicationContext, "User not authenticated", Toast.LENGTH_LONG).show()
+            binding.progressCreatePost.visibility = View.GONE
+            binding.progressTitle.visibility = View.GONE
+            return
+        }
+
         if (filePath != null) {
             postID = UUID.randomUUID()
-            val ref = storageReference?.child("posts/" + postID.toString())
+            val ref = storageReference?.child("posts/${postID}")
+            
+            Log.d("UploadDebug", "Starting upload for user: ${currentUser.email}")
+            Log.d("UploadDebug", "Upload path: posts/${postID}")
+            
             val uploadTask = ref?.putFile(filePath!!)
-
-            val urlTask =
-                uploadTask?.continueWithTask(Continuation<UploadTask.TaskSnapshot, Task<Uri>> { task ->
-                    if (!task.isSuccessful) {
-                        task.exception?.let {
-                            throw it
-                            binding.progressCreatePost.visibility = View.GONE
-                            binding.progressTitle.visibility = View.GONE
-                        }
-                    }
-                    return@Continuation ref.downloadUrl
-                })?.addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        val downloadUri = task.result
-                        addUploadRecordWithImageToDb(downloadUri.toString(), postID!!)
-                    } else {
-                        binding.progressCreatePost.visibility = View.GONE
-                        binding.progressTitle.visibility = View.GONE
-                    }
-                }?.addOnFailureListener {
+                ?.addOnProgressListener { taskSnapshot ->
+                    val progress = (100.0 * taskSnapshot.bytesTransferred / taskSnapshot.totalByteCount).toInt()
+                    Log.d("UploadDebug", "Upload progress: $progress%")
+                }
+                ?.addOnFailureListener { e ->
+                    Log.e("UploadDebug", "Upload failed", e)
                     binding.progressCreatePost.visibility = View.GONE
                     binding.progressTitle.visibility = View.GONE
-                    Toast.makeText(requireActivity().applicationContext, it.message, Toast.LENGTH_LONG).show()
+                    Toast.makeText(requireActivity().applicationContext, 
+                        "Upload failed: ${e.message}", Toast.LENGTH_LONG).show()
                 }
+
+            uploadTask?.continueWithTask(Continuation<UploadTask.TaskSnapshot, Task<Uri>> { task ->
+                if (!task.isSuccessful) {
+                    task.exception?.let {
+                        Log.e("UploadDebug", "Task failed", it)
+                        throw it
+                    }
+                }
+                Log.d("UploadDebug", "Getting download URL")
+                return@Continuation ref.downloadUrl
+            })?.addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val downloadUri = task.result
+                    Log.d("UploadDebug", "Download URL obtained: ${downloadUri}")
+                    addUploadRecordWithImageToDb(downloadUri.toString(), postID!!)
+                } else {
+                    Log.e("UploadDebug", "Failed to get download URL", task.exception)
+                    binding.progressCreatePost.visibility = View.GONE
+                    binding.progressTitle.visibility = View.GONE
+                    Toast.makeText(requireActivity().applicationContext, 
+                        "Failed to get download URL: ${task.exception?.message}", Toast.LENGTH_LONG).show()
+                }
+            }
         } else {
+            Log.d("UploadDebug", "No file selected, creating post without image")
             data2["uploadType"] = ""
             addUploadRecordWithImageToDb(null, null)
         }
     }
 
     private fun addUploadRecordWithImageToDb(uri: String?, postID: UUID?) {
-
-        if (!uri.isNullOrEmpty()) {
-            data2["imageUrl"] = uri.toString()
-            data2["imageID"] = postID.toString()
+        val currentUser = authUser?.currentUser
+        if (currentUser == null) {
+            Toast.makeText(requireActivity().applicationContext, "User not authenticated", Toast.LENGTH_LONG).show()
+            binding.progressCreatePost.visibility = View.GONE
+            binding.progressTitle.visibility = View.GONE
+            return
         }
 
-        val data3 = HashMap<String, Any>()
-        val postTimeStamp = System.currentTimeMillis()
+        // Explicitly check if email is null
+        val userEmail = currentUser.email
+        if (userEmail == null) {
+            Log.e("UploadDebug", "User email is null. Cannot proceed with post creation.")
+            Toast.makeText(requireActivity().applicationContext, "User email is missing. Cannot create post.", Toast.LENGTH_LONG).show()
+            binding.progressCreatePost.visibility = View.GONE
+            binding.progressTitle.visibility = View.GONE
+            return
+        }
 
-        data2["userID"] = authUser!!.currentUser?.email.toString()
-        data2["timeStamp"] = postTimeStamp
-        data2["title"] = binding.postTitleSM.text.toString()
-        data2["description"] = binding.descPostSM.text.toString()
-
-        db.collection("posts")
-            .add(data2)
-            .addOnSuccessListener { documentReference ->
-
-                val data = HashMap<String, Any>()
-                val posts = arrayListOf<String>()
-                val postRecordID = documentReference.id.toString()
-
-                posts.add(postRecordID)
-                data["posts"] = posts
-
-                db.collection("users")
-                    .document("${authUser!!.currentUser?.email.toString()}")
-                    .update("posts", FieldValue.arrayUnion(postRecordID))
-                    .addOnSuccessListener { documentReference ->
-
-                        Toast.makeText(
-                            requireActivity().applicationContext,
-                            "Post Created",
-                            Toast.LENGTH_LONG
-                        ).show()
-
-                        binding.progressCreatePost.visibility = View.GONE
-                        binding.progressTitle.visibility = View.GONE
-                        userDataViewModel.getUserData(authUser!!.currentUser?.email.toString())
-                        socialMediaPostsFragment = SocialMediaPostsFragment()
-                        val transaction = requireActivity().supportFragmentManager
-                            .beginTransaction()
-                            .replace(R.id.frame_layout, socialMediaPostsFragment, "smPostList")
-                            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                            .setReorderingAllowed(true)
-                            .addToBackStack("smPostList")
-                            .commit()
-                    }
-                    .addOnFailureListener { e ->
-                        Toast.makeText(
-                            requireActivity().applicationContext,
-                            "Error saving to DB",
-                            Toast.LENGTH_LONG
-                        ).show()
-                        binding.progressCreatePost.visibility = View.GONE
-                        binding.progressTitle.visibility = View.GONE
-                    }
+        try {
+            if (!uri.isNullOrEmpty()) {
+                data2["imageUrl"] = uri
+                data2["imageID"] = postID.toString()
             }
-            .addOnFailureListener { e ->
-                Toast.makeText(
-                    requireActivity().applicationContext,
-                    "Error saving to DB",
-                    Toast.LENGTH_LONG
-                ).show()
-                binding.progressCreatePost.visibility = View.GONE
-                binding.progressTitle.visibility = View.GONE
-            }
+
+            val postTimeStamp = System.currentTimeMillis()
+            data2["userID"] = userEmail  // Now userEmail is guaranteed non-null
+            data2["timeStamp"] = postTimeStamp
+            data2["title"] = binding.postTitleSM.text.toString()
+            data2["description"] = binding.descPostSM.text.toString()
+
+            Log.d("UploadDebug", "Creating post with data: $data2")
+
+            db.collection("posts")
+                .add(data2)
+                .addOnSuccessListener { documentReference ->
+                    Log.d("UploadDebug", "Post created successfully with ID: ${documentReference.id}")
+                    
+                    val postRecordID = documentReference.id
+                    val userRef = db.collection("users").document(userEmail)  // Use non-null userEmail
+                    
+                    // Create a new array with the post ID
+                    val newPosts = listOf(postRecordID)
+                    
+                    // Update using set with merge
+                    userRef.set(mapOf("posts" to newPosts), com.google.firebase.firestore.SetOptions.merge())
+                        .addOnSuccessListener {
+                            Log.d("UploadDebug", "User document updated with new post ID")
+                            Toast.makeText(
+                                requireActivity().applicationContext,
+                                "Post Created Successfully",
+                                Toast.LENGTH_LONG
+                            ).show()
+
+                            binding.progressCreatePost.visibility = View.GONE
+                            binding.progressTitle.visibility = View.GONE
+                            userDataViewModel.getUserData(userEmail)  // Use non-null userEmail
+                            
+                            socialMediaPostsFragment = SocialMediaPostsFragment()
+                            val transaction = requireActivity().supportFragmentManager
+                                .beginTransaction()
+                            transaction.replace(R.id.frame_layout, socialMediaPostsFragment)
+                            transaction.commit()
+                        }
+                        .addOnFailureListener { e ->
+                            Log.e("UploadDebug", "Failed to update user document", e)
+                            Toast.makeText(
+                                requireActivity().applicationContext,
+                                "Failed to update user profile: ${e.message}",
+                                Toast.LENGTH_LONG
+                            ).show()
+                            binding.progressCreatePost.visibility = View.GONE
+                            binding.progressTitle.visibility = View.GONE
+                        }
+                }
+                .addOnFailureListener { e ->
+                    Log.e("UploadDebug", "Failed to create post", e)
+                    Toast.makeText(
+                        requireActivity().applicationContext,
+                        "Failed to create post: ${e.message}",
+                        Toast.LENGTH_LONG
+                    ).show()
+                    binding.progressCreatePost.visibility = View.GONE
+                    binding.progressTitle.visibility = View.GONE
+                }
+        } catch (e: Exception) {
+            Log.e("UploadDebug", "Error in addUploadRecordWithImageToDb", e)
+            Toast.makeText(
+                requireActivity().applicationContext,
+                "Error creating post: ${e.message}",
+                Toast.LENGTH_LONG
+            ).show()
+            binding.progressCreatePost.visibility = View.GONE
+            binding.progressTitle.visibility = View.GONE
+        }
     }
 }
