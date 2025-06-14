@@ -80,4 +80,13 @@ This project is open-source and available under the MIT License.
 
 ---
 
+## 🙏 Credits & References
+
+This project was inspired and partially referenced from the open-source work by:
+
+🔗 [Het Suthar – Farming App GitHub Repository](https://github.com/hetsuthar028/Farming-App)
+
+Thanks for the valuable contribution to agri-tech solutions!
+---
+
 🌿 _AgriOne: Farming meets Technology._
