@@ -6,7 +6,7 @@ AgriOne is an all-in-one Android mobile application built to empower Indian farm
 
 ## 📸 App Preview
 
-![AgriOne UI](https://drive.google.com/uc?export=view&id=1a2KlLvtU5BXUTtXQn9VxMzDlklbyiJhm)
+![AgriOne UI](images/agri_india.png)
 
 ---
 
