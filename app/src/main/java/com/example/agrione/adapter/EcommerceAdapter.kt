@@ -42,19 +42,14 @@ class EcommerceAdapter(
 
     override fun onBindViewHolder(holder: EcommerceViewHolder, position: Int) {
         val currentItem = ecommListData[position]
-
+        val imageUrl = currentItem.get("imageUrl") as? String
+        if (!imageUrl.isNullOrEmpty()) {
+            Glide.with(context).load(imageUrl).into(holder.ecommImage)
+        }
         holder.ecommtitle.text = currentItem.getString("title") ?: "N/A"
         holder.ecommPrice.text = "\u20B9 ${currentItem.get("price").toString()}"
         holder.ecommretailer.text = currentItem.getString("retailer") ?: "Unknown"
         holder.ecommItemAvailability.text = currentItem.getString("availability") ?: "Unavailable"
-
-        val allImages = currentItem.get("imageUrl") as? List<*> ?: emptyList<String>()
-        if (allImages.isNotEmpty()) {
-            Glide.with(context)
-                .load(allImages[0].toString())
-                .into(holder.ecommImage)
-        }
-
         holder.ecommRating.rating = currentItem.get("rating")?.toString()?.toFloatOrNull() ?: 0f
 
         holder.itemView.setOnClickListener {

@@ -38,10 +38,15 @@ class DashboardEcomItemAdapter(
         holder.itemTitle.text = currentData.get("title").toString()
         holder.itemPrice.text = "\u20B9${currentData.get("price").toString()}"
 
-        val allImages = currentData.get("imageUrl") as? ArrayList<*> ?: arrayListOf<String>()
-        if (allImages.isNotEmpty()) {
+        val imageUrl = when (val imageUrlValue = currentData.get("imageUrl")) {
+            is String -> imageUrlValue
+            is List<*> -> if (imageUrlValue.isNotEmpty()) imageUrlValue[0].toString() else ""
+            else -> ""
+        }
+
+        if (imageUrl.isNotEmpty()) {
             Glide.with(context)
-                .load(allImages[0])
+                .load(imageUrl)
                 .into(holder.itemImage)
         }
 

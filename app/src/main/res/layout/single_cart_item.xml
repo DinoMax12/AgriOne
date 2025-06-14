@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto">
@@ -60,18 +61,18 @@
 
                 />
 
+
             <ImageView
                 android:id="@+id/removeCartBtn"
                 android:layout_width="wrap_content"
-                android:layout_marginHorizontal="7dp"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="@id/itemPriceCart"
-                app:layout_constraintBottom_toBottomOf="@id/itemPriceCart"
+                android:layout_marginHorizontal="7dp"
+                android:layout_marginEnd="16dp"
                 android:src="@drawable/ic_baseline_delete_forever_24"
+                app:layout_constraintBottom_toBottomOf="@id/itemPriceCart"
                 app:layout_constraintEnd_toEndOf="parent"
-                />
-
-
+                app:layout_constraintTop_toTopOf="@id/itemPriceCart"
+                app:layout_constraintVertical_bias="0.0" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -122,14 +123,16 @@
                 android:id="@+id/cartItemAvailability"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginHorizontal="7dp"
+                android:layout_marginEnd="16dp"
+                android:text="In Stock"
+                android:textColor="@color/fontColor"
+                android:textStyle="bold"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@id/quantityChangeCard"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@id/quantityChangeCard"
-                app:layout_constraintBottom_toBottomOf="@id/quantityChangeCard"
-                android:layout_marginHorizontal="7dp"
-                android:text="In Stock"
-                android:textStyle="bold"
-                android:textColor="@color/fontColor"
-                />
+                app:layout_constraintVertical_bias="0.0" />
 
             <TextView
                 android:id="@+id/deliveryChargeCart"
@@ -159,20 +162,6 @@
                 android:text="Delivery Charge: ₹"
                 />
 
-            <TextView
-                android:id="@+id/cartItemFirm"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginHorizontal="7dp"
-                app:layout_constraintTop_toTopOf="@id/deliveryChargeCart"
-                app:layout_constraintBottom_toBottomOf="@id/deliveryChargeCart"
-                android:textColor="@color/fontColor"
-                android:text="- Hello World Firm"
-                android:textStyle="italic"
-                android:textSize="10sp"
-                />
-
             <!--            <TextView-->
             <!--                android:layout_width="wrap_content"-->
             <!--                android:layout_height="wrap_content"-->
@@ -184,6 +173,25 @@
             <!--                android:textStyle="bold|italic"-->
             <!--                app:layout_constraintStart_toEndOf="@id/cartItemImage"-->
             <!--                app:layout_constraintTop_toBottomOf="@id/deliveryChargeCart" />-->
+
+            <TextView
+                android:id="@+id/cartItemFirm"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="3dp"
+                android:layout_marginEnd="7dp"
+                android:ellipsize="marquee"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:scrollHorizontally="true"
+                android:singleLine="true"
+                android:textColor="@color/black"
+                android:textSize="12sp"
+                android:textStyle="normal"
+                app:layout_constraintBottom_toTopOf="@+id/cartItemBuyBtn"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/quantityChangeCard"
+                app:layout_constraintTop_toBottomOf="@+id/itemNameCart"
+                app:layout_constraintVertical_bias="0.666" />
 
             <Button
                 android:id="@+id/cartItemBuyBtn"
@@ -198,7 +206,8 @@
                 android:textColor="@color/fontColor"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cartItemImage" />
+                app:layout_constraintTop_toBottomOf="@id/cartItemImage"
+                tools:layout_editor_absoluteX="7dp" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

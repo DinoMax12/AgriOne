@@ -40,10 +40,7 @@
             android:id="@+id/posterSlider"
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:layout_marginTop="200dp"
-            android:layout_marginBottom="14dp"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             />
@@ -57,8 +54,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginHorizontal="0.5dp"
             android:elevation="1dp"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="200dp"
+            app:layout_constraintTop_toBottomOf="@id/posterSlider"
             app:layout_constraintStart_toStartOf="parent"
             >
 
@@ -248,13 +244,19 @@
                     style="@style/Widget.AppCompat.RatingBar.Small"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:rating="3"
-                    android:theme="@style/RatingBar"
-                    app:layout_constraintTop_toBottomOf="@id/quantityChangeCard"
                     android:layout_marginVertical="7dp"
-                    app:layout_constraintStart_toStartOf="@id/quantityChangeCard"
-                    app:layout_constraintEnd_toEndOf="@id/quantityChangeCard"
-                    />
+                    android:layout_marginStart="280dp"
+                    android:layout_marginTop="20dp"
+                    android:clickable="true"
+                    android:elevation="2dp"
+                    android:focusable="true"
+                    android:isIndicator="false"
+                    android:numStars="5"
+                    android:rating="3"
+                    android:stepSize="0.5"
+                    android:theme="@style/RatingBar"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/quantityChangeCard" />
 
                 <TextView
                     android:id="@+id/productSpecTitle"

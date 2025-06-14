@@ -55,18 +55,22 @@ class EcommViewModel : ViewModel() {
             }
     }
 
-    fun getSpecificCategoryItems(itemType: String): MutableLiveData<List<DocumentSnapshot>> {
+    fun getSpecificCategoryItems(category: String): MutableLiveData<List<DocumentSnapshot>> {
+        Log.d("EcommViewModel", "Querying for type: ${category.lowercase()}")
         firebaseFireStore.collection("products")
-            .whereEqualTo("type", itemType)
             .get()
-            .addOnCompleteListener {
-                if (it.isSuccessful) {
-                    specificCategoryItems.value = it.result!!.documents
-                    Log.d("EcommViewModel", "Loaded Category Items: ${it.result!!.documents}")
+            .addOnSuccessListener { documents ->
+                val filteredDocs = documents.documents.filter { doc ->
+                    val type = doc.getString("type")?.lowercase()
+                    Log.d("EcommViewModel", "Document type: $type, comparing with: ${category.lowercase()}")
+                    type == category.lowercase()
                 }
+                Log.d("EcommViewModel", "Found ${filteredDocs.size} matching documents")
+                specificCategoryItems.value = filteredDocs
             }
-            .addOnFailureListener {
-                Log.e("EcommViewModel", "Error loading specific category items: ${it.message}")
+            .addOnFailureListener { exception ->
+                Log.e("EcommViewModel", "Error loading type items: ${exception.message}")
+                specificCategoryItems.value = emptyList()
             }
         return specificCategoryItems
     }

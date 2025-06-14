@@ -2,6 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/admin_verification"
+        android:icon="@drawable/ic_admin"
+        android:title="Admin Verification"
+        app:showAsAction="always" />
+    <item
         android:id="@+id/cart_item"
         android:icon="@drawable/ic_baseline_shopping_cart_24"
         android:title="Cart"

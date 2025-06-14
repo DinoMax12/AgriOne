@@ -1,63 +1,12 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Base application theme -->
-    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:windowBackground">@drawable/gradient_secondary</item>
-        <item name="android:statusBarColor">@color/greenDark</item>
-        <item name="android:navigationBarColor">@color/greenDark</item>
-    </style>
-
-    <!-- Style for primary buttons -->
-    <style name="Widget.App.Button.Primary" parent="Widget.MaterialComponents.Button">
-        <item name="android:background">@drawable/gradient_primary</item>
-        <item name="android:textColor">@color/white</item>
-        <item name="android:textSize">16sp</item>
-        <item name="android:padding">12dp</item>
-        <item name="cornerRadius">8dp</item>
-    </style>
-
-    <!-- Style for cards -->
-    <style name="Widget.App.CardView" parent="Widget.MaterialComponents.CardView">
-        <item name="cardBackgroundColor">@drawable/gradient_secondary</item>
-        <item name="cardCornerRadius">16dp</item>
-        <item name="cardElevation">4dp</item>
-        <item name="contentPadding">16dp</item>
-    </style>
-
-    <!-- Style for primary cards (like weather card) -->
-    <style name="Widget.App.CardView.Primary" parent="Widget.MaterialComponents.CardView">
-        <item name="cardBackgroundColor">@drawable/gradient_primary</item>
-        <item name="cardCornerRadius">16dp</item>
-        <item name="cardElevation">8dp</item>
-        <item name="contentPadding">16dp</item>
-    </style>
-
-    <!-- Style for app bar -->
-    <style name="Widget.App.AppBarLayout" parent="Widget.MaterialComponents.AppBarLayout">
-        <item name="android:background">@drawable/gradient_primary</item>
-        <item name="android:elevation">4dp</item>
-    </style>
-
-    <!-- Style for bottom navigation -->
-    <style name="Widget.App.BottomNavigationView" parent="Widget.MaterialComponents.BottomNavigationView">
-        <item name="android:background">@drawable/gradient_primary</item>
-        <item name="itemIconTint">@color/white</item>
-        <item name="itemTextColor">@color/white</item>
-    </style>
-
-    <!-- Style for chips -->
-    <style name="Widget.App.Chip" parent="Widget.MaterialComponents.Chip">
-        <item name="chipBackgroundColor">@drawable/gradient_secondary</item>
+        <item name="fontFamily">@font/lato</item>
         <item name="android:textColor">@color/fontColor</item>
-    </style>
-
-    <!-- Style for primary chips -->
-    <style name="Widget.App.Chip.Primary" parent="Widget.MaterialComponents.Chip">
-        <item name="chipBackgroundColor">@drawable/gradient_primary</item>
-        <item name="android:textColor">@color/white</item>
     </style>
 
     <style name="AppTheme2" parent="Theme.MaterialComponents.Light.NoActionBar">
@@ -71,6 +20,10 @@
     <style name="RatingBar" parent="AppTheme">
         <item name="colorControlActivated">@color/colorPrimary</item>
         <item name="colorControlNormal">@color/secondary2</item>
+    </style>
+
+    <style name="CustomRadioButton" parent="Widget.AppCompat.CompoundButton.RadioButton">
+        <item name="android:buttonTint">@color/radio_button_color</item>
     </style>
 
 </resources>

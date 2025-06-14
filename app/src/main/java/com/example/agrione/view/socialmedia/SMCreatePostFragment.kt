@@ -271,31 +271,47 @@ class SMCreatePostFragment : Fragment() {
                     val postRecordID = documentReference.id
                     val userRef = db.collection("users").document(userEmail)  // Use non-null userEmail
                     
-                    // Create a new array with the post ID
-                    val newPosts = listOf(postRecordID)
-                    
-                    // Update using set with merge
-                    userRef.set(mapOf("posts" to newPosts), com.google.firebase.firestore.SetOptions.merge())
-                        .addOnSuccessListener {
-                            Log.d("UploadDebug", "User document updated with new post ID")
-                            Toast.makeText(
-                                requireActivity().applicationContext,
-                                "Post Created Successfully",
-                                Toast.LENGTH_LONG
-                            ).show()
-
-                            binding.progressCreatePost.visibility = View.GONE
-                            binding.progressTitle.visibility = View.GONE
-                            userDataViewModel.getUserData(userEmail)  // Use non-null userEmail
+                    // Get current posts and append new post ID
+                    userRef.get()
+                        .addOnSuccessListener { document ->
+                            val currentPosts = document.get("posts") as? List<String> ?: emptyList()
+                            val newPosts = currentPosts.toMutableList().apply {
+                                add(postRecordID)
+                            }
                             
-                            socialMediaPostsFragment = SocialMediaPostsFragment()
-                            val transaction = requireActivity().supportFragmentManager
-                                .beginTransaction()
-                            transaction.replace(R.id.frame_layout, socialMediaPostsFragment)
-                            transaction.commit()
+                            // Update using set with merge
+                            userRef.set(mapOf("posts" to newPosts), com.google.firebase.firestore.SetOptions.merge())
+                                .addOnSuccessListener {
+                                    Log.d("UploadDebug", "User document updated with new post ID")
+                                    Toast.makeText(
+                                        requireActivity().applicationContext,
+                                        "Post Created Successfully",
+                                        Toast.LENGTH_LONG
+                                    ).show()
+
+                                    binding.progressCreatePost.visibility = View.GONE
+                                    binding.progressTitle.visibility = View.GONE
+                                    userDataViewModel.getUserData(userEmail)  // Use non-null userEmail
+                                    
+                                    socialMediaPostsFragment = SocialMediaPostsFragment()
+                                    val transaction = requireActivity().supportFragmentManager
+                                        .beginTransaction()
+                                    transaction.replace(R.id.frame_layout, socialMediaPostsFragment)
+                                    transaction.commit()
+                                }
+                                .addOnFailureListener { e ->
+                                    Log.e("UploadDebug", "Failed to update user document", e)
+                                    Toast.makeText(
+                                        requireActivity().applicationContext,
+                                        "Failed to update user profile: ${e.message}",
+                                        Toast.LENGTH_LONG
+                                    ).show()
+                                    binding.progressCreatePost.visibility = View.GONE
+                                    binding.progressTitle.visibility = View.GONE
+                                }
                         }
                         .addOnFailureListener { e ->
-                            Log.e("UploadDebug", "Failed to update user document", e)
+                            Log.e("UploadDebug", "Failed to get user document", e)
                             Toast.makeText(
                                 requireActivity().applicationContext,
                                 "Failed to update user profile: ${e.message}",

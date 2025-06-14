@@ -1,0 +1,14 @@
+{
+  "rules": {
+    ".read": true,
+    ".write": true,
+    "users": {
+      "$uid": {
+        "cart": {
+          ".read": true,
+          ".write": true
+        }
+      }
+    }
+  }
+} 

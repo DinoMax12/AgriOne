@@ -1,201 +1,242 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.agrione.view.ecommerce.RazorPayActivity">
+    android:fitsSystemWindows="true">
 
-    <TextView
-        android:id="@+id/paymentFragTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginVertical="@dimen/margin_medium"
-        android:text="@string/payment_title"
-        android:textColor="@color/black"
-        android:textSize="@dimen/text_large"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@id/fullNamePrePay"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <EditText
-        android:id="@+id/fullNamePrePay"
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginHorizontal="10dp"
-        android:layout_marginVertical="7dp"
-        android:background="@drawable/edit_back"
-        android:hint="Full Name"
-        android:padding="10dp"
-        android:textColor="@color/colorPrimary"
-        android:textColorHint="#FF404A3A"
-        android:textSize="18dp"
-        app:layout_constraintBottom_toTopOf="@id/localityPrePay"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/paymentFragTitle" />
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:scrollbars="none">
 
-    <EditText
-        android:id="@+id/localityPrePay"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginHorizontal="10dp"
-        android:layout_marginVertical="7dp"
-        android:background="@drawable/edit_back"
-        android:hint="Locality / Street Name"
-        android:padding="10dp"
-        android:textColor="@color/colorPrimary"
-        android:textColorHint="#FF404A3A"
-        app:layout_constraintBottom_toTopOf="@id/cityPrePay"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/fullNamePrePay" />
-
-    <EditText
-        android:id="@+id/cityPrePay"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginHorizontal="10dp"
-        android:layout_marginVertical="7dp"
-        android:background="@drawable/edit_back"
-        android:hint="City"
-        android:padding="10dp"
-        android:textColor="@color/colorPrimary"
-        android:textColorHint="#FF404A3A"
-        app:layout_constraintBottom_toTopOf="@id/statePrePay"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/localityPrePay" />
-
-    <EditText
-        android:id="@+id/statePrePay"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginHorizontal="10dp"
-        android:layout_marginVertical="7dp"
-        android:background="@drawable/edit_back"
-        android:hint="State"
-        android:padding="10dp"
-        android:textColor="@color/colorPrimary"
-        android:textColorHint="#FF404A3A"
-        app:layout_constraintBottom_toTopOf="@id/pincodePrePay"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cityPrePay" />
-
-    <EditText
-        android:id="@+id/pincodePrePay"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginHorizontal="10dp"
-        android:layout_marginVertical="7dp"
-        android:background="@drawable/edit_back"
-        android:hint="Pin Code"
-        android:padding="10dp"
-        android:textColor="@color/colorPrimary"
-        android:textColorHint="#FF404A3A"
-        app:layout_constraintBottom_toTopOf="@id/mobileNumberPrePay"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/statePrePay" />
-
-    <EditText
-        android:id="@+id/mobileNumberPrePay"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginHorizontal="10dp"
-        android:layout_marginVertical="7dp"
-        android:background="@drawable/edit_back"
-        android:hint="Mobile Number"
-        android:inputType="phone"
-        android:padding="10dp"
-        android:textColor="@color/colorPrimary"
-        android:textColorHint="#FF404A3A"
-        app:layout_constraintBottom_toTopOf="@id/addressTypeTitle"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/pincodePrePay" />
-
-    <TextView
-        android:id="@+id/addressTypeTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="20dp"
-        android:layout_marginVertical="7dp"
-        android:text="Address Type"
-        android:textColor="@color/fontColor"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@id/addressTypeRadioGroup"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/mobileNumberPrePay" />
-
-    <RadioGroup
-        android:checkedButton="@id/homerd"
-        android:id="@+id/addressTypeRadioGroup"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/margin_small"
-        android:layout_marginVertical="@dimen/margin_medium"
-        android:foregroundGravity="center"
-        android:orientation="horizontal"
-        android:foregroundTint="@color/colorPrimary"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/addressTypeTitle">
-
-        <com.google.android.material.radiobutton.MaterialRadioButton
-            android:layout_width="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/homerd"
-            android:layout_weight="1"
-            android:buttonTint="@color/colorPrimary"
-            android:text="@string/address_type_home" />
+            android:paddingBottom="16dp">
 
-        <com.google.android.material.radiobutton.MaterialRadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/officerd"
-            android:layout_weight="1"
-            android:buttonTint="@color/colorPrimary"
-            android:text="@string/address_type_office" />
+            <TextView
+                android:id="@+id/paymentFragTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="14dp"
+                android:text="Payment Details"
+                android:layout_marginStart="6dp"
+                android:textColor="@color/fontColor"
+                android:textSize="21sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <com.google.android.material.radiobutton.MaterialRadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/otherrd"
-            android:layout_weight="1"
-            android:buttonTint="@color/colorPrimary"
-            android:text="@string/address_type_other" />
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/fullNamePrePay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/rounded_edit_text"
+                android:drawableStart="@drawable/ic_person"
+                android:drawablePadding="10dp"
+                android:drawableTint="@color/colorPrimary"
+                android:hint="Full Name"
+                android:inputType="textPersonName"
+                android:padding="15dp"
+                android:textCursorDrawable="@drawable/custom_cursor"
+                android:textSize="16sp"
+                app:layout_constraintTop_toBottomOf="@id/paymentFragTitle" />
 
-    </RadioGroup>
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/localityPrePay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/rounded_edit_text"
+                android:drawableStart="@drawable/ic_location"
+                android:drawablePadding="10dp"
+                android:drawableTint="@color/colorPrimary"
+                android:hint="Locality"
+                android:inputType="textPostalAddress"
+                android:padding="15dp"
+                android:textCursorDrawable="@drawable/custom_cursor"
+                android:textSize="16sp"
+                app:layout_constraintTop_toBottomOf="@id/fullNamePrePay" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Net Value: ₹"
-        app:layout_constraintTop_toBottomOf="@id/addressTypeRadioGroup"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:textSize="28sp"
-        android:textStyle="bold"
-        android:id="@+id/netValue"
-        android:textColor="@color/colorThird" />
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/cityPrePay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/rounded_edit_text"
+                android:drawableStart="@drawable/ic_location"
+                android:drawablePadding="10dp"
+                android:drawableTint="@color/colorPrimary"
+                android:hint="City"
+                android:inputType="textPostalAddress"
+                android:padding="15dp"
+                android:textCursorDrawable="@drawable/custom_cursor"
+                android:textSize="16sp"
+                app:layout_constraintTop_toBottomOf="@id/localityPrePay" />
 
-    <Button
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:id="@+id/orderNowBtn"
-        android:layout_width="250dp"
-        android:layout_height="55dp"
-        android:layout_marginVertical="7dp"
-        android:background="@drawable/round_borderless_general"
-        android:backgroundTint="@color/colorThird"
-        android:text="Proceed with Payment"
-        android:textAllCaps="false"
-        android:textColor="#fff"
-        android:textSize="18sp"
-        android:textStyle="bold"/>
-</androidx.constraintlayout.widget.ConstraintLayout>
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/statePrePay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/rounded_edit_text"
+                android:drawableStart="@drawable/ic_location"
+                android:drawablePadding="10dp"
+                android:drawableTint="@color/colorPrimary"
+                android:hint="State"
+                android:inputType="textPostalAddress"
+                android:padding="15dp"
+                android:textCursorDrawable="@drawable/custom_cursor"
+                android:textSize="16sp"
+                app:layout_constraintTop_toBottomOf="@id/cityPrePay" />
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/pincodePrePay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/rounded_edit_text"
+                android:drawableStart="@drawable/ic_location"
+                android:drawablePadding="10dp"
+                android:drawableTint="@color/colorPrimary"
+                android:hint="Pincode"
+                android:inputType="number"
+                android:maxLength="6"
+                android:padding="15dp"
+                android:textCursorDrawable="@drawable/custom_cursor"
+                android:textSize="16sp"
+                app:layout_constraintTop_toBottomOf="@id/statePrePay" />
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/mobileNumberPrePay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/rounded_edit_text"
+                android:drawableStart="@drawable/ic_phone"
+                android:drawablePadding="10dp"
+                android:drawableTint="@color/colorPrimary"
+                android:hint="Mobile Number"
+                android:inputType="phone"
+                android:maxLength="10"
+                android:padding="15dp"
+                android:textCursorDrawable="@drawable/custom_cursor"
+                android:textSize="16sp"
+                app:layout_constraintTop_toBottomOf="@id/pincodePrePay" />
+
+            <TextView
+                android:id="@+id/addressTypeTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="14dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="8dp"
+                android:text="Address Type: "
+                android:textColor="@color/fontColor"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/mobileNumberPrePay" />
+
+            <RadioGroup
+                android:id="@+id/addressTypeRadioGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="14dp"
+                android:layout_marginStart="10dp"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@id/addressTypeTitle">
+
+                <RadioButton
+                    android:id="@+id/homerd"
+                    style="@style/CustomRadioButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="Home"
+                    android:textColor="@color/fontColor" />
+
+                <RadioButton
+                    android:id="@+id/officerd"
+                    style="@style/CustomRadioButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:text="Office"
+                    android:textColor="@color/fontColor" />
+
+                <RadioButton
+                    android:id="@+id/otherrd"
+                    style="@style/CustomRadioButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:text="Other"
+                    android:textColor="@color/fontColor" />
+            </RadioGroup>
+
+            <TextView
+                android:id="@+id/netValueTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="14dp"
+                android:layout_marginStart="100dp"
+                android:layout_marginTop="12dp"
+                android:text="Net Value:"
+                android:textColor="@color/colorThird"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/addressTypeRadioGroup" />
+
+            <TextView
+                android:id="@+id/netValue"
+                android:layout_width="60dp"
+                android:layout_height="28dp"
+                android:layout_marginVertical="14dp"
+
+                android:layout_marginTop="12dp"
+                android:text="₹ 0.00"
+                android:textColor="@color/fontColor"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.08"
+                app:layout_constraintStart_toEndOf="@id/netValueTitle"
+                app:layout_constraintTop_toBottomOf="@+id/addressTypeRadioGroup" />
+
+            <Button
+                android:id="@+id/payNowBtn"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/all_buttons"
+                android:text="Pay Now"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintTop_toBottomOf="@id/netValueTitle" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

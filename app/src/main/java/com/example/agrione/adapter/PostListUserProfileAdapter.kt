@@ -39,14 +39,30 @@ class PostListUserProfileAdapter(
     override fun onBindViewHolder(holder: PostListUserProfileViewHolder, position: Int) {
         val currentData = listData[position]
 
-        holder.userPostTitle.text = currentData.get("title").toString()
-        holder.userPostUploadTime.text =
-            DateUtils.getRelativeTimeSpanString(currentData.get("timeStamp") as Long)
+        holder.userPostTitle.text = currentData.get("title")?.toString() ?: ""
+        
+        // Safely handle timestamp
+        val timestamp = currentData.get("timeStamp")
+        holder.userPostUploadTime.text = when (timestamp) {
+            is Long -> DateUtils.getRelativeTimeSpanString(timestamp)
+            is Number -> DateUtils.getRelativeTimeSpanString(timestamp.toLong())
+            else -> "Just now"
+        }
+
         holder.userPostProfileCard.setOnClickListener {
             cellClickListener.onCellClickListener(currentData.id)
         }
-        if (!currentData.get("imageUrl").toString().isNullOrEmpty()) {
-            Glide.with(context).load(currentData.getString("imageUrl")).into(holder.userPostImage)
+
+        // Safely handle image URL
+        val imageUrl = currentData.getString("imageUrl")
+        if (!imageUrl.isNullOrEmpty()) {
+            Glide.with(context)
+                .load(imageUrl)
+                .placeholder(R.drawable.ic_user_profile)
+                .error(R.drawable.ic_user_profile)
+                .into(holder.userPostImage)
+        } else {
+            holder.userPostImage.setImageResource(R.drawable.ic_user_profile)
         }
     }
 }

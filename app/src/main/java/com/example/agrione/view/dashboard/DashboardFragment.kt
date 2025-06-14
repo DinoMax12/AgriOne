@@ -1,6 +1,8 @@
 package com.example.agrione.view.dashboard
 
+import android.app.Dialog
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.preference.PreferenceManager
@@ -8,6 +10,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.GridLayout
 import android.widget.ImageView
 import android.widget.ProgressBar
@@ -21,21 +24,26 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
+import com.google.android.material.tabs.TabLayout
 import com.google.gson.JsonObject
 import com.example.agrione.R
 import com.example.agrione.adapter.DashboardEcomItemAdapter
+import com.example.agrione.adapter.CarouselAdapter
 import com.example.agrione.model.WeatherApi
 import com.example.agrione.model.data.WeatherRootList
 import com.example.agrione.utilities.CellClickListener
 import com.example.agrione.view.articles.ArticleListFragment
 import com.example.agrione.view.articles.FruitsFragment
+import com.example.agrione.view.ecommerce.AddProductActivity
 import com.example.agrione.view.ecommerce.EcommerceItemFragment
 import com.example.agrione.view.weather.WeatherFragment
 import com.example.agrione.view.yojna.YojnaListFragment
 import com.example.agrione.viewmodel.ArticleViewModel
 import com.example.agrione.viewmodel.EcommViewModel
 import com.example.agrione.viewmodel.WeatherViewModel
+import com.google.android.material.textfield.TextInputEditText
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
@@ -64,6 +72,7 @@ class DashboardFragment : Fragment(), CellClickListener {
     private lateinit var cat5: CardView
     private lateinit var dashboardEcommRecycler: RecyclerView
     private lateinit var weatherProgressBar: ProgressBar
+    private lateinit var adminVerificationIcon: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -98,6 +107,7 @@ class DashboardFragment : Fragment(), CellClickListener {
         cat5 = view.findViewById(R.id.cat5)
         dashboardEcommRecycler = view.findViewById(R.id.dashboardEcommRecycler)
         weatherProgressBar = view.findViewById(R.id.weatherProgressBar)
+        adminVerificationIcon = view.findViewById(R.id.adminVerificationIcon)
 
         // Show progress bar initially
         weatherProgressBar.visibility = View.VISIBLE
@@ -106,6 +116,9 @@ class DashboardFragment : Fragment(), CellClickListener {
         windTextWeathFrag.visibility = View.GONE
         weatherCityTitle.visibility = View.GONE
         weathIconImageWeathFrag.visibility = View.GONE
+
+        // Set up click listeners
+        setupClickListeners()
 
         viewModel.getCoordinates().observe(viewLifecycleOwner, Observer {
             Log.d("DashFrag", "Coordinates: $it")
@@ -197,6 +210,57 @@ class DashboardFragment : Fragment(), CellClickListener {
                 .setReorderingAllowed(true)
                 .addToBackStack("articlesListFrag")
                 .commit()
+        }
+    }
+
+    private fun setupClickListeners() {
+        adminVerificationIcon.setOnClickListener {
+            showAdminVerificationDialog()
+        }
+    }
+
+    private fun showAdminVerificationDialog() {
+        try {
+            val dialog = Dialog(requireContext())
+            dialog.setContentView(R.layout.dialog_admin_verification)
+            dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+            dialog.window?.setLayout(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            )
+
+            val adminCodeInput = dialog.findViewById<TextInputEditText>(R.id.adminCodeInput)
+            val verifyButton = dialog.findViewById<Button>(R.id.verifyButton)
+            val cancelButton = dialog.findViewById<Button>(R.id.cancelButton)
+
+            verifyButton.setOnClickListener {
+                val adminCode = adminCodeInput.text.toString()
+                if (adminCode == "1264") {
+                    dialog.dismiss()
+                    startAddProductActivity()
+                } else {
+                    Toast.makeText(context, "Invalid admin code", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            cancelButton.setOnClickListener {
+                dialog.dismiss()
+            }
+
+            dialog.show()
+        } catch (e: Exception) {
+            Log.e("DashboardFragment", "Error showing admin dialog: ${e.message}")
+            Toast.makeText(context, "Error showing admin dialog", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun startAddProductActivity() {
+        try {
+            val intent = Intent(requireContext(), AddProductActivity::class.java)
+            startActivity(intent)
+        } catch (e: Exception) {
+            Log.e("DashboardFragment", "Error starting AddProductActivity: ${e.message}")
+            Toast.makeText(context, "Error starting add product activity", Toast.LENGTH_SHORT).show()
         }
     }
 

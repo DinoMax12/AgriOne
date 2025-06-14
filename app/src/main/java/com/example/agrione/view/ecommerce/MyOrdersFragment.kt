@@ -21,6 +21,11 @@ import com.example.agrione.adapter.MyOrdersAdapter
 import com.example.agrione.utilities.CartItemBuy
 import com.example.agrione.utilities.CellClickListener
 import kotlin.collections.HashMap
+import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
+import com.google.android.material.button.MaterialButton
+import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
 
 // TODO: Rename parameter arguments, choose names that match
 private const val ARG_PARAM1 = "param1"
@@ -35,12 +40,12 @@ class MyOrdersFragment : Fragment(), CellClickListener, CartItemBuy {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
-    lateinit var firebaseDatabase: FirebaseDatabase
-    lateinit var firebaseAuth: FirebaseAuth
-    lateinit var firebaseFirestore: FirebaseFirestore
     private lateinit var myOrderRecycler: RecyclerView
-
-    var orders = HashMap<String, Any>()
+    private lateinit var noOrdersLayout: ConstraintLayout
+    private lateinit var exploreNowButton: MaterialButton
+    private lateinit var firebaseAuth: FirebaseAuth
+    private lateinit var firebaseDatabase: FirebaseDatabase
+    private var orders = HashMap<String, Any>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,7 +55,6 @@ class MyOrdersFragment : Fragment(), CellClickListener, CartItemBuy {
         }
         firebaseDatabase = FirebaseDatabase.getInstance()
         firebaseAuth = FirebaseAuth.getInstance()
-        firebaseFirestore = FirebaseFirestore.getInstance()
     }
 
     override fun onCreateView(
@@ -59,6 +63,8 @@ class MyOrdersFragment : Fragment(), CellClickListener, CartItemBuy {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_my_orders, container, false)
         myOrderRecycler = view.findViewById(R.id.myOrderRecycler)
+        noOrdersLayout = view.findViewById(R.id.noOrdersLayout)
+        exploreNowButton = view.findViewById(R.id.exploreNowButton)
         return view
     }
 
@@ -84,26 +90,48 @@ class MyOrdersFragment : Fragment(), CellClickListener, CartItemBuy {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val orderRef = firebaseDatabase.getReference("${firebaseAuth.currentUser!!.uid}").child("orders")
+        // Initialize Firebase
+        firebaseAuth = FirebaseAuth.getInstance()
+        firebaseDatabase = FirebaseDatabase.getInstance()
 
-        (activity as AppCompatActivity).supportActionBar?.title = "My Orders"
+        // Setup RecyclerView
+        myOrderRecycler.layoutManager = LinearLayoutManager(context)
 
-        val orderListener = object : ValueEventListener {
-            override fun onCancelled(error: DatabaseError) {
-                // Handle error
-            }
+        // Setup explore now button
+        exploreNowButton.setOnClickListener {
+            // Navigate to e-commerce section
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.frame_layout, EcommerceFragment())
+                .addToBackStack(null)
+                .commit()
+        }
 
+        // Load orders
+        loadOrders()
+    }
+
+    private fun loadOrders() {
+        val userId = firebaseAuth.currentUser?.uid ?: return
+        val orderRef = firebaseDatabase.getReference("${userId}/orders")
+
+        orderRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()) {
                     orders = snapshot.value as HashMap<String, Any>
-                    var myOrdersAdapter = MyOrdersAdapter(this@MyOrdersFragment, orders, this@MyOrdersFragment, this@MyOrdersFragment)
+                    val myOrdersAdapter = MyOrdersAdapter(this@MyOrdersFragment, orders, this@MyOrdersFragment, this@MyOrdersFragment)
                     myOrderRecycler.adapter = myOrdersAdapter
-                    myOrderRecycler.layoutManager = LinearLayoutManager(activity!!.applicationContext)
+                    myOrderRecycler.visibility = View.VISIBLE
+                    noOrdersLayout.visibility = View.GONE
+                } else {
+                    myOrderRecycler.visibility = View.GONE
+                    noOrdersLayout.visibility = View.VISIBLE
                 }
             }
-        }
 
-        orderRef.addValueEventListener(orderListener)
+            override fun onCancelled(error: DatabaseError) {
+                Toast.makeText(context, "Error loading orders: ${error.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
     override fun onCellClickListener(name: String) {

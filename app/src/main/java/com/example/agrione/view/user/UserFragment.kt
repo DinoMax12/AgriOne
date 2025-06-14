@@ -114,8 +114,13 @@ class UserFragment : Fragment(), CellClickListener {
 
         binding.cityEditUserProfile.visibility = View.GONE
 
-        viewModel.userProfilePostsLiveData.observe(viewLifecycleOwner) {
-            Log.d("Some Part", it.toString())
+        // Observe posts data
+        viewModel.liveData3.observe(viewLifecycleOwner) { posts ->
+            Log.d("UserFragment", "Received ${posts.size} posts")
+            if (posts.isNotEmpty()) {
+                binding.userProfilePostsRecycler.layoutManager = LinearLayoutManager(requireContext())
+                binding.userProfilePostsRecycler.adapter = PostListUserProfileAdapter(requireContext(), posts, this)
+            }
         }
 
         userDataViewModel.userliveData.observe(viewLifecycleOwner) {
@@ -352,16 +357,6 @@ class UserFragment : Fragment(), CellClickListener {
             .show()
 
         Toast.makeText(requireContext(), "You Clicked $name", Toast.LENGTH_SHORT).show()
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel.liveData3.observe(viewLifecycleOwner) {
-            val adapter = PostListUserProfileAdapter(requireContext(), it, this)
-            binding.userProfilePostsRecycler.adapter = adapter
-            binding.userProfilePostsRecycler.layoutManager = LinearLayoutManager(requireContext())
-            adapter.notifyDataSetChanged()
-        }
     }
 }
 

@@ -18,10 +18,12 @@
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/weatherCard"
-                style="@style/Widget.App.CardView.Primary"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="8dp"
+                app:strokeWidth="0dp"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -165,27 +167,37 @@
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="14dp"
                 android:text="Articles"
-
                 android:textSize="21sp"
                 android:textColor="@color/fontColor"
                 android:textStyle="bold"
-
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/weatherCard" />
 
+            <ImageView
+                android:id="@+id/adminVerificationIcon"
+                android:layout_width="34dp"
+                android:layout_height="36dp"
+                android:layout_marginEnd="24dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:padding="4dp"
+                android:src="@drawable/ic_admin"
+                android:tint="@color/colorPrimary"
+                app:layout_constraintBottom_toBottomOf="@id/articlesTitle"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/articlesTitle" />
+
             <HorizontalScrollView
                 android:id="@+id/categoryHorizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_width="374dp"
+                android:layout_height="157dp"
+                android:layout_marginVertical="4dp"
                 android:scrollbars="none"
-                android:layout_marginVertical="7dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/articlesTitle">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
-
 
 
                     <androidx.cardview.widget.CardView
@@ -211,18 +223,18 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
+                                android:layout_marginVertical="7dp"
                                 android:text="Plants"
                                 android:textColor="@color/fontColor"
-                                android:layout_marginVertical="7dp"
                                 android:textSize="14sp"
                                 android:textStyle="bold" />
                         </LinearLayout>
                     </androidx.cardview.widget.CardView>
 
                     <androidx.cardview.widget.CardView
+                        android:id="@+id/cat2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/cat2"
                         android:layout_marginHorizontal="10dp"
                         android:layout_marginVertical="10dp">
 
@@ -240,19 +252,19 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:textColor="@color/fontColor"
                                 android:layout_gravity="center"
-                                android:text="Methods"
                                 android:layout_marginVertical="7dp"
+                                android:text="Methods"
+                                android:textColor="@color/fontColor"
                                 android:textSize="14sp"
                                 android:textStyle="bold" />
                         </LinearLayout>
                     </androidx.cardview.widget.CardView>
 
                     <androidx.cardview.widget.CardView
+                        android:id="@+id/cat3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/cat3"
                         android:layout_marginHorizontal="10dp"
                         android:layout_marginVertical="10dp">
 
@@ -270,10 +282,10 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:textColor="@color/fontColor"
-                                android:layout_marginVertical="7dp"
                                 android:layout_gravity="center"
+                                android:layout_marginVertical="7dp"
                                 android:text="Diseases"
+                                android:textColor="@color/fontColor"
                                 android:textSize="14sp"
                                 android:textStyle="bold" />
                         </LinearLayout>
@@ -302,9 +314,9 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
+                                android:layout_marginVertical="7dp"
                                 android:text="Yojanas"
                                 android:textColor="@color/fontColor"
-                                android:layout_marginVertical="7dp"
                                 android:textSize="14sp"
                                 android:textStyle="bold" />
                         </LinearLayout>
@@ -312,32 +324,51 @@
 
                     <androidx.cardview.widget.CardView
                         android:id="@+id/cat5"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="10dp"
-
-                        android:layout_marginVertical="10dp">
+                        android:layout_margin="8dp"
+                        app:cardCornerRadius="8dp"
+                        app:cardElevation="4dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/cat4"
+                        app:layout_constraintTop_toTopOf="@id/cat4">
 
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:orientation="vertical">
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            android:padding="8dp">
 
-                            <ImageView
-                                android:layout_width="100dp"
-                                android:layout_height="100dp"
-                                android:scaleType="fitXY"
-                                android:src="@drawable/fruits" />
+                            <FrameLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content">
+
+                                <ImageView
+                                    android:id="@+id/shoppingCartImage"
+                                    android:layout_width="48dp"
+                                    android:layout_height="48dp"
+                                    android:src="@drawable/ic_shopping_cart"
+                                    android:tint="@color/colorPrimary" />
+
+                                <ImageView
+                                    android:id="@+id/addProductIcon"
+                                    android:layout_width="24dp"
+                                    android:layout_height="24dp"
+                                    android:layout_gravity="end|bottom"
+                                    android:background="@drawable/circle_background"
+                                    android:padding="4dp"
+                                    android:src="@drawable/ic_add"
+                                    android:tint="@color/white" />
+                            </FrameLayout>
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:layout_marginVertical="7dp"
+                                android:layout_marginTop="4dp"
+                                android:text="Shopping"
                                 android:textColor="@color/fontColor"
-                                android:text="Fruits"
-                                android:textSize="14sp"
-                                android:textStyle="bold" />
+                                android:textSize="14sp" />
                         </LinearLayout>
                     </androidx.cardview.widget.CardView>
 
@@ -348,9 +379,10 @@
                 android:id="@+id/carousel"
                 android:layout_width="match_parent"
                 android:layout_height="175dp"
-                android:layout_marginVertical="10dp"
+                android:layout_marginVertical="4dp"
                 android:background="@color/colorPrimary"
-                app:layout_constraintTop_toBottomOf="@id/categoryHorizontal" />
+                app:layout_constraintTop_toBottomOf="@id/categoryHorizontal"
+                tools:layout_editor_absoluteX="16dp" />
 
             <TextView
                 android:id="@+id/productsTitle"

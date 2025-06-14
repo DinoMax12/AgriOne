@@ -24,38 +24,51 @@
         <activity 
             android:name=".view.introscreen.IntroActivity"
             android:theme="@style/AppTheme2"
-            android:exported="true" />
+            android:exported="true"
+            android:windowSoftInputMode="adjustResize" />
 
         <!-- RazorPayActivity -->
         <activity
             android:name=".view.ecommerce.RazorPayActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
 
         <!-- Main Activity -->
         <activity
             android:name=".MainActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
 
         <!-- Signup Activity -->
         <activity
             android:name=".view.auth.SignupActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
 
         <!-- Login Activity -->
         <activity
             android:name=".view.auth.LoginActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
 
         <!-- TEMPORARY TESTING MODE - Dashboard Activity -->
         <!-- TODO: Remove intent-filter from DashboardActivity when done testing -->
         <activity
             android:name=".view.dashboard.DashboardActivity"
-            android:exported="true">
+            android:exported="true"
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Add Product Activity -->
+        <activity
+            android:name=".view.ecommerce.AddProductActivity"
+            android:exported="false"
+            android:theme="@style/AppTheme2"
+            android:windowSoftInputMode="adjustResize" />
 
         <!-- Meta-data for RazorPay and Fonts -->
         <meta-data

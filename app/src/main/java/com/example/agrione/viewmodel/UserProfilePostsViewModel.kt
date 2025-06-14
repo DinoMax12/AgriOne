@@ -83,14 +83,50 @@ class UserProfilePostsViewModel : ViewModel() {
     fun getAllPosts(userId: String?) {
         val firebaseFirestore = FirebaseFirestore.getInstance()
 
-        firebaseFirestore.collection("posts").whereEqualTo("userID", userId)
+        // First get the user document to get the post IDs
+        firebaseFirestore.collection("users").document(userId!!)
             .get()
-            .addOnSuccessListener { snapshot ->
-                liveData3.value = snapshot.documents as ArrayList<DocumentSnapshot>
-                Log.d("UserPrlPostsViewModel", "Updated data")
+            .addOnSuccessListener { userDoc ->
+                val postIds = userDoc.get("posts") as? List<String> ?: emptyList()
+                Log.d("UserPrlPostsViewModel", "Found ${postIds.size} posts for user")
+                
+                if (postIds.isEmpty()) {
+                    liveData3.value = ArrayList()
+                    return@addOnSuccessListener
+                }
+
+                // Then get all the posts using the IDs
+                val postsList = ArrayList<DocumentSnapshot>()
+                var completedCount = 0
+
+                postIds.forEach { postId ->
+                    firebaseFirestore.collection("posts").document(postId)
+                        .get()
+                        .addOnSuccessListener { postDoc ->
+                            postsList.add(postDoc)
+                            completedCount++
+                            
+                            // Only update when all posts are fetched
+                            if (completedCount == postIds.size) {
+                                liveData3.value = postsList
+                                Log.d("UserPrlPostsViewModel", "Updated data with ${postsList.size} posts")
+                            }
+                        }
+                        .addOnFailureListener { e ->
+                            Log.e("UserPrlPostsViewModel", "Error fetching post $postId: ${e.message}")
+                            completedCount++
+                            
+                            // Still update when all requests are complete, even if some failed
+                            if (completedCount == postIds.size) {
+                                liveData3.value = postsList
+                                Log.d("UserPrlPostsViewModel", "Updated data with ${postsList.size} posts (some failed)")
+                            }
+                        }
+                }
             }
-            .addOnFailureListener {
-                Log.d("Error", "Error in all docs")
+            .addOnFailureListener { e ->
+                Log.e("UserPrlPostsViewModel", "Error fetching user document: ${e.message}")
+                liveData3.value = ArrayList()
             }
     }
 }

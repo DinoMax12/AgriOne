@@ -33,56 +33,89 @@ class RazorPayActivity : AppCompatActivity(), PaymentResultListener {
     var currentDate = sdf.format(Date())
     lateinit var realtimeDatabase: FirebaseDatabase
     var productId: String? = null
-    var totalPrice = 0
-    var itemCost: Int? = null
+    var totalPrice = 0.0
+    var itemCost: Double? = null
     var quantity: Int? = null
-    var deliveryCost: Int? = null
+    var deliveryCost: Double? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityRazorPayBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        
+
         postId = UUID.randomUUID()
 
         firebaseAuth = FirebaseAuth.getInstance()
         productId = intent.getStringExtra("productId")
-        itemCost = intent.getStringExtra("itemCost")!!.toString().toInt()
-        quantity = intent.getStringExtra("quantity")!!.toString().toInt()
-        deliveryCost = intent.getStringExtra("deliveryCost")!!.toString().toInt()
+        itemCost = intent.getStringExtra("itemCost")?.toDoubleOrNull() ?: 0.0
+        quantity = intent.getStringExtra("quantity")?.toIntOrNull() ?: 0
+        deliveryCost = intent.getStringExtra("deliveryCost")?.toDoubleOrNull() ?: 0.0
 
-        // Set up radio group listener
+        // If deliveryCost is 0, it means we're using "Buy All" and itemCost already includes delivery
+        // Otherwise, we need to add delivery cost for single product purchase
+        totalPrice = if (deliveryCost == 0.0) {
+            itemCost ?: 0.0  // For Buy All, use the total directly
+        } else {
+            (itemCost ?: 0.0) + (deliveryCost ?: 0.0)  // For single product, add delivery cost
+        }
+
+        // Set up radio group listener with proper validation
         binding.addressTypeRadioGroup.setOnCheckedChangeListener { group, checkedId ->
-            addressType = when (checkedId) {
-                R.id.homerd -> "Home"
-                R.id.officerd -> "Office"
-                R.id.otherrd -> "Other"
-                else -> "Home"
+            when (checkedId) {
+                R.id.homerd -> {
+                    addressType = "Home"
+                    binding.homerd.isChecked = true
+                }
+                R.id.officerd -> {
+                    addressType = "Office"
+                    binding.officerd.isChecked = true
+                }
+                R.id.otherrd -> {
+                    addressType = "Other"
+                    binding.otherrd.isChecked = true
+                }
             }
         }
 
-        binding.orderNowBtn.setOnClickListener {
-            name = binding.fullNamePrePay.text.toString()
-            locality = binding.localityPrePay.text.toString()
-            city = binding.cityPrePay.text.toString()
-            state = binding.statePrePay.text.toString()
-            pincode = binding.pincodePrePay.text.toString()
-            mobile = binding.mobileNumberPrePay.text.toString()
-            if (name.isNullOrEmpty() ||
-                locality.isNullOrEmpty() ||
-                city.isNullOrEmpty() ||
-                state.isNullOrEmpty() ||
-                pincode.isNullOrEmpty() ||
-                mobile.isNullOrEmpty()
-            ) {
-                Toast.makeText(this, "Please Add all Fields", Toast.LENGTH_LONG).show()
-            } else {
-                Toast.makeText(this, "Done", Toast.LENGTH_LONG).show()
+        // Set default selection
+        binding.homerd.isChecked = true
+        addressType = "Home"
+
+        binding.netValue.text = "₹ ${String.format("%.2f", totalPrice)}"
+
+        binding.payNowBtn.setOnClickListener {
+            if (validateInputs()) {
                 startPayment()
             }
         }
+    }
 
-        binding.netValue.text = "Net Value: ₹ ${(itemCost!! * quantity!! + deliveryCost!!)}"
+    private fun validateInputs(): Boolean {
+        if (binding.fullNamePrePay.text.toString().isEmpty()) {
+            binding.fullNamePrePay.error = "Please enter your name"
+            return false
+        }
+        if (binding.localityPrePay.text.toString().isEmpty()) {
+            binding.localityPrePay.error = "Please enter your locality"
+            return false
+        }
+        if (binding.cityPrePay.text.toString().isEmpty()) {
+            binding.cityPrePay.error = "Please enter your city"
+            return false
+        }
+        if (binding.statePrePay.text.toString().isEmpty()) {
+            binding.statePrePay.error = "Please enter your state"
+            return false
+        }
+        if (binding.pincodePrePay.text.toString().isEmpty() || binding.pincodePrePay.text.toString().length != 6) {
+            binding.pincodePrePay.error = "Please enter a valid 6-digit pincode"
+            return false
+        }
+        if (binding.mobileNumberPrePay.text.toString().isEmpty() || binding.mobileNumberPrePay.text.toString().length != 10) {
+            binding.mobileNumberPrePay.error = "Please enter a valid 10-digit mobile number"
+            return false
+        }
+        return true
     }
 
     private fun startPayment() {
@@ -96,8 +129,8 @@ class RazorPayActivity : AppCompatActivity(), PaymentResultListener {
             options.put("image", "https://s3.amazonaws.com/rzp-mobile/images/rzp.png")
             options.put("currency", "INR")
 
-            totalPrice = itemCost!! * quantity!! + deliveryCost!!
-            options.put("amount", "${totalPrice * 100}")
+            // Convert total price to paise (multiply by 100)
+            options.put("amount", "${(totalPrice * 100).toInt()}")
 
             val prefill = JSONObject()
             prefill.put("email", "${firebaseAuth.currentUser!!.email}")
@@ -148,9 +181,9 @@ class RazorPayActivity : AppCompatActivity(), PaymentResultListener {
                     mobile!!,
                     currentDate,
                     productId!!,
-                    itemCost!!,
+                    itemCost!!.toInt(),
                     quantity!!,
-                    deliveryCost!!,
+                    deliveryCost!!.toInt(),
                     "Arriving By: " + sdf.format(date1).toString()
                 )
             ).addOnCompleteListener {

@@ -30,6 +30,7 @@ import com.bumptech.glide.Glide
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
+import com.google.firebase.firestore.FirebaseFirestore
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -165,6 +166,13 @@ class EcommerceItemFragment : Fragment(), CellClickListener {
             }
         }
 
+        // Add rating change listener
+        binding.Rating.setOnRatingBarChangeListener { ratingBar, rating, fromUser ->
+            if (fromUser) {
+                updateProductRating(rating)
+            }
+        }
+
         val allData = viewmodel.ecommLiveData.value
         val allDataLength = allData!!.size
 
@@ -175,11 +183,16 @@ class EcommerceItemFragment : Fragment(), CellClickListener {
 
                 binding.productTitle.text = specificData.getString("title")
                 binding.productShortDescription.text = specificData.getString("shortDesc")
-                binding.productPrice.text = "₹" + specificData.getString("price")
+                val price = when (val priceValue = specificData.get("price")) {
+                    is String -> priceValue.toDoubleOrNull() ?: 0.0
+                    is Double -> priceValue
+                    is Number -> priceValue.toDouble()
+                    else -> 0.0
+                }
+                binding.productPrice.text = "₹$price"
                 binding.productLongDesc.text = specificData.getString("longDesc")
                 binding.howToUseText.text = specificData.getString("howtouse")
                 binding.deliverycost.text = specificData.getString("delCharge")
-                binding.Rating.rating = specificData.get("rating").toString().toFloat()
                 var attributes = specificData.get("attributes") as Map<String, Any>
 
                 if (attributes.contains("Color")) {
@@ -212,10 +225,20 @@ class EcommerceItemFragment : Fragment(), CellClickListener {
                 binding.progressEcommItem.visibility = View.GONE
                 binding.loadingText.visibility = View.GONE
 
-                val allImages = specificData.get("imageUrl") as List<String>
-                val imageSliderAdapter = ImageSliderAdapter(allImages)
+                // Handle imageUrl that could be either String or List<String>
+                val imageUrls = when (val imageUrlValue = specificData.get("imageUrl")) {
+                    is String -> listOf(imageUrlValue)
+                    is List<*> -> imageUrlValue.map { it.toString() }
+                    else -> listOf()
+                }
+                val imageSliderAdapter = ImageSliderAdapter(imageUrls)
                 binding.posterSlider.adapter = imageSliderAdapter
                 binding.posterSlider.orientation = ViewPager2.ORIENTATION_HORIZONTAL
+
+                // Set initial rating
+                val currentRating = specificData.get("rating")?.toString()?.toFloatOrNull() ?: 0f
+                binding.Rating.rating = currentRating
+                binding.Rating.isEnabled = true  // Enable user interaction
             }
         }
 
@@ -224,10 +247,18 @@ class EcommerceItemFragment : Fragment(), CellClickListener {
             binding.progressEcommItem.visibility = View.VISIBLE
             binding.loadingText.text = "Adding to Cart..."
             binding.loadingText.visibility = View.GONE
-            val realtimeRef = realtimeDatabase.getReference("${firebaseAuth.currentUser!!.uid}").child("cart").child("${currentItemId}")
-
             val currentDateTime = sdf.format(Date())
-            realtimeRef.setValue(CartItem(binding.quantityCountEcomm.text.toString().toInt(), currentDateTime.toString()))
+            // Create a reference to the user's cart
+            val cartRef = FirebaseDatabase.getInstance().reference
+                .child("users")
+                .child(FirebaseAuth.getInstance().currentUser?.uid ?: "")
+                .child("cart")
+                .child(currentItemId.toString())
+
+            cartRef.setValue(CartItem(
+                quantity = binding.quantityCountEcomm.text.toString().toInt(),
+                time = currentDateTime
+            ))
                 .addOnCompleteListener {
                     Toast.makeText(requireActivity().applicationContext, "Item Added", Toast.LENGTH_SHORT).show()
                     binding.progressEcommItem.visibility = View.GONE
@@ -251,6 +282,55 @@ class EcommerceItemFragment : Fragment(), CellClickListener {
                 it.putExtra("deliveryCost", binding.deliverycost.text.toString())
                 startActivity(it)
             }
+        }
+    }
+
+    private fun updateProductRating(newRating: Float) {
+        if (currentItemId == null) return
+
+        // Show loading state
+        binding.progressEcommItem.visibility = View.VISIBLE
+        binding.loadingText.text = "Updating rating..."
+        binding.loadingText.visibility = View.VISIBLE
+
+        // Get reference to the product in Firestore
+        val productRef = FirebaseFirestore.getInstance().collection("products").document(currentItemId.toString())
+
+        // Get current rating data
+        productRef.get().addOnSuccessListener { document ->
+            if (document != null && document.exists()) {
+                val currentRating = document.get("rating")?.toString()?.toFloatOrNull() ?: 0f
+                val totalRatings = document.get("totalRatings")?.toString()?.toIntOrNull() ?: 0
+                
+                // Calculate new average rating
+                val newTotalRatings = totalRatings + 1
+                val newAverageRating = ((currentRating * totalRatings) + newRating) / newTotalRatings
+
+                // Update the product document
+                val updates = hashMapOf<String, Any>(
+                    "rating" to newAverageRating,
+                    "totalRatings" to newTotalRatings
+                )
+
+                productRef.update(updates)
+                    .addOnSuccessListener {
+                        // Update successful
+                        binding.Rating.rating = newAverageRating
+                        Toast.makeText(requireContext(), "Rating updated successfully!", Toast.LENGTH_SHORT).show()
+                        binding.progressEcommItem.visibility = View.GONE
+                        binding.loadingText.visibility = View.GONE
+                    }
+                    .addOnFailureListener { e ->
+                        // Update failed
+                        Toast.makeText(requireContext(), "Failed to update rating: ${e.message}", Toast.LENGTH_SHORT).show()
+                        binding.progressEcommItem.visibility = View.GONE
+                        binding.loadingText.visibility = View.GONE
+                    }
+            }
+        }.addOnFailureListener { e ->
+            Toast.makeText(requireContext(), "Error: ${e.message}", Toast.LENGTH_SHORT).show()
+            binding.progressEcommItem.visibility = View.GONE
+            binding.loadingText.visibility = View.GONE
         }
     }
 

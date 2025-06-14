@@ -91,30 +91,52 @@ class EcommerceFragment : Fragment(), CellClickListener {
         binding.chipgrp.setOnCheckedChangeListener { group, checkedId ->
             when (checkedId) {
                 R.id.chip1 -> {
+                    Log.d("EcommerceFragment", "Loading all items")
                     viewmodel.loadAllEcommItems().observe(viewLifecycleOwner, Observer {
+                        Log.d("EcommerceFragment", "All items loaded: ${it.size}")
                         binding.ecommrcyclr.adapter =
                             EcommerceAdapter(requireContext(), it, this)
+                        binding.noProductsText.visibility = if (it.isEmpty()) View.VISIBLE else View.GONE
                     })
                 }
                 R.id.chip2 -> {
+                    Log.d("EcommerceFragment", "Loading fertilizer items")
                     viewmodel.getSpecificCategoryItems("fertilizer")
                         .observe(viewLifecycleOwner, Observer {
+                            Log.d("EcommerceFragment", "Fertilizer items loaded: ${it.size}")
                             binding.ecommrcyclr.adapter =
                                 EcommerceAdapter(requireContext(), it, this)
+                            binding.noProductsText.visibility = if (it.isEmpty()) View.VISIBLE else View.GONE
                         })
                 }
                 R.id.chip3 -> {
+                    Log.d("EcommerceFragment", "Loading pesticide items")
                     viewmodel.getSpecificCategoryItems("pesticide")
                         .observe(viewLifecycleOwner, Observer {
+                            Log.d("EcommerceFragment", "Pesticide items loaded: ${it.size}")
                             binding.ecommrcyclr.adapter =
                                 EcommerceAdapter(requireContext(), it, this)
+                            binding.noProductsText.visibility = if (it.isEmpty()) View.VISIBLE else View.GONE
                         })
                 }
                 R.id.chip4 -> {
+                    Log.d("EcommerceFragment", "Loading machine items")
                     viewmodel.getSpecificCategoryItems("machine")
                         .observe(viewLifecycleOwner, Observer {
+                            Log.d("EcommerceFragment", "Machine items loaded: ${it.size}")
                             binding.ecommrcyclr.adapter =
                                 EcommerceAdapter(requireContext(), it, this)
+                            binding.noProductsText.visibility = if (it.isEmpty()) View.VISIBLE else View.GONE
+                        })
+                }
+                R.id.chip5 -> {
+                    Log.d("EcommerceFragment", "Loading seed items")
+                    viewmodel.getSpecificCategoryItems("seed")
+                        .observe(viewLifecycleOwner, Observer {
+                            Log.d("EcommerceFragment", "Seed items loaded: ${it.size}")
+                            binding.ecommrcyclr.adapter =
+                                EcommerceAdapter(requireContext(), it, this)
+                            binding.noProductsText.visibility = if (it.isEmpty()) View.VISIBLE else View.GONE
                         })
                 }
             }
